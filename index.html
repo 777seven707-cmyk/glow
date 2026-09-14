@@ -5,20 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>На твоё усмотрение — студия разработки сайтов</title>
 <meta name="description" content="Студия «На твоё усмотрение»: разрабатываем сайты под ключ. Три тарифа — Малый $70, Средний $200, Большой $500. Дизайн, вёрстка, адаптив, запуск и поддержка.">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#05050a">
 <meta name="author" content="На твоё усмотрение">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="На твоё усмотрение — студия разработки сайтов">
 <meta property="og:description" content="Сайты под ключ за 3–20 дней. Тарифы: $70 / $200 / $500.">
 <meta property="og:locale" content="ru_RU">
+<!-- При публикации замените на абсолютный URL: https://ваш-домен/assets/img/og-cover.png -->
+<meta property="og:image" content="assets/img/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Сайты, которые приносят деньги — тарифы $70, $200, $500">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="assets/img/og-cover.png">
 
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
-<script>document.documentElement.classList.add("js");</script>
+<script>document.documentElement.classList.add("js","at-hero");</script>
 </head>
 <body>
 
@@ -102,8 +109,10 @@
 
 <!-- ============ ГЕРОЙ ============ -->
 <section class="hero">
-  <div class="hero__art" aria-hidden="true" data-par="-16">
-    <img src="assets/img/chrome.svg" alt="" width="1200" height="700" decoding="async">
+  <div class="hero__space" aria-hidden="true">
+    <div class="hero__space-in" data-par="-46">
+      <img src="assets/img/blackhole.svg" alt="" width="1200" height="700" decoding="async">
+    </div>
   </div>
   <div class="glass-eye" id="glassEye" aria-hidden="true">
     <span class="glass-eye__shell"></span>
@@ -158,6 +167,9 @@
 
 <!-- ============ УСЛУГИ ============ -->
 <section class="section" id="services">
+  <div class="art art--cover art--light" aria-hidden="true">
+    <div class="art__in" data-par="34" style="margin-left:-300px;margin-top:-140px"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
+  </div>
   <div class="container">
     <div class="sec-head">
       <span class="sec-num" data-reveal>(01)</span>
@@ -211,8 +223,8 @@
 
 <!-- ============ ТАРИФЫ ============ -->
 <section class="section section--dark" id="pricing">
-  <div class="art art--chrome art--tl" aria-hidden="true">
-    <div class="art__in" data-par="26"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
+  <div class="art art--cover art--dark art--flip" aria-hidden="true">
+    <div class="art__in" data-par="-40" style="margin-left:260px;margin-top:120px"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
   </div>
   <div class="container">
     <div class="sec-head">
@@ -302,6 +314,9 @@
 
 <!-- ============ СРАВНЕНИЕ ============ -->
 <section class="section" id="compare">
+  <div class="art art--cover art--light art--flip" aria-hidden="true">
+    <div class="art__in" data-par="30" style="margin-left:-220px;margin-top:200px"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
+  </div>
   <div class="container">
     <div class="sec-head sec-head--row">
       <span class="sec-num" data-reveal>(03)</span>
@@ -347,6 +362,9 @@
 
 <!-- ============ ПРОЦЕСС ============ -->
 <section class="section section--dark" id="process">
+  <div class="art art--cover art--dark" aria-hidden="true">
+    <div class="art__in" data-par="44" style="margin-left:-340px;margin-top:-220px"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
+  </div>
   <div class="container">
     <div class="sec-head">
       <span class="sec-num" data-reveal>(04)</span>
@@ -404,6 +422,9 @@
 
 <!-- ============ ФОРМАТЫ ПРОЕКТОВ ============ -->
 <section class="section" id="works">
+  <div class="art art--cover art--light" aria-hidden="true">
+    <div class="art__in" data-par="-34" style="margin-left:320px;margin-top:-160px"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
+  </div>
   <div class="container">
     <div class="sec-head">
       <span class="sec-num" data-reveal>(05)</span>
@@ -526,6 +547,9 @@
 
 <!-- ============ FAQ ============ -->
 <section class="section" id="faq">
+  <div class="art art--cover art--light art--flip" aria-hidden="true">
+    <div class="art__in" data-par="28" style="margin-left:180px;margin-top:240px"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
+  </div>
   <div class="container">
     <div class="sec-head sec-head--row">
       <span class="sec-num" data-reveal>(07)</span>
@@ -571,8 +595,8 @@
 
 <!-- ============ КОНТАКТЫ ============ -->
 <section class="section section--dark contact" id="contact">
-  <div class="art art--chrome art--br" aria-hidden="true">
-    <div class="art__in" data-par="-22"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
+  <div class="art art--cover art--dark" aria-hidden="true">
+    <div class="art__in" data-par="-38" style="margin-left:240px;margin-top:180px"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
   </div>
   <div class="container">
     <div class="sec-head">

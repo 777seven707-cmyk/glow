@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" fill="none" role="img" aria-label="Чёрная дыра">
+  <defs>
+    <radialGradient id="bh-halo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0.28" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="0.52" stop-color="#c8d2e0" stop-opacity="0.12"/>
+      <stop offset="0.78" stop-color="#8a96a8" stop-opacity="0.04"/>
+      <stop offset="1"    stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- яркость диска: гаснет к краям кадра -->
+    <linearGradient id="bh-disk" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"    stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.09" stop-color="#d8dee7" stop-opacity="0.45"/>
+      <stop offset="0.24" stop-color="#ffffff" stop-opacity="0.92"/>
+      <stop offset="0.42" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="0.58" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="0.76" stop-color="#ffffff" stop-opacity="0.88"/>
+      <stop offset="0.91" stop-color="#d8dee7" stop-opacity="0.4"/>
+      <stop offset="1"    stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="bh-arc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"    stop-color="#ffffff" stop-opacity="0.15"/>
+      <stop offset="0.22" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="0.5"  stop-color="#eef2f7" stop-opacity="0.75"/>
+      <stop offset="0.78" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="1"    stop-color="#ffffff" stop-opacity="0.15"/>
+    </linearGradient>
+
+    <!-- газовые вихри -->
+    <filter id="bh-wisp" filterUnits="userSpaceOnUse" x="-260" y="-260" width="1720" height="1220" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.085" numOctaves="4" seed="5" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="13" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="3.6"/>
+    </filter>
+    <filter id="bh-wisp2" filterUnits="userSpaceOnUse" x="-260" y="-260" width="1720" height="1220" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.11" numOctaves="3" seed="11" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="B"/>
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <filter id="bh-soft"  x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+    <filter id="bh-soft2" filterUnits="userSpaceOnUse" x="-260" y="-260" width="1720" height="1220"><feGaussianBlur stdDeviation="22"/></filter>
+
+    <mask id="bh-upper" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="700">
+      <rect x="0" y="0" width="1200" height="354" fill="#ffffff"/>
+    </mask>
+    <mask id="bh-lower" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="700">
+      <rect x="0" y="352" width="1200" height="348" fill="#ffffff"/>
+    </mask>
+
+    <style>
+      @keyframes bhSpin{to{transform:rotate(360deg)}}
+      @keyframes bhBreathe{0%,100%{opacity:.85}50%{opacity:1}}
+      .spin{animation:bhSpin 90s linear infinite;transform-origin:600px 350px}
+      .spin-r{animation:bhSpin 130s linear infinite reverse;transform-origin:600px 350px}
+      .breathe{animation:bhBreathe 7s ease-in-out infinite}
+      @media (prefers-reduced-motion:reduce){.spin,.spin-r,.breathe{animation:none}}
+    </style>
+  </defs>
+
+  <!-- рассеянное свечение -->
+  <ellipse cx="600" cy="350" rx="470" ry="440" fill="url(#bh-halo)"/>
+
+  <!-- дальняя часть диска, поднятая гравитационной линзой над горизонтом -->
+  <g mask="url(#bh-upper)">
+    <g filter="url(#bh-wisp)" class="spin">
+      <ellipse cx="600" cy="352" rx="330" ry="256" fill="none" stroke="url(#bh-arc)" stroke-width="44"/>
+    </g>
+    <g filter="url(#bh-wisp2)" opacity="0.45" class="spin-r">
+      <ellipse cx="600" cy="352" rx="368" ry="278" fill="none" stroke="url(#bh-arc)" stroke-width="16"/>
+    </g>
+  </g>
+
+  <!-- дальняя часть плоского диска (уйдёт за горизонт) -->
+  <g filter="url(#bh-wisp)">
+    <ellipse cx="600" cy="346" rx="590" ry="34" fill="url(#bh-disk)"/>
+  </g>
+
+  <!-- нижняя дуга линзы -->
+  <g mask="url(#bh-lower)">
+    <g filter="url(#bh-wisp2)" opacity="0.3" class="spin">
+      <ellipse cx="600" cy="350" rx="302" ry="250" fill="none" stroke="url(#bh-arc)" stroke-width="22"/>
+    </g>
+  </g>
+
+  <!-- тень горизонта событий -->
+  <circle cx="600" cy="350" r="209" fill="#000000"/>
+
+  <!-- фотонное кольцо -->
+  <g class="breathe">
+    <circle cx="600" cy="350" r="215" fill="none" stroke="#ffffff" stroke-width="7" opacity="0.28" filter="url(#bh-soft)"/>
+    <circle cx="600" cy="350" r="214" fill="none" stroke="#ffffff" stroke-width="1.6" opacity="0.9"/>
+  </g>
+
+  <!-- ближняя часть диска — проходит перед горизонтом -->
+  <g mask="url(#bh-lower)">
+    <g filter="url(#bh-wisp)">
+      <ellipse cx="600" cy="366" rx="590" ry="26" fill="url(#bh-disk)"/>
+    </g>
+    <g filter="url(#bh-wisp2)" opacity="0.5">
+      <ellipse cx="600" cy="372" rx="540" ry="13" fill="url(#bh-disk)"/>
+    </g>
+  </g>
+
+  <!-- бликовое ядро у самого горизонта -->
+  <g filter="url(#bh-soft2)" opacity="0.3" style="mix-blend-mode:screen">
+    <ellipse cx="600" cy="366" rx="280" ry="14" fill="#ffffff"/>
+  </g>
+</svg>

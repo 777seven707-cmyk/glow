@@ -300,6 +300,24 @@
   }
 
 
+  /* ---------- 13.5 ТЁМНАЯ ШАПКА НАД ГЕРОЕМ ---------- */
+  function initHeroTheme() {
+    var hero = $('.hero');
+    var root = document.documentElement;
+    if (!hero) return;
+    var ticking = false;
+
+    function update() {
+      root.classList.toggle('at-hero', window.pageYOffset < hero.offsetHeight - 88);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+
   /* ---------- 14. ПАРАЛЛАКС ФОНОВЫХ СЛОЁВ ---------- */
   function initParallax() {
     var items = $$('[data-par]');
@@ -398,6 +416,7 @@
     initFaq();
     initAnchors();
     initForm();
+    initHeroTheme();
     initParallax();
     initGlassEye();
     initHud();
