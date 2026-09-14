@@ -299,6 +299,85 @@
     });
   }
 
+
+  /* ---------- 14. ПАРАЛЛАКС ФОНОВЫХ СЛОЁВ ---------- */
+  function initParallax() {
+    var items = $$('[data-par]');
+    if (!items.length || reduced) return;
+    var ticking = false;
+
+    function update() {
+      var vh = window.innerHeight;
+      items.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < -300 || r.top > vh + 300) return;
+        var progress = (r.top + r.height / 2 - vh / 2) / vh;
+        var amount = parseFloat(el.dataset.par) || 0;
+        el.style.setProperty('--par-y', (progress * amount).toFixed(2) + 'px');
+      });
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+
+  /* ---------- 15. СТЕКЛЯННЫЙ ГЛАЗ ---------- */
+  function initGlassEye() {
+    if (isTouch || reduced) return;
+    var eye = $('#glassEye');
+    var hero = $('.hero');
+    if (!eye || !hero) return;
+
+    var box = hero.getBoundingClientRect();
+
+    // доли ширины/высоты героя: цель и текущее сглаженное положение
+    var tx = 0.74, ty = 0.42, cx = tx, cy = ty;
+    var following = false, phase = 0;
+
+    hero.addEventListener('mousemove', function (e) {
+      tx = (e.clientX - box.left) / box.width;
+      ty = (e.clientY - box.top) / box.height;
+      following = true;
+      eye.classList.add('is-on');
+    });
+    hero.addEventListener('mouseleave', function () { following = false; });
+    setTimeout(function () { eye.classList.add('is-on'); }, 1500);
+
+    (function loop() {
+      requestAnimationFrame(loop);
+      box = hero.getBoundingClientRect();
+      // герой ушёл из кадра — не тратим кадры на пересчёт
+      if (box.bottom < 0 || box.top > window.innerHeight) return;
+
+      phase += 0.005;
+      var gx = following ? tx : 0.74 + Math.sin(phase) * 0.05;
+      var gy = following ? ty : 0.42 + Math.cos(phase * 1.35) * 0.08;
+      cx += (gx - cx) * 0.075;
+      cy += (gy - cy) * 0.075;
+      var size = eye.offsetWidth || 180;
+      eye.style.transform = 'translate3d(' +
+        (cx * box.width - size / 2).toFixed(1) + 'px,' +
+        (cy * box.height - size / 2).toFixed(1) + 'px,0)';
+    })();
+  }
+
+  /* ---------- 16. ПРИЦЕЛ НА ФИГУРЕ ---------- */
+  function initHud() {
+    var hud = $('#riderHud');
+    if (!hud) return;
+    if (!('IntersectionObserver' in window)) { hud.classList.add('is-in'); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { hud.classList.add('is-in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.35 });
+    io.observe(hud);
+  }
+
   /* ---------- 13. МЕЛОЧИ ---------- */
   function initMisc() {
     var y = $('#year');
@@ -319,6 +398,9 @@
     initFaq();
     initAnchors();
     initForm();
+    initParallax();
+    initGlassEye();
+    initHud();
     initMisc();
   }
 

@@ -31,6 +31,26 @@
   </div>
 </div>
 
+
+<!-- ============ SVG-ФИЛЬТРЫ ДЛЯ СТЕКЛА ============ -->
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="container-glass" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves="1" seed="1" result="turbulence"/>
+      <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="34" xChannelSelector="R" yChannelSelector="B" result="displaced"/>
+      <feGaussianBlur in="displaced" stdDeviation="3" result="finalBlur"/>
+      <feComposite in="finalBlur" in2="finalBlur" operator="over"/>
+    </filter>
+    <filter id="lens-glass" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.012" numOctaves="2" seed="7" result="t"/>
+      <feGaussianBlur in="t" stdDeviation="3" result="tb"/>
+      <feDisplacementMap in="SourceGraphic" in2="tb" scale="76" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="1.5"/>
+    </filter>
+  </defs>
+</svg>
+
 <!-- ============ ДЕКОР ============ -->
 <div class="grain" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
@@ -82,6 +102,15 @@
 
 <!-- ============ ГЕРОЙ ============ -->
 <section class="hero">
+  <div class="hero__art" aria-hidden="true" data-par="-16">
+    <img src="assets/img/chrome.svg" alt="" width="1200" height="700" decoding="async">
+  </div>
+  <div class="glass-eye" id="glassEye" aria-hidden="true">
+    <span class="glass-eye__shell"></span>
+    <span class="glass-eye__iris"></span>
+    <span class="glass-eye__pupil"></span>
+  </div>
+
   <div class="container">
     <div class="hero__top" data-reveal>
       <span class="tag"><i class="dot"></i> Принимаем 4 проекта на этот месяц</span>
@@ -102,7 +131,7 @@
       </p>
       <div class="hero__actions" data-reveal>
         <a href="#pricing" class="btn" data-magnetic><span>Смотреть тарифы</span></a>
-        <a href="#contact" class="btn btn--ghost" data-magnetic><span>Бесплатная консультация</span></a>
+        <a href="#contact" class="btn btn--glass" data-magnetic><span>Бесплатная консультация</span></a>
       </div>
     </div>
 
@@ -182,6 +211,9 @@
 
 <!-- ============ ТАРИФЫ ============ -->
 <section class="section section--dark" id="pricing">
+  <div class="art art--chrome art--tl" aria-hidden="true">
+    <div class="art__in" data-par="26"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
+  </div>
   <div class="container">
     <div class="sec-head">
       <span class="sec-num" data-reveal>(02)</span>
@@ -450,14 +482,45 @@
   </div>
 </section>
 
-<!-- ============ ЦИТАТА ============ -->
-<section class="quote">
-  <div class="container">
-    <p class="quote__text" data-reveal>
-      «Хороший сайт — это не тот, который получил награду.
-      Это тот, после которого вам написали».
-    </p>
-    <span class="quote__author" data-reveal>— принцип студии</span>
+<!-- ============ ФИГУРА В ТУМАНЕ ============ -->
+<section class="rider" id="rider">
+  <div class="container rider__in">
+
+    <div class="rider__text">
+      <span class="rider__eyebrow" data-reveal><i></i> Фокус на результате</span>
+      <p class="quote__text" data-reveal>
+        «Хороший сайт — это не тот, который получил награду.
+        Это тот, после которого вам написали».
+      </p>
+      <span class="quote__author" data-reveal>— принцип студии</span>
+      <div class="rider__actions" data-reveal>
+        <a href="#contact" class="btn btn--glass" data-magnetic><span>Обсудить задачу</span></a>
+      </div>
+    </div>
+
+    <figure class="rider__figure" data-reveal>
+      <img src="assets/img/rider.svg" alt="Фигура в тумане с подсвеченными очками" width="800" height="1000" loading="lazy" decoding="async">
+      <div class="rider__hud" id="riderHud">
+        <svg viewBox="0 0 220 186" fill="none" aria-hidden="true">
+          <rect class="hud__box" x="14" y="14" width="192" height="158" stroke="currentColor" stroke-width="1"/>
+          <g stroke="currentColor" stroke-width="1" fill="none">
+            <rect class="hud__pt" x="10" y="10" width="8" height="8"/>
+            <rect class="hud__pt" x="106" y="10" width="8" height="8"/>
+            <rect class="hud__pt" x="202" y="10" width="8" height="8"/>
+            <rect class="hud__pt" x="10" y="89" width="8" height="8"/>
+            <rect class="hud__pt" x="202" y="89" width="8" height="8"/>
+            <rect class="hud__pt" x="10" y="168" width="8" height="8"/>
+            <rect class="hud__pt" x="106" y="168" width="8" height="8"/>
+            <rect class="hud__pt" x="202" y="168" width="8" height="8"/>
+          </g>
+          <g class="hud__cross" stroke="currentColor" stroke-width="1">
+            <line x1="92" y1="93" x2="128" y2="93"/>
+            <line x1="110" y1="75" x2="110" y2="111"/>
+          </g>
+        </svg>
+      </div>
+    </figure>
+
   </div>
 </section>
 
@@ -508,6 +571,9 @@
 
 <!-- ============ КОНТАКТЫ ============ -->
 <section class="section section--dark contact" id="contact">
+  <div class="art art--chrome art--br" aria-hidden="true">
+    <div class="art__in" data-par="-22"><img src="assets/img/chrome.svg" alt="" width="1200" height="700" loading="lazy" decoding="async"></div>
+  </div>
   <div class="container">
     <div class="sec-head">
       <span class="sec-num" data-reveal>(08)</span>

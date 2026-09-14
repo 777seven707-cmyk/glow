@@ -521,3 +521,209 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
 @media (hover:none){
   .cursor{display:none}
 }
+
+/* =========================================================
+   25. АРТ-СЛОИ: ХРОМ, ТУМАН, СТЕКЛО
+   ========================================================= */
+
+.svg-defs{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+
+/* ---------- 25.1 Фоновые художественные слои ---------- */
+.art{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.art img{position:absolute;display:block;will-change:transform}
+.section > .container,.hero > .container,.quote > .container{position:relative;z-index:1}
+
+/* хром в герое */
+.hero__art{
+  position:absolute;top:15%;right:-14%;width:min(790px,60vw);z-index:0;pointer-events:none;
+  opacity:.8;filter:invert(1) hue-rotate(180deg) contrast(1.12) saturate(1.25);
+  -webkit-mask-image:radial-gradient(closest-side at 64% 50%,#000 44%,rgba(0,0,0,.32) 72%,transparent 100%);
+  mask-image:radial-gradient(closest-side at 64% 50%,#000 44%,rgba(0,0,0,.32) 72%,transparent 100%);
+  transform:translate3d(0,var(--par-y,0px),0);
+}
+.hero__art img{position:static;width:100%;height:auto;animation:artFloat 22s ease-in-out infinite}
+@keyframes artFloat{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  33%{transform:translate3d(-1.4%,2.2%,0) rotate(-1.2deg) scale(1.03)}
+  66%{transform:translate3d(1.8%,-1.6%,0) rotate(1deg) scale(1.01)}
+}
+
+/* хром на тёмных секциях */
+.art__in{position:absolute;width:min(1000px,92vw);transform:translate3d(0,var(--par-y,0px),0)}
+.art--tl{
+  -webkit-mask-image:linear-gradient(135deg,#000 0%,rgba(0,0,0,.55) 42%,transparent 76%);
+  mask-image:linear-gradient(135deg,#000 0%,rgba(0,0,0,.55) 42%,transparent 76%);
+}
+.art--br{
+  -webkit-mask-image:linear-gradient(315deg,#000 0%,rgba(0,0,0,.55) 42%,transparent 76%);
+  mask-image:linear-gradient(315deg,#000 0%,rgba(0,0,0,.55) 42%,transparent 76%);
+}
+.art--tl .art__in{top:-22%;left:-15%}
+.art--br .art__in{bottom:-28%;right:-16%;transform:translate3d(0,var(--par-y,0px),0) rotate(180deg)}
+.art--chrome img{
+  position:static;width:100%;height:auto;opacity:.46;
+  filter:brightness(1.3) contrast(1.08);
+  animation:artFloat 26s ease-in-out infinite reverse;
+}
+
+/* ---------- 25.2 Стеклянная кнопка (liquid glass) ---------- */
+.btn--glass{
+  background:transparent;border-color:transparent;color:var(--ink);
+  border-radius:999px;overflow:visible;isolation:isolate;
+  transition:transform .35s var(--ease),color .35s;
+}
+.btn--glass::before{
+  content:"";position:absolute;inset:0;z-index:0;border-radius:inherit;transform:none;
+  -webkit-backdrop-filter:blur(3px) saturate(170%);
+  backdrop-filter:blur(3px) saturate(170%);
+}
+/* браузеры без поддержки SVG-фильтра в backdrop-filter останутся на blur() выше */
+.btn--glass::before{
+  -webkit-backdrop-filter:url("#container-glass");
+  backdrop-filter:url("#container-glass");
+}
+.btn--glass::after{
+  content:"";position:absolute;inset:0;z-index:1;border-radius:inherit;pointer-events:none;
+  box-shadow:
+    0 0 6px rgba(0,0,0,.03),
+    0 2px 6px rgba(0,0,0,.08),
+    inset 3px 3px .5px -3px rgba(0,0,0,.9),
+    inset -3px -3px .5px -3px rgba(0,0,0,.85),
+    inset 1px 1px 1px -.5px rgba(0,0,0,.6),
+    inset -1px -1px 1px -.5px rgba(0,0,0,.6),
+    inset 0 0 6px 6px rgba(0,0,0,.12),
+    inset 0 0 2px 2px rgba(0,0,0,.06),
+    0 0 12px rgba(255,255,255,.15);
+  transition:box-shadow .4s var(--ease);
+}
+.btn--glass > span{position:relative;z-index:2}
+.btn--glass:hover{transform:scale(1.05)}
+.btn--glass:active{transform:scale(.98)}
+
+.section--dark .btn--glass,.quote .btn--glass{background:transparent;border-color:transparent;color:#fff}
+.section--dark .btn--glass::after,.quote .btn--glass::after{
+  box-shadow:
+    0 0 8px rgba(0,0,0,.03),
+    0 2px 6px rgba(0,0,0,.08),
+    inset 3px 3px .5px -3.5px rgba(255,255,255,.09),
+    inset -3px -3px .5px -3.5px rgba(255,255,255,.85),
+    inset 1px 1px 1px -.5px rgba(255,255,255,.6),
+    inset -1px -1px 1px -.5px rgba(255,255,255,.6),
+    inset 0 0 6px 6px rgba(255,255,255,.12),
+    inset 0 0 2px 2px rgba(255,255,255,.06),
+    0 0 12px rgba(0,0,0,.15);
+}
+.section--dark .btn--glass:hover,.quote .btn--glass:hover{color:#fff}
+
+/* ---------- 25.3 Стеклянный глаз ---------- */
+.glass-eye{
+  position:absolute;z-index:2;pointer-events:none;
+  width:clamp(130px,15vw,208px);aspect-ratio:1;border-radius:50%;
+  top:0;left:0;transform:translate3d(60vw,38vh,0);
+  opacity:0;transition:opacity .8s var(--ease);
+  will-change:transform;
+}
+.glass-eye.is-on{opacity:1}
+.glass-eye::before{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  -webkit-backdrop-filter:blur(2px) saturate(160%);
+  backdrop-filter:blur(2px) saturate(160%);
+}
+.glass-eye::before{
+  -webkit-backdrop-filter:url("#lens-glass");
+  backdrop-filter:url("#lens-glass");
+}
+.glass-eye__shell{
+  position:absolute;inset:0;border-radius:50%;
+  box-shadow:
+    inset 4px 4px 1px -4px rgba(255,255,255,.95),
+    inset -4px -4px 1px -4px rgba(0,0,0,.55),
+    inset 2px 2px 2px -1px rgba(255,255,255,.7),
+    inset -2px -2px 2px -1px rgba(0,0,0,.35),
+    inset 0 0 14px 10px rgba(255,255,255,.14),
+    0 10px 40px rgba(0,0,0,.14),
+    0 0 22px rgba(255,255,255,.35);
+}
+.glass-eye__iris{
+  position:absolute;inset:15%;border-radius:50%;
+  border:1px solid rgba(10,10,10,.1);
+  box-shadow:inset 0 0 24px rgba(255,255,255,.35);
+  animation:irisSpin 16s linear infinite;
+}
+.glass-eye__iris::after{
+  content:"";position:absolute;top:8%;left:16%;width:34%;height:22%;border-radius:50%;
+  background:linear-gradient(120deg,rgba(255,255,255,.85),rgba(255,255,255,0));
+  filter:blur(3px);
+}
+.glass-eye__pupil{
+  position:absolute;inset:40%;border-radius:50%;
+  border:1px solid rgba(10,10,10,.14);
+  animation:pupil 5s ease-in-out infinite;
+}
+@keyframes irisSpin{to{transform:rotate(360deg)}}
+@keyframes pupil{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(.78);opacity:.5}}
+
+/* ---------- 25.4 Секция с фигурой в тумане ---------- */
+.rider{
+  position:relative;overflow:hidden;padding-block:var(--sec-pad);
+  background:linear-gradient(180deg,#eceef0 0%,#e0e3e7 55%,#d6dade 100%);
+  color:var(--ink);
+}
+.rider::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 80% at 50% 40%,transparent 40%,rgba(255,255,255,.55) 100%);
+}
+.rider__in{
+  position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;
+  gap:clamp(32px,6vw,80px);align-items:center;
+}
+.rider__figure{position:relative;width:min(440px,100%);margin-inline:auto}
+.rider__figure img{width:100%;height:auto;display:block}
+.rider__hud{
+  position:absolute;left:50%;top:37.5%;transform:translate(-50%,-50%);
+  width:62%;color:#fff;filter:drop-shadow(0 0 4px rgba(0,0,0,.45));
+}
+.rider__hud svg{width:100%;height:auto;display:block}
+.hud__box{opacity:.85;animation:hudBreathe 6s ease-in-out infinite}
+.hud__pt{opacity:0}
+.rider__hud.is-in .hud__pt{animation:hudPt .5s var(--ease) forwards}
+html:not(.js) .hud__pt{opacity:1}
+.hud__cross{animation:hudPulse 3.4s ease-in-out infinite}
+.hud__tag{font:500 6px/1 var(--font-body);letter-spacing:.22em;fill:#fff;opacity:.85}
+@keyframes hudBreathe{0%,100%{opacity:.85}50%{opacity:.55}}
+@keyframes hudPulse{0%,100%{opacity:.45}50%{opacity:1}}
+@keyframes hudPt{to{opacity:1}}
+.rider__hud.is-in .hud__pt:nth-child(1){animation-delay:.05s}
+.rider__hud.is-in .hud__pt:nth-child(2){animation-delay:.1s}
+.rider__hud.is-in .hud__pt:nth-child(3){animation-delay:.15s}
+.rider__hud.is-in .hud__pt:nth-child(4){animation-delay:.2s}
+.rider__hud.is-in .hud__pt:nth-child(5){animation-delay:.25s}
+.rider__hud.is-in .hud__pt:nth-child(6){animation-delay:.3s}
+.rider__hud.is-in .hud__pt:nth-child(7){animation-delay:.35s}
+.rider__hud.is-in .hud__pt:nth-child(8){animation-delay:.4s}
+
+.rider__text .quote__text{margin-inline:0;text-align:left;max-width:15ch;font-size:clamp(22px,3.1vw,44px)}
+.rider__text .quote__author{color:rgba(10,10,10,.5);text-align:left}
+.rider__eyebrow{
+  display:inline-flex;align-items:center;gap:10px;margin-bottom:26px;
+  font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(10,10,10,.55);
+}
+.rider__eyebrow i{width:6px;height:6px;border-radius:50%;background:#ff5a00;animation:pulse 1.8s infinite}
+.rider__actions{margin-top:36px;display:flex;gap:12px;flex-wrap:wrap}
+
+/* ---------- 25.5 Адаптив и доступность арт-слоёв ---------- */
+@media (max-width:900px){
+  .rider__in{grid-template-columns:1fr;gap:44px}
+  .rider__text .quote__text{max-width:none}
+  .rider__figure{order:-1;width:min(320px,80%)}
+  .hero__art{top:auto;bottom:-16%;right:-34%;width:136vw;opacity:.26}
+  .glass-eye{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero__art img,.art--chrome img,.glass-eye__iris,.glass-eye__pupil,.hud__box,.hud__cross{animation:none}
+  .hud__pt{opacity:1}
+  .glass-eye{display:none}
+}
+@media (hover:none){
+  .glass-eye{display:none}
+}
