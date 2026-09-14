@@ -383,17 +383,33 @@
     })();
   }
 
-  /* ---------- 16. ПРИЦЕЛ НА ФИГУРЕ ---------- */
-  function initHud() {
-    var hud = $('#riderHud');
-    if (!hud) return;
-    if (!('IntersectionObserver' in window)) { hud.classList.add('is-in'); return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { hud.classList.add('is-in'); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.35 });
-    io.observe(hud);
+  /* ---------- 16. ВРАЩЕНИЕ ЧЁРНОЙ ДЫРЫ ---------- */
+  function initBlackHole() {
+    var hero = $('.hero');
+    var spin = $('#bhSpin');
+    if (!hero || !spin || reduced || isTouch) return;
+
+    var angle = 0, speed = 0.05, target = 0.05;   // градусов за кадр
+
+    hero.addEventListener('mouseenter', function () {
+      target = 0.62;
+      hero.classList.add('is-spinning');
+    });
+    hero.addEventListener('mouseleave', function () {
+      target = 0.05;
+      hero.classList.remove('is-spinning');
+    });
+
+    (function loop() {
+      requestAnimationFrame(loop);
+      var r = hero.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > window.innerHeight) return;
+
+      // разгон и торможение сглажены — диск раскручивается, а не дёргается
+      speed += (target - speed) * 0.04;
+      angle = (angle + speed) % 360;
+      spin.style.rotate = angle.toFixed(2) + 'deg';
+    })();
   }
 
   /* ---------- 13. МЕЛОЧИ ---------- */
@@ -419,7 +435,7 @@
     initHeroTheme();
     initParallax();
     initGlassEye();
-    initHud();
+    initBlackHole();
     initMisc();
   }
 
