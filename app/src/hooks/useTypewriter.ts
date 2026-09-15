@@ -7,10 +7,18 @@ export type TypewriterState = { displayed: string; done: boolean }
  * Возвращает текущий срез и признак завершения.
  */
 export function useTypewriter(text: string, speed = 38, startDelay = 600): TypewriterState {
-  const [displayed, setDisplayed] = useState('')
-  const [done, setDone] = useState(false)
+  // Тем, кто просил меньше движения, строка показывается сразу целиком.
+  const reduced =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const [displayed, setDisplayed] = useState(reduced ? text : '')
+  const [done, setDone] = useState(reduced)
 
   useEffect(() => {
+    // Начальное состояние уже содержит готовую строку — печатать нечего.
+    if (reduced) return
+
     let interval: ReturnType<typeof setInterval> | undefined
     const timeout = setTimeout(() => {
       // Сброс сделан здесь, а не синхронно в эффекте: при монтировании
@@ -33,7 +41,7 @@ export function useTypewriter(text: string, speed = 38, startDelay = 600): Typew
       clearTimeout(timeout)
       if (interval) clearInterval(interval)
     }
-  }, [text, speed, startDelay])
+  }, [text, speed, startDelay, reduced])
 
   return { displayed, done }
 }

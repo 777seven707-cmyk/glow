@@ -1,4 +1,5 @@
 import { Route, Routes, useLocation } from 'react-router-dom'
+import { MotionConfig } from 'motion/react'
 import { Suspense, lazy, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
@@ -7,21 +8,25 @@ import Home from './pages/Home'
 const Work = lazy(() => import('./pages/Work'))
 
 export default function App() {
-  const { pathname } = useLocation()
+  const { pathname, state } = useLocation()
 
   useEffect(() => {
+    // Переход к секции прокручивает страницу сам — наверх в этом случае не уводим.
+    if ((state as { section?: string } | null)?.section) return
     window.scrollTo(0, 0)
-  }, [pathname])
+  }, [pathname, state])
 
   return (
-    <div className="relative bg-white text-neutral-900 font-sans selection:bg-[#EAECE9] selection:text-[#1C2E1E] antialiased overflow-x-hidden flex flex-col lg:block lg:min-h-screen">
-      <Navbar />
-      <Suspense fallback={<div className="min-h-screen bg-white" />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/work" element={<Work />} />
-        </Routes>
-      </Suspense>
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="relative bg-white text-neutral-900 font-sans selection:bg-[#EAECE9] selection:text-[#1C2E1E] antialiased overflow-x-hidden flex flex-col lg:block lg:min-h-screen">
+        <Navbar />
+        <Suspense fallback={<div className="min-h-screen bg-white" />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/work" element={<Work />} />
+          </Routes>
+        </Suspense>
+      </div>
+    </MotionConfig>
   )
 }
