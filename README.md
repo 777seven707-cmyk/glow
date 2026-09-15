@@ -213,6 +213,7 @@ Safari не поддерживает SVG-фильтр внутри `backdrop-fil
 npx create-next-app@latest . --typescript --tailwind --eslint --app
 npx shadcn@latest init            # создаст lib/utils.ts с функцией cn и алиас @/*
 npm i @radix-ui/react-slot class-variance-authority
+npm i @splinetool/runtime @splinetool/react-spline framer-motion
 ```
 
 `shadcn init` пропишет алиас `@/*` в `tsconfig.json` и создаст `lib/utils.ts` —
