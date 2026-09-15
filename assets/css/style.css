@@ -552,22 +552,29 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
 .art img{position:absolute;display:block;will-change:transform}
 .section > .container,.hero > .container,.quote > .container{position:relative;z-index:1}
 
-/* Хром идёт через всю страницу: в каждой секции свой полноразмерный слой.
-   Ширина у всех одинаковая — браузер декодирует картинку один раз
-   и переиспользует для всех копий. Снимок уже на чёрном фоне,
-   поэтому на тёмных секциях подложка сливается сама, без блендов. */
-.art--cover{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.art--cover .art__in{
-  position:absolute;top:50%;left:50%;width:1500px;
-  transform:translate(-50%,-50%) translate3d(0,var(--par-y,0px),0);
+/* Летящие линии на фоне секций: два встречных пучка кривых,
+   по которым бежит штрих. Разметку создаёт assets/js/paths.js. */
+.paths{
+  position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  color:#fff;
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 16%,#000 84%,transparent);
+  mask-image:linear-gradient(180deg,transparent,#000 16%,#000 84%,transparent);
 }
-.art--cover img{position:static;width:100%;height:auto;animation:artFloat 34s ease-in-out infinite}
-.art--cover img{
-  opacity:.22;filter:brightness(.8) contrast(1.04) saturate(1.05);
-  -webkit-mask-image:radial-gradient(50% 50% at 50% 50%,#000 26%,rgba(0,0,0,.45) 66%,transparent 100%);
-  mask-image:radial-gradient(50% 50% at 50% 50%,#000 26%,rgba(0,0,0,.45) 66%,transparent 100%);
+.paths svg{display:block;width:100%;height:100%}
+.paths--flip svg{transform:scaleX(-1)}
+.paths path{
+  fill:none;stroke:currentColor;
+  /* Штрих почти сплошной: по линии бежит разрыв, а не пунктир.
+     Доли считаются от pathLength="1", то есть от длины самой кривой. */
+  stroke-dasharray:.82 .18;
+  opacity:var(--op);
+  animation:pathFlow var(--dur) linear infinite,
+            pathFade calc(var(--dur) * .55) ease-in-out infinite;
+  animation-play-state:paused;
 }
-.art--flip img{animation-direction:reverse}
+.paths.is-running path{animation-play-state:running}
+@keyframes pathFlow{from{stroke-dashoffset:0}  to{stroke-dashoffset:-1}}
+@keyframes pathFade{0%,100%{opacity:var(--op)} 50%{opacity:calc(var(--op) * 1.7)}}
 
 /* ---------- ГЕРОЙ: ТЁМНЫЙ, С ЧЁРНОЙ ДЫРОЙ ---------- */
 .hero{background:var(--bg);color:var(--ink)}
@@ -749,11 +756,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
   .rider__text .quote__text{max-width:none}
   .rider__figure{order:-1;width:min(320px,80%)}
   .hero__space-in{left:52%;top:44%;width:172vw}
-  .art--cover .art__in{width:980px}
+  
   .glass-eye{display:none}
 }
 @media (prefers-reduced-motion:reduce){
-  .art--cover img,.bh-stage,.glass-eye__iris,.glass-eye__pupil{animation:none}
+  .bh-stage,.glass-eye__iris,.glass-eye__pupil{animation:none}
   .glass-eye{display:none}
 }
 @media (hover:none){
