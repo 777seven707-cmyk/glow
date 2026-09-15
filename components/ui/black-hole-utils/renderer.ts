@@ -49,8 +49,8 @@ export function createRenderer(options: RendererOptions): Renderer {
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  let scale = options.scale ?? (small ? 0.5 : 0.75);
-  let steps = options.steps ?? (small ? 110 : 150);
+  let scale = options.scale ?? (small ? 0.38 : 0.5);
+  let steps = options.steps ?? (small ? 64 : 72);
   const idleSpin = options.spin ?? 1;
   const hoverSpin = options.spinOnHover ?? 4.5;
 
@@ -168,15 +168,22 @@ export function createRenderer(options: RendererOptions): Renderer {
     const start = performance.now();
     let slow = 0;
     let first = true;
+    let prev = 0;
+    let avg = 0;
+    const MIN_GAP = 42;      // 24 кадра в секунду: диск вращается медленно
+
+    let lastFrame = 0;
 
     const loop = (now: number) => {
       if (disposed) return;
       frameId = requestAnimationFrame(loop);
 
-      const box = canvas.getBoundingClientRect();
-      if (box.bottom < 0 || box.top > window.innerHeight) return;  // вне экрана не считаем
+      if (now - lastFrame < MIN_GAP) return;
+      lastFrame = now;
 
-      const began = performance.now();
+      const box = canvas.getBoundingClientRect();
+      if (box.bottom < 0 || box.top > window.innerHeight) { prev = 0; return; }
+
       draw((now - start) / 1000);
 
       if (first) {
@@ -184,16 +191,24 @@ export function createRenderer(options: RendererOptions): Renderer {
         resolveReady();
       }
 
-      /* Кадр даётся тяжело — снижаем качество, чтобы не ронять частоту */
-      if (performance.now() - began > 22) {
-        if (++slow > 12) {
+      /* Мерим промежуток между кадрами, а не время вызова отрисовки:
+         drawArrays возвращается сразу, работа уходит на видеокарту
+         асинхронно, поэтому по нему нагрузку не увидеть. */
+      if (prev) {
+        const gap = now - prev;
+        avg = avg ? avg * 0.9 + gap * 0.1 : gap;
+        if (avg > MIN_GAP * 1.7) {
+          if (++slow > 20) {
+            slow = 0;
+            if (steps > 48) steps -= 12;
+            else if (scale > 0.3) { scale -= 0.08; width = 0; }
+            avg = MIN_GAP;
+          }
+        } else {
           slow = 0;
-          if (steps > 90) steps -= 25;
-          else if (scale > 0.4) { scale -= 0.1; width = 0; }
         }
-      } else {
-        slow = 0;
       }
+      prev = now;
     };
 
     frameId = requestAnimationFrame(loop);

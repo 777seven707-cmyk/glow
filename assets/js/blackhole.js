@@ -29,7 +29,7 @@ float noise(vec3 p){
 
 float fbm(vec3 p){
   float a = 0.5, s = 0.0;
-  for (int i = 0; i < 5; i++){ s += a * noise(p); p *= 2.07; a *= 0.5; }
+  for (int i = 0; i < 3; i++){ s += a * noise(p); p *= 2.07; a *= 0.5; }
   return s;
 }
 
@@ -43,10 +43,9 @@ vec3 disk(vec3 hit, float rr){
 
   /* Угловая координата меняется медленно, радиальная быстро —
      шум вытягивается в волокна вдоль орбиты */
-  float n  = fbm(vec3(s * 1.45, rr * 1.9));
-  float n2 = fbm(vec3(s * 3.1,  rr * 4.2 + 9.0));
-  float gas = pow(n, 1.4) * (0.62 + 0.62 * n2);
-  gas *= 0.84 + 0.16 * sin(rr * 2.6 + n * 8.0);
+  float n = fbm(vec3(s * 1.45, rr * 1.9));
+  float gas = n * n * 1.35;
+  gas *= 0.7 + 0.5 * sin(rr * 3.4 + n * 9.0);
 
   float inner = smoothstep(2.55, 3.5, rr);
   float outer = 1.0 - smoothstep(7.5, 12.0, rr);
@@ -82,7 +81,8 @@ void main(){
     if (r < 1.02) break;
     if (r > 34.0) break;
 
-    vec3 acc  = -1.5 * h2 * pos / pow(r, 5.0);
+    float r2 = r * r;
+    vec3 acc  = -1.5 * h2 * pos / (r2 * r2 * r);   /* дешевле, чем pow(r,5) */
     vec3 npos = pos + vel * dt + 0.5 * acc * dt * dt;
     vel += acc * dt;
 
@@ -159,8 +159,8 @@ void main(){
        зато кадр дешевле в несколько раз */
     /* На телефонах считаем грубее: экран меньше, а видеоядро слабее */
     var small = window.innerWidth < 760 || window.matchMedia('(hover: none)').matches;
-    var scale = small ? 0.5 : 0.75;
-    var steps = small ? 110 : 150;
+    var scale = small ? 0.38 : 0.5;
+    var steps = small ? 64 : 72;
     var w = 0, h = 0;
 
     function resize() {
@@ -181,7 +181,10 @@ void main(){
       hero.addEventListener('mouseleave', function () { spinTarget = 1;   hero.classList.remove('is-spinning'); });
     }
 
-    var t0 = performance.now(), slow = 0, drawn = false;
+    var t0 = performance.now(), slow = 0, prev = 0, avg = 0;
+    var lastFrame = 0;
+    var MIN_GAP = 42;        /* 24 кадра в секунду: диск вращается медленно,
+                                разницы с 60 не видно, а работы втрое меньше */
 
     function draw(timeSec) {
       resize();
@@ -201,22 +204,30 @@ void main(){
 
     function frame(now) {
       requestAnimationFrame(frame);
+      if (now - lastFrame < MIN_GAP) return;
+      lastFrame = now;
+
       var box = host.getBoundingClientRect();
-      if (box.bottom < 0 || box.top > window.innerHeight) return;   // вне экрана не считаем
+      if (box.bottom < 0 || box.top > window.innerHeight) { prev = 0; return; }  // вне экрана не считаем
 
-      var started = performance.now();
       draw((now - t0) / 1000);
-      drawn = true;
 
-      /* Кадр даётся тяжело — снижаем качество, чтобы не ронять частоту */
-      var cost = performance.now() - started;
-      if (cost > 22) {
-        if (++slow > 12) {
-          slow = 0;
-          if (steps > 90) steps -= 25;
-          else if (scale > 0.4) { scale -= 0.1; w = 0; }
-        }
-      } else slow = 0;
+      /* Мерим промежуток между кадрами, а не время вызова отрисовки:
+         drawArrays возвращается сразу, работа уходит на видеокарту асинхронно,
+         поэтому по нему нагрузку не увидеть. */
+      if (prev) {
+        var gap = now - prev;
+        avg = avg ? avg * 0.9 + gap * 0.1 : gap;
+        if (avg > MIN_GAP * 1.7) {
+          if (++slow > 20) {
+            slow = 0;
+            if (steps > 48) steps -= 12;
+            else if (scale > 0.3) { scale -= 0.08; w = 0; }
+            avg = MIN_GAP;
+          }
+        } else slow = 0;
+      }
+      prev = now;
     }
 
     requestAnimationFrame(frame);

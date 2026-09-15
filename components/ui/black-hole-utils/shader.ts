@@ -30,7 +30,7 @@ float noise(vec3 p){
 
 float fbm(vec3 p){
   float a = 0.5, s = 0.0;
-  for (int i = 0; i < 5; i++){ s += a * noise(p); p *= 2.07; a *= 0.5; }
+  for (int i = 0; i < 3; i++){ s += a * noise(p); p *= 2.07; a *= 0.5; }
   return s;
 }
 
@@ -44,10 +44,9 @@ vec3 disk(vec3 hit, float rr, float time, float spin){
 
   /* Угловая координата меняется медленно, радиальная быстро —
      шум вытягивается в волокна вдоль орбиты */
-  float n  = fbm(vec3(s * 1.45, rr * 1.9));
-  float n2 = fbm(vec3(s * 3.1,  rr * 4.2 + 9.0));
-  float gas = pow(n, 1.4) * (0.62 + 0.62 * n2);
-  gas *= 0.84 + 0.16 * sin(rr * 2.6 + n * 8.0);
+  float n = fbm(vec3(s * 1.45, rr * 1.9));
+  float gas = n * n * 1.35;
+  gas *= 0.7 + 0.5 * sin(rr * 3.4 + n * 9.0);
 
   float inner = smoothstep(2.55, 3.5, rr);
   float outer = 1.0 - smoothstep(7.5, 12.0, rr);
@@ -83,7 +82,8 @@ void main(){
     if (r < 1.02) break;
     if (r > 34.0) break;
 
-    vec3 acc  = -1.5 * h2 * pos / pow(r, 5.0);
+    float r2 = r * r;
+    vec3 acc  = -1.5 * h2 * pos / (r2 * r2 * r);   /* дешевле, чем pow(r,5) */
     vec3 npos = pos + vel * dt + 0.5 * acc * dt * dt;
     vel += acc * dt;
 
@@ -97,8 +97,8 @@ void main(){
   }
 
   col = max(col, 0.0);
-  col += pow(col, vec3(2.2)) * 0.5;   /* мягкое свечение */
-  col = col / (1.0 + col);            /* тональная компрессия */
+  col += pow(col, vec3(2.2)) * 0.5;
+  col = col / (1.0 + col);
   col = pow(col, vec3(0.85));
   gl_FragColor = vec4(col, 1.0);
 }
