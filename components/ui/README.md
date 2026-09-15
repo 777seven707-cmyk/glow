@@ -13,6 +13,9 @@ black-hole.tsx                  компонент-обёртка: канвас 
 black-hole-utils/renderer.ts    создание контекста, цикл кадров, dispose
 black-hole-utils/shader.ts      вершинный и фрагментный шейдеры
 liquid-glass-button.tsx         кнопки LiquidButton и MetalButton
+background-paths.tsx            летящие линии + заголовок по буквам
+background-paths-demo.tsx       демо к нему
+button.tsx                      Button из shadcn/ui
 splite.tsx                      SplineScene — ленивая загрузка 3D-сцены
 spotlight.tsx                   Spotlight — пятно света за курсором
 card.tsx                        Card из shadcn/ui
@@ -131,4 +134,69 @@ return () => {
   parentElement.removeEventListener('mouseenter', onEnter);
   parentElement.removeEventListener('mouseleave', onLeave);
 };
+```
+
+
+## background-paths
+
+```bash
+npm i framer-motion @radix-ui/react-slot class-variance-authority
+```
+
+```tsx
+import { BackgroundPaths } from "@/components/ui/background-paths";
+
+<BackgroundPaths title="Сайты, которые приносят деньги" />
+```
+
+Геометрия проверена отрисовкой: два встречных пучка по 36 кривых, вместе
+дают перекрещивающийся поток линий. Координаты путей выходят далеко за
+`viewBox` (по x от −555 до 859 при ширине 696) — так и задумано, в кадр
+попадает только средняя часть, за счёт этого линии «влетают» и «вылетают».
+
+### Это не фон, а целая секция
+
+Несмотря на название, компонент — готовый первый экран: `min-h-screen`,
+свой заголовок по буквам и кнопка «Discover Excellence». Просто подложить
+его под свой контент не получится.
+
+Если нужны только линии, внутренняя функция `FloatingPaths` подойдёт,
+но она не экспортируется — добавьте `export` перед `function FloatingPaths`
+и используйте её отдельно.
+
+### На что обратить внимание
+
+**Заголовок внутри SVG читают скринридеры.** Тег `<title>Background Paths</title>`
+озвучивается вслух, хотя это чисто декоративная графика. Уберите его,
+а самому `<svg>` поставьте `aria-hidden="true"`.
+
+**Движение не отключается.** 72 линии анимируются бесконечно, без оглядки
+на системную настройку «уменьшить движение». Оберните в проверку:
+
+```tsx
+const reduced = useReducedMotion();   // из framer-motion
+// ...
+animate={reduced ? undefined : { pathLength: 1, opacity: [0.3, 0.6, 0.3], pathOffset: [0, 1, 0] }}
+```
+
+**Нагрузка.** 36 путей × 2 пучка = 72 бесконечные анимации, каждая меняет
+`stroke-dasharray` и `stroke-dashoffset` — это перерисовка всего SVG каждый
+кадр. На слабых машинах заметно. Если тормозит, уменьшите `length: 36`.
+
+**Длительность пересчитывается при каждом рендере.** `duration: 20 + Math.random() * 10`
+стоит прямо в теле компонента, поэтому любой повторный рендер родителя
+перезапустит все 72 анимации с новыми значениями. Вынесите массив `paths`
+в `useMemo(() => ..., [position])`.
+
+**Поле `color` в массиве `paths` не используется** — цвет берётся из
+`stroke="currentColor"`. Можно удалить.
+
+**Два разных `Button` в папке.** `button.tsx` (канонический shadcn) и
+`liquid-glass-button.tsx` тоже экспортируют `Button` и `buttonVariants`.
+Файлы разные, конфликта нет, но если понадобится импортировать оба
+в одном месте — переименовывайте при импорте:
+
+```tsx
+import { Button } from "@/components/ui/button";
+import { LiquidButton } from "@/components/ui/liquid-glass-button";
 ```
