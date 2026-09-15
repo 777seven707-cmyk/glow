@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var COUNT = 30;          // кривых в одном пучке
+  var COUNT = 20;          // кривых в одном пучке
   var VIEWBOX = '0 0 696 316';
 
   /* Формула кривых повторяет компонент background-paths:
@@ -16,23 +16,25 @@
   function bundle(position) {
     var out = '';
     for (var i = 0; i < COUNT; i++) {
-      var x1 = 380 - i * 5 * position;
-      var y1 = 189 + i * 6;
-      var x2 = 312 - i * 5 * position;
-      var y2 = 216 - i * 6;
-      var x3 = 152 - i * 5 * position;
-      var y3 = 343 - i * 6;
-      var x4 = 616 - i * 5 * position;
-      var y4 = 470 - i * 6;
-      var x5 = 684 - i * 5 * position;
-      var y5 = 875 - i * 6;
+      /* шаг растянут так, чтобы пучок сохранил прежнюю ширину */
+      var j = i * (30 / COUNT);
+      var x1 = 380 - j * 5 * position;
+      var y1 = 189 + j * 6;
+      var x2 = 312 - j * 5 * position;
+      var y2 = 216 - j * 6;
+      var x3 = 152 - j * 5 * position;
+      var y3 = 343 - j * 6;
+      var x4 = 616 - j * 5 * position;
+      var y4 = 470 - j * 6;
+      var x5 = 684 - j * 5 * position;
+      var y5 = 875 - j * 6;
 
       var d = 'M-' + x1 + ' -' + y1 +
               'C-' + x1 + ' -' + y1 + ' -' + x2 + ' ' + y2 + ' ' + x3 + ' ' + y3 +
               'C' + x4 + ' ' + y4 + ' ' + x5 + ' ' + y5 + ' ' + x5 + ' ' + y5;
 
-      var width = (0.4 + i * 0.022).toFixed(2);
-      var op = (0.012 + i * 0.0026).toFixed(4);   // фон не должен спорить с текстом
+      var width = (0.4 + j * 0.022).toFixed(2);
+      var op = (0.012 + j * 0.0026).toFixed(4);   // фон не должен спорить с текстом
       var dur = (22 + (i % 7) * 2.5).toFixed(1);   // разброс задан один раз, не случайно каждый кадр
 
       out += '<path pathLength="1" d="' + d + '" stroke-width="' + width +
@@ -74,7 +76,7 @@
           host.classList.remove('is-running');   // вне экрана не тратим кадры
         }
       });
-    }, { rootMargin: '25% 0px' });
+    }, { rootMargin: '0px' });   /* анимируем только то, что реально в кадре */
 
     hosts.forEach(function (host) { io.observe(host); });
   }

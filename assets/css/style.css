@@ -555,10 +555,15 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
 /* Летящие линии на фоне секций: два встречных пучка кривых,
    по которым бежит штрих. Разметку создаёт assets/js/paths.js. */
 .paths{
-  position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  /* Полоса занимает середину секции, а не всю её высоту: слой перерисовки
+     вдвое меньше, а под заголовком и у краёв линий всё равно не видно.
+     contain отрезает этот слой от остальной страницы — перерисовка
+     штриха не тянет за собой пересчёт соседних блоков. */
+  position:absolute;inset:14% 0;z-index:0;overflow:hidden;pointer-events:none;
+  contain:layout paint style;
   color:#fff;
-  -webkit-mask-image:linear-gradient(180deg,transparent,#000 16%,#000 84%,transparent);
-  mask-image:linear-gradient(180deg,transparent,#000 16%,#000 84%,transparent);
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);
+  mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);
 }
 .paths svg{display:block;width:100%;height:100%}
 .paths--flip svg{transform:scaleX(-1)}
@@ -568,13 +573,17 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
      Доли считаются от pathLength="1", то есть от длины самой кривой. */
   stroke-dasharray:.82 .18;
   opacity:var(--op);
-  animation:pathFlow var(--dur) linear infinite,
-            pathFade calc(var(--dur) * .55) ease-in-out infinite;
+  animation:pathFlow var(--dur) linear infinite;
   animation-play-state:paused;
 }
 .paths.is-running path{animation-play-state:running}
 @keyframes pathFlow{from{stroke-dashoffset:0}  to{stroke-dashoffset:-1}}
-@keyframes pathFade{0%,100%{opacity:var(--op)} 50%{opacity:calc(var(--op) * 1.7)}}
+
+/* «Дыхание» пучка задано на контейнере, а не на каждой кривой.
+   Это один композитный слой вместо 120 перерисовок в кадр:
+   та же живость на фоне, но без просадки кадров. */
+.paths.is-running{animation:pathsBreathe 9s ease-in-out infinite}
+@keyframes pathsBreathe{0%,100%{opacity:.72} 50%{opacity:1}}
 
 /* ---------- ГЕРОЙ: ТЁМНЫЙ, С ЧЁРНОЙ ДЫРОЙ ---------- */
 .hero{background:var(--bg);color:var(--ink)}

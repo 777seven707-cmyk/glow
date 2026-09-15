@@ -114,6 +114,17 @@ void main(){
     return s;
   }
 
+  /* WEBGL_debug_renderer_info доступен не везде; когда его нет,
+     считаем рендерер аппаратным и полагаемся на подстройку качества. */
+  function isSoftware(gl) {
+    try {
+      var ext = gl.getExtension('WEBGL_debug_renderer_info');
+      if (!ext) return false;
+      var name = String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || '').toLowerCase();
+      return /swiftshader|llvmpipe|softpipe|software|basic render|microsoft basic/.test(name);
+    } catch (e) { return false; }
+  }
+
   function init() {
     var host = document.getElementById('bhStage');
     if (!host) return;
@@ -127,6 +138,15 @@ void main(){
     var opts = { alpha: false, antialias: false, depth: false, powerPreference: 'high-performance' };
     var gl = canvas.getContext('webgl', opts) || canvas.getContext('experimental-webgl', opts);
     if (!gl) return;
+
+    /* Если у браузера нет аппаратного ускорения, шейдер считает процессор.
+       Трассировка лучей в софте роняет страницу до 5-7 кадров в секунду,
+       поэтому в этом случае честнее оставить запасную картинку. */
+    if (isSoftware(gl)) {
+      var loseEarly = gl.getExtension('WEBGL_lose_context');
+      if (loseEarly) loseEarly.loseContext();   // не держим контекст впустую
+      return;
+    }
 
     var vs = compile(gl, gl.VERTEX_SHADER, VERT);
     var fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
@@ -202,7 +222,19 @@ void main(){
       return;
     }
 
+    /* Последняя ступень: слабое видеоядро не вытягивает даже минимальное
+       качество. Возвращаем статичный кадр — он всегда лучше рывков. */
+    var alive = true;
+    function giveUp() {
+      alive = false;
+      host.classList.remove('is-live');
+      if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+      var lose = gl.getExtension('WEBGL_lose_context');
+      if (lose) lose.loseContext();
+    }
+
     function frame(now) {
+      if (!alive) return;
       requestAnimationFrame(frame);
       if (now - lastFrame < MIN_GAP) return;
       lastFrame = now;
@@ -218,11 +250,12 @@ void main(){
       if (prev) {
         var gap = now - prev;
         avg = avg ? avg * 0.9 + gap * 0.1 : gap;
-        if (avg > MIN_GAP * 1.7) {
-          if (++slow > 20) {
+        if (avg > MIN_GAP * 1.4) {   /* ниже ~17 кадров в секунду движение уже читается как рывки */
+          if (++slow > 8) {
             slow = 0;
-            if (steps > 48) steps -= 12;
-            else if (scale > 0.3) { scale -= 0.08; w = 0; }
+            if (steps > 36) steps -= 12;
+            else if (scale > 0.24) { scale -= 0.07; w = 0; }
+            else { giveUp(); return; }   // запас качества исчерпан, а плавности нет
             avg = MIN_GAP;
           }
         } else slow = 0;
