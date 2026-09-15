@@ -582,7 +582,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
 /* «Дыхание» пучка задано на контейнере, а не на каждой кривой.
    Это один композитный слой вместо 120 перерисовок в кадр:
    та же живость на фоне, но без просадки кадров. */
-.paths.is-running{animation:pathsBreathe 9s ease-in-out infinite}
+.paths{animation:pathsBreathe 9s ease-in-out infinite;animation-play-state:paused}
+.paths.is-running{animation-play-state:running}
 @keyframes pathsBreathe{0%,100%{opacity:.72} 50%{opacity:1}}
 
 /* ---------- ГЕРОЙ: ТЁМНЫЙ, С ЧЁРНОЙ ДЫРОЙ ---------- */

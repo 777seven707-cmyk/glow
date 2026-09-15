@@ -66,19 +66,29 @@
       return;
     }
 
-    var io = new IntersectionObserver(function (entries) {
+    /* Два наблюдателя, а не один. Разметку готовим заранее, с запасом
+       в пол-экрана: когда секция въезжает в кадр, линии уже нарисованы
+       и стоят на паузе — не видно, как фон возникает на ходу.
+       Двигаться они начинают только когда секция действительно в кадре. */
+    var ioBuild = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { build(entry.target); ioBuild.unobserve(entry.target); }
+      });
+    }, { rootMargin: '60% 0px' });
+
+    var ioRun = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var host = entry.target;
         if (entry.isIntersecting) {
-          build(host);
+          build(host);                           // на случай прыжка по якорю через весь сайт
           if (!reduced) host.classList.add('is-running');
         } else {
           host.classList.remove('is-running');   // вне экрана не тратим кадры
         }
       });
-    }, { rootMargin: '0px' });   /* анимируем только то, что реально в кадре */
+    }, { rootMargin: '0px' });
 
-    hosts.forEach(function (host) { io.observe(host); });
+    hosts.forEach(function (host) { ioBuild.observe(host); ioRun.observe(host); });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
