@@ -72,7 +72,9 @@ void main(){
   vec3 pos = ro, vel = rd, col = vec3(0.0);
   vec3 L = cross(pos, vel);
   float h2 = dot(L, L);
-  float dt = 0.145;
+  /* Длина пути держится постоянной: меньше шагов — крупнее шаг.
+     Иначе при снижении качества луч не доходит до дыры и картинка ломается. */
+  float dt = 21.5 / float(uSteps);
 
   for (int i = 0; i < 220; i++){
     if (i >= uSteps) break;

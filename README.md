@@ -24,7 +24,7 @@ assets/img/chrome.jpg      жидкий хром — сквозной фон в�
 assets/img/rider.jpg       фигура в тумане с подсвеченными очками
 assets/img/og-cover.png    обложка ссылки 1200×630
 assets/img/favicon.svg
-components/ui/             React-версия liquid-glass-кнопки (сайтом не используется)
+components/ui/             React-компоненты для shadcn (сайтом не используются)
 .nojekyll                  чтобы GitHub Pages отдавал файлы как есть
 ```
 
@@ -205,9 +205,9 @@ Safari не поддерживает SVG-фильтр внутри `backdrop-fil
 
 ## Переезд на React + shadcn/ui
 
-Сайт статический и React не требует. Если всё-таки нужен — компонент
-`components/ui/liquid-glass-button.tsx` уже лежит в репозитории, останется
-поднять окружение:
+Сайт статический и React не требует. Если всё-таки нужен — компоненты
+уже лежат в `components/ui` (чёрная дыра и liquid-glass-кнопки),
+останется поднять окружение:
 
 ```bash
 npx create-next-app@latest . --typescript --tailwind --eslint --app
@@ -223,12 +223,20 @@ npm i @radix-ui/react-slot class-variance-authority
 Использование:
 
 ```tsx
+import BlackHole from "@/components/ui/black-hole"
 import { LiquidButton } from "@/components/ui/liquid-glass-button"
 
 export default function Demo() {
-  return <LiquidButton>Liquid Glass</LiquidButton>
+  return (
+    <div className="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
+      <BlackHole />
+      <LiquidButton>Liquid Glass</LiquidButton>
+    </div>
+  )
 }
 ```
+
+Подробности по компонентам — в `components/ui/README.md`.
 
 ## Что настроить под себя
 
