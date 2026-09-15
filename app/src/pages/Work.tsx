@@ -4,6 +4,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import Scene3D from '../components/Scene3D'
 import Footer from '../components/Footer'
+import ProjectThumb from '../components/ProjectThumb'
+import Marquee from '../components/Marquee'
+import Counter from '../components/Counter'
 
 const PROJECTS = [
   { id: '01', title: 'Halo Commerce', tag: 'Brand · Digital', year: '2026',
@@ -17,10 +20,10 @@ const PROJECTS = [
 ]
 
 const STATS = [
-  { value: '48', label: 'проектов выпущено' },
-  { value: '12', label: 'стран у клиентов' },
-  { value: '6', label: 'лет практики' },
-  { value: '100', label: 'баллов Lighthouse' },
+  { to: 48, label: 'проектов выпущено' },
+  { to: 12, label: 'стран у клиентов' },
+  { to: 6, label: 'лет практики' },
+  { to: 100, label: 'баллов Lighthouse' },
 ]
 
 const TEAM = [
@@ -104,12 +107,16 @@ export default function Work() {
               viewport={{ once: true, amount: 0.6 }}
               transition={{ duration: 0.5, delay: i * 0.06 }}
             >
-              <div className="text-4xl md:text-5xl tracking-tight tabular-nums text-[#1C2E1E]">
-                {stat.value}
+              <div className="text-4xl md:text-5xl tracking-tight text-[#1C2E1E]">
+                <Counter to={stat.to} />
               </div>
               <div className="text-sm text-[#738273] mt-2">{stat.label}</div>
             </motion.div>
           ))}
+        </div>
+
+        <div className="-mx-6 mb-20">
+          <Marquee />
         </div>
 
         <ul className="flex flex-col">
@@ -124,16 +131,26 @@ export default function Work() {
             >
               <a
                 href="#contact"
-                className="flex flex-col md:flex-row md:items-center gap-4 md:gap-10 py-10 transition-colors duration-300 hover:bg-[#FAFBF9] md:px-4 md:-mx-4 rounded-2xl"
+                className="flex flex-col md:flex-row md:items-center gap-5 md:gap-10 py-8 transition-colors duration-300 hover:bg-[#FAFBF9] md:px-4 md:-mx-4 rounded-2xl"
               >
-                <span className="text-xs tabular-nums text-[#738273] md:w-12">{project.id}</span>
-                <span className="text-3xl md:text-4xl tracking-tight text-black md:w-80">
+                <span className="text-xs tabular-nums text-[#738273] md:w-10">{project.id}</span>
+
+                {/* Превью раскрывается по ширине при наведении — на мобильных
+                    оно видно всегда, там наведения нет. */}
+                <span className="block w-full md:w-40 md:group-hover:w-64 shrink-0 overflow-hidden rounded-2xl transition-[width] duration-500 ease-out">
+                  <ProjectThumb
+                    seed={i + 1}
+                    className="w-full h-32 md:h-24 object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </span>
+
+                <span className="text-3xl md:text-4xl tracking-tight text-black md:w-72 transition-transform duration-500 md:group-hover:translate-x-1">
                   {project.title}
                 </span>
-                <span className="text-[#5A635A] leading-relaxed flex-1 max-w-xl">
+                <span className="text-[#5A635A] leading-relaxed flex-1 max-w-md">
                   {project.text}
                 </span>
-                <span className="flex items-center gap-4 text-sm text-[#738273]">
+                <span className="flex items-center gap-4 text-sm text-[#738273] shrink-0">
                   {project.tag} · {project.year}
                   <ArrowUpRight className="w-5 h-5 text-[#1C2E1E] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </span>
@@ -156,8 +173,10 @@ export default function Work() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.5 }}
                 transition={{ duration: 0.5, delay: i * 0.06 }}
+                whileHover={{ y: -4 }}
                 className="border-t border-[#F1F3F1] pt-5"
               >
+                <ProjectThumb seed={i + 7} className="w-full h-28 rounded-2xl mb-4" />
                 <div className="text-xl tracking-tight text-black">{person.name}</div>
                 <div className="text-sm text-[#738273] mt-1">{person.role}</div>
               </motion.div>
@@ -208,6 +227,7 @@ export default function Work() {
                 className="flex flex-col justify-between gap-10 bg-[#FAFBF9] border border-[#F1F3F1] rounded-3xl p-8 min-h-56"
               >
                 <div>
+                  <ProjectThumb seed={i + 11} className="w-full h-32 rounded-2xl mb-5" />
                   <h3 className="text-2xl tracking-tight text-black">{item.title}</h3>
                   <p className="text-sm text-[#738273] mt-2 leading-relaxed">{item.note}</p>
                 </div>
