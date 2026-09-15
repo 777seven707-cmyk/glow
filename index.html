@@ -58,6 +58,9 @@
   </defs>
 </svg>
 
+<!-- ============ НАПРАВЛЯЮЩИЕ ============ -->
+<div class="grid-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
 <!-- ============ ДЕКОР ============ -->
 <div class="grain" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
@@ -111,8 +114,9 @@
 <section class="hero">
   <div class="hero__space" aria-hidden="true">
     <div class="hero__space-in" data-par="-46">
-      <img src="assets/img/blackhole.jpg" alt="" width="736" height="414" decoding="async">
-      <span class="bh-spin" id="bhSpin"></span>
+      <div class="bh-stage" id="bhStage">
+        <img class="bh-fallback" src="assets/img/blackhole.jpg" alt="" width="736" height="414" decoding="async">
+      </div>
     </div>
   </div>
   <div class="glass-eye" id="glassEye" aria-hidden="true">
@@ -173,8 +177,8 @@
   </div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>(01)</span>
-      <h2 class="sec-title" data-reveal>Что входит<br>в работу</h2>
+      <span class="sec-num" data-reveal>01 / Услуги</span>
+      <h2 class="sec-title" data-reveal="wipe">Что входит<br>в работу</h2>
       <p class="sec-desc" data-reveal>
         Мы не продаём «часы дизайнера». Мы продаём готовый результат: сайт, который
         открывается, грузится за секунду и понятен посетителю с первого экрана.
@@ -229,8 +233,8 @@
   </div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>(02)</span>
-      <h2 class="sec-title" data-reveal>Тарифы</h2>
+      <span class="sec-num" data-reveal>02 / Тарифы</span>
+      <h2 class="sec-title" data-reveal="wipe">Тарифы</h2>
       <p class="sec-desc" data-reveal>
         Три пакета на выбор. Цена фиксируется в договорённости до старта —
         итог не вырастет «по ходу дела». Оплата 50% на старте, 50% при сдаче.
@@ -319,9 +323,9 @@
     <div class="art__in" data-par="30" style="margin-left:-220px;margin-top:200px"><img src="assets/img/chrome.jpg" alt="" width="734" height="369" loading="lazy" decoding="async"></div>
   </div>
   <div class="container">
-    <div class="sec-head sec-head--row">
-      <span class="sec-num" data-reveal>(03)</span>
-      <h2 class="sec-title sec-title--sm" data-reveal>Сравнение тарифов</h2>
+    <div class="sec-head">
+      <span class="sec-num" data-reveal>03 / Сравнение</span>
+      <h2 class="sec-title" data-reveal="wipe">Сравнение тарифов</h2>
     </div>
 
     <div class="table-wrap" data-reveal>
@@ -368,8 +372,8 @@
   </div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>(04)</span>
-      <h2 class="sec-title" data-reveal>Как проходит<br>работа</h2>
+      <span class="sec-num" data-reveal>04 / Процесс</span>
+      <h2 class="sec-title" data-reveal="wipe">Как проходит<br>работа</h2>
       <p class="sec-desc" data-reveal>
         Пять шагов, понятных заранее. На каждом — вы видите результат и можете сказать «стоп»
         или «переделай», пока это дёшево.
@@ -428,8 +432,8 @@
   </div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>(05)</span>
-      <h2 class="sec-title" data-reveal>Форматы,<br>с которыми работаем</h2>
+      <span class="sec-num" data-reveal>05 / Форматы</span>
+      <h2 class="sec-title" data-reveal="wipe">Форматы,<br>с которыми работаем</h2>
       <p class="sec-desc" data-reveal>Шесть типов проектов, которые закрывают 95% запросов. Для остального — напишите, обсудим индивидуально.</p>
     </div>
 
@@ -484,8 +488,8 @@
 <section class="section section--split" id="why">
   <div class="container why">
     <div class="why__left">
-      <span class="sec-num" data-reveal>(06)</span>
-      <h2 class="sec-title" data-reveal>Почему<br>«На твоё<br>усмотрение»</h2>
+      <span class="sec-num" data-reveal>06 / Принципы</span>
+      <h2 class="sec-title" data-reveal="wipe">Почему<br>«На твоё<br>усмотрение»</h2>
       <p class="sec-desc" data-reveal>
         Название — не случайность. Это принцип: мы берём на себя решения, в которых
         разбираемся лучше, и не заставляем вас выбирать между шестнадцатью оттенками серого.
@@ -534,9 +538,9 @@
     <div class="art__in" data-par="28" style="margin-left:180px;margin-top:240px"><img src="assets/img/chrome.jpg" alt="" width="734" height="369" loading="lazy" decoding="async"></div>
   </div>
   <div class="container">
-    <div class="sec-head sec-head--row">
-      <span class="sec-num" data-reveal>(07)</span>
-      <h2 class="sec-title sec-title--sm" data-reveal>Частые вопросы</h2>
+    <div class="sec-head">
+      <span class="sec-num" data-reveal>07 / Вопросы</span>
+      <h2 class="sec-title" data-reveal="wipe">Частые вопросы</h2>
     </div>
 
     <div class="faq">
@@ -583,8 +587,8 @@
   </div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>(08)</span>
-      <h2 class="sec-title" data-reveal>Расскажите<br>о проекте</h2>
+      <span class="sec-num" data-reveal>08 / Контакты</span>
+      <h2 class="sec-title" data-reveal="wipe">Расскажите<br>о проекте</h2>
       <p class="sec-desc" data-reveal>
         Ответим в течение суток, чаще — быстрее. Консультация и оценка бесплатны и ни к чему не обязывают.
       </p>
@@ -691,6 +695,7 @@
   </div>
 </footer>
 
+<script src="assets/js/blackhole.js" defer></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

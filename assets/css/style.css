@@ -16,6 +16,7 @@
 
   --font-body:"Inter","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   --font-display:"Unbounded","Inter",system-ui,sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 
   --container:1280px;
   --pad:clamp(20px,4vw,64px);
@@ -177,25 +178,31 @@ table{border-collapse:collapse;width:100%}
 .btn--inv::before{background:var(--ink)}
 .btn--inv:hover{color:var(--on-ink)}
 
-/* внутри белой карточки «Средний» — тёмная кнопка */
-.plan--pop .btn{--bg-btn:var(--on-ink);--fg-btn:var(--ink);color:var(--ink);border-color:var(--on-ink)}
-.plan--pop .btn::before{background:var(--ink)}
-.plan--pop .btn:hover{color:var(--on-ink)}
+/* кнопка выделенного тарифа остаётся светлой — единственная сплошная на странице */
 
 /* ---------- 8. ОБЩИЕ БЛОКИ СЕКЦИЙ ---------- */
 .section{padding-block:var(--sec-pad);position:relative}
 .section--dark{background:var(--surface);color:var(--ink)}
 .section--dark .sec-desc,.section--dark .sec-num{color:rgba(255,255,255,.55)}
 
-.sec-head{max-width:920px;margin-bottom:clamp(40px,6vw,88px)}
-.sec-head--row{display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;max-width:none}
-.sec-num{display:block;font-size:12px;letter-spacing:.18em;color:var(--muted);margin-bottom:18px}
-.sec-head--row .sec-num{margin-bottom:0}
+.sec-head{max-width:none;margin-bottom:clamp(40px,6vw,88px)}
+.sec-num{
+  position:relative;display:block;padding-top:20px;margin-bottom:clamp(24px,3vw,44px);
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);
+}
+/* Линейка над меткой прочерчивается при появлении блока */
+.sec-num::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;background:var(--line-strong);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 1.2s var(--ease) .08s;
+}
+.sec-num.is-in::before{transform:scaleX(1)}
 .sec-title{
   font-family:var(--font-display);font-weight:800;
   font-size:clamp(34px,7vw,84px);line-height:.98;letter-spacing:-.04em;text-transform:none;
 }
-.sec-title--sm{font-size:clamp(28px,4.4vw,52px)}
+.sec-title{max-width:16ch}
 .sec-desc{margin-top:24px;font-size:clamp(15px,1.4vw,19px);line-height:1.65;color:var(--muted);max-width:62ch}
 
 /* ---------- 9. ГЕРОЙ ---------- */
@@ -207,7 +214,7 @@ table{border-collapse:collapse;width:100%}
 }
 .dot{width:7px;height:7px;border-radius:50%;background:var(--ink);animation:pulse 1.8s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.75)}}
-.hero__loc{font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.hero__loc{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
 
 .hero__title{
   font-family:var(--font-display);font-weight:800;
@@ -239,7 +246,7 @@ html:not(.js) .loader{display:none}
   margin-top:clamp(48px,7vw,104px);padding-top:32px;border-top:1px solid var(--line);
 }
 .stat{display:flex;flex-direction:column;gap:8px}
-.stat b{font-family:var(--font-display);font-size:clamp(30px,4.4vw,56px);font-weight:600;line-height:1;letter-spacing:-.04em}
+.stat b{font-family:var(--font-display);font-size:clamp(30px,4.4vw,56px);font-weight:600;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
 .stat span{font-size:13px;color:var(--muted);line-height:1.45}
 
 .hero__scroll{display:flex;align-items:center;gap:14px;margin-top:36px}
@@ -260,20 +267,20 @@ html:not(.js) .loader{display:none}
 @keyframes marq{to{transform:translateX(-50%)}}
 
 /* ---------- 11. КАРТОЧКИ УСЛУГ ---------- */
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-.card{background:rgba(10,10,16,.62);padding:clamp(24px,3vw,42px);position:relative;overflow:hidden;transition:color .5s var(--ease)}
-.card::before{content:"";position:absolute;inset:0;background:var(--ink);transform:translateY(100%);transition:transform .55s var(--ease);z-index:0}
-.card:hover{color:var(--on-ink)}
-.card:hover::before{transform:translateY(0)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+.card{background:var(--bg);padding:clamp(26px,3vw,44px);position:relative;overflow:hidden;transition:background .5s var(--ease)}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .55s var(--ease);z-index:1}
+.card:hover{background:rgba(255,255,255,.035)}
+.card:hover::before{transform:scaleX(1)}
 .card > *{position:relative;z-index:1}
-.card__num{font-size:12px;letter-spacing:.18em;color:var(--muted);transition:color .5s}
-.card:hover .card__num{color:rgba(7,7,11,.55)}
+.card__num{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;color:var(--muted);transition:color .5s}
+.card:hover .card__num{color:var(--ink)}
 .card h3{font-family:var(--font-display);font-size:clamp(20px,2vw,27px);font-weight:600;letter-spacing:-.02em;margin:22px 0 14px}
 .card p{font-size:15px;line-height:1.6;color:var(--muted);transition:color .5s}
-.card:hover p{color:rgba(7,7,11,.72)}
+.card:hover p{color:rgba(255,255,255,.8)}
 .card__list{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px}
 .card__list li{font-size:12px;padding:6px 12px;border:1px solid var(--line-strong);border-radius:100px;transition:border-color .5s}
-.card:hover .card__list li{border-color:rgba(7,7,11,.25)}
+.card:hover .card__list li{border-color:var(--line-strong)}
 
 /* ---------- 12. ТАРИФЫ ---------- */
 .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,1.6vw,24px);align-items:start}
@@ -284,23 +291,26 @@ html:not(.js) .loader{display:none}
   transform-style:preserve-3d;
 }
 .plan:hover{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.04)}
-.plan--pop{background:#fff;color:var(--on-ink);border-color:#fff}
-.plan--pop:hover{background:#fff;border-color:#fff}
+.plan--pop{
+  background:rgba(255,255,255,.045);color:var(--ink);border-color:transparent;
+  box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 30px 90px rgba(0,0,0,.7), inset 0 0 60px rgba(255,255,255,.04);
+}
+.plan--pop:hover{background:rgba(255,255,255,.07);border-color:transparent}
 .plan__badge{
-  position:absolute;top:-1px;right:-1px;background:var(--on-ink);color:var(--ink);
+  position:absolute;top:-1px;right:-1px;background:var(--ink);color:var(--on-ink);
   font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;
 }
-.plan__label{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.5}
+.plan__label{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.55}
 .plan__name{font-family:var(--font-display);font-size:clamp(28px,3.2vw,40px);font-weight:700;letter-spacing:-.035em;margin:12px 0 14px}
 .plan__for{font-size:14.5px;line-height:1.55;opacity:.65;min-height:4.6em}
 .plan__price{display:flex;align-items:flex-start;gap:4px;margin:26px 0 10px;font-family:var(--font-display);font-weight:800;letter-spacing:-.05em;line-height:1}
 .plan__price .cur{font-size:clamp(20px,2vw,26px);margin-top:.35em;opacity:.55}
-.plan__price b{font-size:clamp(48px,6.4vw,82px)}
+.plan__price b{font-size:clamp(48px,6.4vw,82px);font-variant-numeric:tabular-nums}
 .plan__meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
-.plan__meta span{font-size:12px;padding:6px 12px;border:1px solid currentColor;opacity:.45;border-radius:100px}
+.plan__meta span{font-family:var(--font-mono);font-size:12px;padding:6px 12px;border:1px solid currentColor;opacity:.5;border-radius:100px}
 .plan__list{margin-top:28px;padding-top:26px;border-top:1px solid currentColor;display:flex;flex-direction:column;gap:13px}
 .plan:not(.plan--pop) .plan__list{border-top-color:rgba(255,255,255,.18)}
-.plan--pop .plan__list{border-top-color:rgba(7,7,11,.16)}
+.plan--pop .plan__list{border-top-color:var(--line-strong)}
 .plan__list li{position:relative;padding-left:26px;font-size:14.5px;line-height:1.5;opacity:.85}
 .plan__list li::before{
   content:"";position:absolute;left:0;top:.55em;width:12px;height:2px;background:currentColor;
@@ -350,10 +360,10 @@ html:not(.js) .loader{display:none}
 .step:hover{padding-left:20px}
 .step:hover::before{width:100%}
 .step > *{position:relative;z-index:1}
-.step__n{font-family:var(--font-display);font-size:clamp(22px,2.6vw,34px);font-weight:600;opacity:.35;letter-spacing:-.03em}
+.step__n{font-family:var(--font-mono);font-size:clamp(20px,2.2vw,28px);font-weight:500;opacity:.4;letter-spacing:.02em}
 .step__body h3{font-family:var(--font-display);font-size:clamp(20px,2.6vw,32px);font-weight:600;letter-spacing:-.03em;margin-bottom:12px}
 .step__body p{font-size:15px;line-height:1.65;color:rgba(255,255,255,.6);max-width:66ch}
-.step__time{font-size:12.5px;letter-spacing:.06em;color:rgba(255,255,255,.5);text-align:right;padding-top:.5em}
+.step__time{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.04em;color:rgba(255,255,255,.55);text-align:right;padding-top:.6em}
 
 /* ---------- 16. ФОРМАТЫ ---------- */
 .works{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,28px)}
@@ -365,7 +375,7 @@ html:not(.js) .loader{display:none}
 .work:hover .work__vis svg{fill:var(--on-ink);stroke:var(--on-ink);transform:scale(1.05)}
 .work__info{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin:22px 0 12px}
 .work__info h3{font-family:var(--font-display);font-size:clamp(17px,1.7vw,22px);font-weight:600;letter-spacing:-.025em}
-.work__info span{font-size:12px;color:var(--muted);white-space:nowrap}
+.work__info span{font-family:var(--font-mono);font-size:12px;color:var(--muted);white-space:nowrap}
 .work p{font-size:14.5px;line-height:1.6;color:var(--muted)}
 
 /* ---------- 17. ПОЧЕМУ МЫ ---------- */
@@ -469,8 +479,21 @@ html:not(.js) .loader{display:none}
 .to-top{font-size:13px;color:var(--ink);display:inline-flex;align-items:center;min-height:44px}
 
 /* ---------- 22. АНИМАЦИЯ ПОЯВЛЕНИЯ ---------- */
-[data-reveal]{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
-[data-reveal].is-in{opacity:1;transform:none}
+/* Блоки поднимаются и одновременно раскрываются снизу вверх */
+[data-reveal]{
+  opacity:0;transform:translateY(22px);
+  clip-path:inset(0 0 22% 0);
+  transition:opacity .85s var(--ease),transform 1s var(--ease),clip-path 1s var(--ease);
+}
+[data-reveal].is-in{opacity:1;transform:none;clip-path:inset(0 0 0 0)}
+
+/* Заголовки секций раскрываются слева направо */
+[data-reveal="wipe"]{
+  opacity:0;transform:none;
+  clip-path:inset(0 100% 0 0);
+  transition:opacity .5s var(--ease),clip-path 1.15s var(--ease);
+}
+[data-reveal="wipe"].is-in{opacity:1;clip-path:inset(0 0 0 0)}
 
 .footer__big .line > span{display:block;transform:translateY(105%);transition:transform 1s var(--ease)}
 .footer__big.is-in .line > span{transform:translateY(0)}
@@ -533,69 +556,40 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
    Ширина у всех одинаковая — браузер декодирует картинку один раз
    и переиспользует для всех копий. Снимок уже на чёрном фоне,
    поэтому на тёмных секциях подложка сливается сама, без блендов. */
-.art--cover{
-  position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
-  -webkit-mask-image:radial-gradient(95% 52% at 58% 50%,#000 16%,rgba(0,0,0,.5) 58%,transparent 96%);
-  mask-image:radial-gradient(95% 52% at 58% 50%,#000 16%,rgba(0,0,0,.5) 58%,transparent 96%);
-}
+.art--cover{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
 .art--cover .art__in{
   position:absolute;top:50%;left:50%;width:1500px;
   transform:translate(-50%,-50%) translate3d(0,var(--par-y,0px),0);
 }
 .art--cover img{position:static;width:100%;height:auto;animation:artFloat 34s ease-in-out infinite}
-.art--cover img{opacity:.22;filter:brightness(.8) contrast(1.04) saturate(1.05)}
+.art--cover img{
+  opacity:.22;filter:brightness(.8) contrast(1.04) saturate(1.05);
+  -webkit-mask-image:radial-gradient(50% 50% at 50% 50%,#000 26%,rgba(0,0,0,.45) 66%,transparent 100%);
+  mask-image:radial-gradient(50% 50% at 50% 50%,#000 26%,rgba(0,0,0,.45) 66%,transparent 100%);
+}
 .art--flip img{animation-direction:reverse}
 
 /* ---------- ГЕРОЙ: ТЁМНЫЙ, С ЧЁРНОЙ ДЫРОЙ ---------- */
 .hero{background:var(--bg);color:var(--ink)}
 .hero__space{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .hero__space-in{
-  position:absolute;top:46%;left:66%;width:min(1140px,88vw);z-index:0;
+  position:absolute;top:40%;left:71%;width:min(1020px,76vw);z-index:0;
   transform:translate(-50%,-50%) translate3d(0,var(--par-y,0px),0);
 }
-.hero__space-in img{
-  width:100%;height:auto;display:block;
-  /* у снимка свой чёрный фон, чуть светлее фона страницы — прячем прямоугольник */
-  -webkit-mask-image:radial-gradient(50% 50% at 50% 50%,#000 34%,rgba(0,0,0,.6) 70%,transparent 100%);
-  mask-image:radial-gradient(50% 50% at 50% 50%,#000 34%,rgba(0,0,0,.6) 70%,transparent 100%);
+/* Сцена дыры: холст WebGL, под ним запасная картинка.
+   Маска растворяет прямоугольник холста в фоне страницы. */
+.bh-stage{
+  position:relative;width:100%;aspect-ratio:736/414;
   animation:bhFloat 30s ease-in-out infinite;
-  /* rotate — отдельное свойство, поэтому не конфликтует с transform у анимации */
-  rotate:0deg;
+  -webkit-mask-image:radial-gradient(50% 50% at 50% 50%,#000 50%,rgba(0,0,0,.5) 80%,transparent 100%);
+  mask-image:radial-gradient(50% 50% at 50% 50%,#000 50%,rgba(0,0,0,.5) 80%,transparent 100%);
 }
+.bh-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.bh-fallback{width:100%;height:auto;display:block}
+.bh-stage.is-live .bh-fallback{visibility:hidden}
 /* подсветка диска, пока курсор над первым экраном */
 .hero__space-in{transition:filter .6s var(--ease)}
 .hero.is-spinning .hero__space-in{filter:brightness(1.16) contrast(1.04)}
-
-/* Блик, бегущий по фотонному кольцу: создаёт ощущение вращения диска,
-   не переворачивая сам кадр. Координаты — центр дыры на снимке. */
-.bh-spin{
-  position:absolute;left:66.85%;top:49.5%;
-  width:30%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;
-  background:conic-gradient(from 0deg,
-    rgba(255,255,255,0)   0deg,
-    rgba(255,255,255,.6) 32deg,
-    rgba(255,255,255,0)  98deg,
-    rgba(255,255,255,0) 172deg,
-    rgba(255,255,255,.32) 208deg,
-    rgba(255,255,255,0) 268deg,
-    rgba(255,255,255,0) 360deg);
-  -webkit-mask-image:radial-gradient(closest-side,transparent 58%,#000 71%,#000 92%,transparent 100%);
-  mask-image:radial-gradient(closest-side,transparent 58%,#000 71%,#000 92%,transparent 100%);
-  mix-blend-mode:screen;pointer-events:none;
-  opacity:0;transition:opacity .7s var(--ease);
-}
-.hero.is-spinning .bh-spin{opacity:.85}
-@keyframes bhFloat{
-  0%,100%{transform:scale(1) translate3d(0,0,0)}
-  50%{transform:scale(1.045) translate3d(-1%,1.2%,0)}
-}
-/* затемняющая шторка слева — чтобы заголовок читался поверх диска */
-.hero__space::after{
-  content:"";position:absolute;inset:0;
-  background:
-    linear-gradient(90deg,var(--bg) 0%,rgba(7,7,11,.9) 30%,rgba(7,7,11,.45) 58%,rgba(7,7,11,0) 86%),
-    linear-gradient(0deg,var(--bg) 0%,rgba(7,7,11,.2) 26%,transparent 52%);
-}
 
 .hero .tag{border-color:rgba(255,255,255,.26);color:#fff}
 .hero .dot{background:#fff}
@@ -759,9 +753,26 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
   .glass-eye{display:none}
 }
 @media (prefers-reduced-motion:reduce){
-  .art--cover img,.hero__space-in img,.glass-eye__iris,.glass-eye__pupil{animation:none}
+  .art--cover img,.bh-stage,.glass-eye__iris,.glass-eye__pupil{animation:none}
   .glass-eye{display:none}
 }
 @media (hover:none){
   .glass-eye{display:none}
 }
+
+
+/* =========================================================
+   26. НАПРАВЛЯЮЩИЕ: тонкая сетка на всю страницу
+   ========================================================= */
+.grid-lines{
+  position:fixed;inset:0;z-index:880;pointer-events:none;
+  width:100%;max-width:var(--container);margin-inline:auto;
+  padding-inline:var(--pad);
+  display:flex;justify-content:space-between;
+}
+.grid-lines i{
+  width:1px;flex:0 0 1px;
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.075) 10%,rgba(255,255,255,.075) 90%,transparent);
+}
+@media (max-width:900px){ .grid-lines i:nth-child(2),.grid-lines i:nth-child(4){display:none} }
+@media (prefers-reduced-motion:reduce){ .sec-num::before{transform:scaleX(1)} }
