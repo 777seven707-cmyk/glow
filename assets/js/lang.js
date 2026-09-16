@@ -154,7 +154,10 @@ t243:'Send an enquiry', t244:'A small website studio',
 t245:'We make clear websites at a fixed price. Plans {small} / {mid} / {big}, from 3 days, warranty up to 90 days.',
 t246:'© <span id="year">2026</span> «Na Tvoyo Usmotrenie». All rights reserved.',
 t247:'<span>Back to top ↑</span>',
-ph1:'John', ph2:'you@mail.com or @nickname', ph3:'What the project is, who it is for, when you need the site'
+ph1:'John', ph2:'you@mail.com or @nickname', ph3:'What the project is, who it is for, when you need the site',
+s01:'Write to us', s02:'We take messages around the clock. We reply during working hours; anything urgent, any time.',
+s03:'Fastest way', s04:'If that suits you better', s05:'Email',
+s06:'Send an enquiry', s07:'Form on the site'
 },
 
 kk: {
@@ -306,7 +309,10 @@ t243:'Өтінім қалдыру', t244:'Сайт жасайтын шағын �
 t245:'Бекітілген бағамен түсінікті сайттар жасаймыз. Тарифтер {small} / {mid} / {big}, мерзімі 3 күннен, кепілдік 90 күнге дейін.',
 t246:'© <span id="year">2026</span> «На твоё усмотрение». Барлық құқықтар қорғалған.',
 t247:'<span>Жоғары ↑</span>',
-ph1:'Айдана', ph2:'you@mail.com немесе @nickname', ph3:'Жоба қандай, кімге арналған, сайт қашан керек'
+ph1:'Айдана', ph2:'you@mail.com немесе @nickname', ph3:'Жоба қандай, кімге арналған, сайт қашан керек',
+s01:'Бізге жазыңыз', s02:'Хабарламаларды тәулік бойы қабылдаймыз. Жұмыс уақытында жауап береміз, шұғыл болса — кез келген уақытта.',
+s03:'Ең жылдам жол', s04:'Солай ыңғайлы болса', s05:'Пошта',
+s06:'Өтінім қалдыру', s07:'Сайттағы форма'
 }
 
 };

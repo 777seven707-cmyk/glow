@@ -446,6 +446,37 @@
     requestAnimationFrame(frame);
   }
 
+  /* ---------- 18.8 КНОПКА ПОДДЕРЖКИ ---------- */
+  function initHelp() {
+    var box = $('#help');
+    var btn = $('#helpBtn');
+    var panel = $('#helpPanel');
+    if (!box || !btn || !panel) return;
+
+    function open(on) {
+      box.classList.toggle('is-open', on);
+      btn.setAttribute('aria-expanded', String(on));
+      panel.hidden = !on;
+    }
+    open(false);
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      open(panel.hidden);
+    });
+
+    /* Клик мимо панели и Esc закрывают её */
+    document.addEventListener('click', function (e) {
+      if (!box.contains(e.target)) open(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') open(false);
+    });
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('a')) open(false);        // выбрали канал — панель не нужна
+    });
+  }
+
   /* ---------- 19. КНОПКА «НАВЕРХ» ---------- */
   function initToTop() {
     var btn = $('#toTop');
@@ -489,7 +520,8 @@
     var form = $('#form');
     if (!form) return;
     var done = $('#formDone');
-    var MAIL = 'hello@natvoeusmotrenie.studio';
+    /* Адрес берём из общего файла контактов, а не из копии здесь */
+    var MAIL = (window.CONTACTS && window.CONTACTS.mail) || 'hello@natvoeusmotrenie.studio';
 
     function setErr(field, on) { field.classList.toggle('is-err', on); }
 
@@ -656,6 +688,7 @@
     initGlow();
     initMarquee();
     initPathsMotion();
+    initHelp();
     initToTop();
     initAnchors();
     initForm();
