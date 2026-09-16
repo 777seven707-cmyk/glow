@@ -539,11 +539,11 @@
       var data = new FormData(form);
       /* Письмо уходит на языке, который выбран на сайте */
       var L = {
-        ru: { none: 'не выбран', name: 'Имя', contact: 'Связь', plan: 'Тариф', task: 'О задаче', subj: 'Заявка с сайта' },
-        en: { none: 'not chosen', name: 'Name', contact: 'Contact', plan: 'Plan', task: 'About the task', subj: 'Enquiry from the website' },
-        kk: { none: 'таңдалмаған', name: 'Аты', contact: 'Байланыс', plan: 'Тариф', task: 'Міндет туралы', subj: 'Сайттан өтінім' }
+        ru: { none: 'не выбран', name: 'Имя', contact: 'Связь', plan: 'Тариф', task: 'О задаче', subj: 'Заявка с сайта', sending: 'Отправляем…' },
+        en: { none: 'not chosen', name: 'Name', contact: 'Contact', plan: 'Plan', task: 'About the task', subj: 'Enquiry from the website', sending: 'Sending…' },
+        kk: { none: 'таңдалмаған', name: 'Аты', contact: 'Байланыс', plan: 'Тариф', task: 'Міндет туралы', subj: 'Сайттан өтінім', sending: 'Жіберілуде…' }
       }[document.documentElement.lang] || null;
-      var w = L || { none: 'не выбран', name: 'Имя', contact: 'Связь', plan: 'Тариф', task: 'О задаче', subj: 'Заявка с сайта' };
+      var w = L || { none: 'не выбран', name: 'Имя', contact: 'Связь', plan: 'Тариф', task: 'О задаче', subj: 'Заявка с сайта', sending: 'Отправляем…' };
       var plan = data.get('plan') || w.none;
       var body =
         w.name + ': ' + data.get('name') + '\n' +
@@ -551,26 +551,90 @@
         w.plan + ': ' + plan + '\n\n' +
         w.task + ':\n' + (data.get('message') || '—');
 
-      /* Показываем, что заявка уходит: письмо открывается не мгновенно,
-         и без отклика кажется, будто кнопка не сработала. */
+      /* Показываем, что заявка уходит: без отклика кажется,
+         будто кнопка не сработала. */
       var btn = $('button[type="submit"]', form);
       var label = btn ? $('span', btn) : null;
       var was = label ? label.textContent : '';
       if (btn) btn.classList.add('is-sending');
-      if (label) label.textContent = 'Отправляем…';
+      if (label) label.textContent = w.sending;
 
-      window.setTimeout(function () {
+      function finish(kind) {
+        if (btn) btn.classList.remove('is-sending');
+        if (label) label.textContent = was;
+        show(kind);
+      }
+
+      function byMail() {
         window.location.href = 'mailto:' + MAIL +
           '?subject=' + encodeURIComponent(w.subj + ' — ' + plan) +
           '&body=' + encodeURIComponent(body);
+        finish('mail');
+      }
 
-        if (btn) btn.classList.remove('is-sending');
-        if (label) label.textContent = was;
-        if (done) {
-          done.hidden = false;
-          requestAnimationFrame(function () { done.classList.add('is-on'); });
+      var id = window.CONTACTS && window.CONTACTS.formspree;
+      if (!id || !window.fetch) {                 // код не вписан — работаем как раньше
+        window.setTimeout(byMail, reduced ? 0 : 500);
+        return;
+      }
+
+      /* Отправляем на сервер. Если не вышло — не теряем заявку,
+         а открываем почтовую программу, как раньше. */
+      fetch('https://formspree.io/f/' + id, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: data.get('name'),
+          contact: data.get('contact'),
+          plan: plan,
+          message: data.get('message') || '',
+          _subject: w.subj + ' — ' + plan
+        })
+      }).then(function (res) {
+        if (!res.ok) throw new Error('formspree ' + res.status);
+        form.reset();
+        finish('sent');
+      }).catch(function () {
+        byMail();
+      });
+    });
+
+    /* Сообщение под формой: текст зависит от того, как ушла заявка,
+       и от выбранного языка. Элемент не помечен data-i18n, поэтому
+       переводим его здесь. */
+    var msg = $('#formMsg');
+    var lastKind = '';
+
+    function texts() {
+      var mail = (window.CONTACTS && window.CONTACTS.mail) || MAIL;
+      return {
+        ru: {
+          sent: 'Заявка отправлена. Ответим в течение суток — следите за почтой и Telegram.',
+          mail: 'Заявка сформирована — откроется почтовый клиент. Если он не открылся, напишите нам напрямую на <b>' + mail + '</b>'
+        },
+        en: {
+          sent: 'The enquiry has been sent. We will reply within a day — watch your email and Telegram.',
+          mail: 'The enquiry is ready — your mail app will open. If it did not, write to us directly at <b>' + mail + '</b>'
+        },
+        kk: {
+          sent: 'Өтінім жіберілді. Бір тәулік ішінде жауап береміз — поштаңыз бен Telegram-ды қараңыз.',
+          mail: 'Өтінім дайын — пошта бағдарламасы ашылады. Ашылмаса, бізге тікелей <b>' + mail + '</b> жазыңыз'
         }
-      }, reduced ? 0 : 500);
+      }[document.documentElement.lang] || null;
+    }
+
+    function show(kind) {
+      lastKind = kind;
+      var t = texts();
+      if (msg && t) msg.innerHTML = t[kind];
+      if (done) {
+        done.hidden = false;
+        requestAnimationFrame(function () { done.classList.add('is-on'); });
+      }
+    }
+
+    document.addEventListener('i18n:applied', function () {
+      if (lastKind) show(lastKind);
     });
 
     $$('input, textarea', form).forEach(function (input) {
