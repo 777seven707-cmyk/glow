@@ -566,7 +566,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
   mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);
 }
 .paths svg{display:block;width:100%;height:100%}
-.paths--flip svg{transform:scaleX(-1)}
 .paths path{
   fill:none;stroke:currentColor;
   /* Штрих почти сплошной: по линии бежит разрыв, а не пунктир.
@@ -582,31 +581,43 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
 /* «Дыхание» пучка задано на контейнере, а не на каждой кривой.
    Это один композитный слой вместо 120 перерисовок в кадр:
    та же живость на фоне, но без просадки кадров. */
-.paths{animation:pathsBreathe 9s ease-in-out infinite;animation-play-state:paused}
+.paths{animation:pathsBreathe 6.5s ease-in-out infinite;animation-play-state:paused}
 .paths.is-running{animation-play-state:running}
-@keyframes pathsBreathe{0%,100%{opacity:.72} 50%{opacity:1}}
+@keyframes pathsBreathe{0%,100%{opacity:.5} 50%{opacity:1}}
 
-/* ---------- ГЕРОЙ: ТЁМНЫЙ, С ЧЁРНОЙ ДЫРОЙ ---------- */
+/* Пучок сдвигается и слегка поворачивается по ходу прокрутки.
+   Значения ставит скрипт — это один композитный слой, не перерисовка. */
+.paths svg{
+  transform:translate3d(0,var(--py,0px),0) rotate(var(--rot,0deg)) scale(var(--sc,1));
+  transform-origin:50% 50%;
+  will-change:transform;
+}
+.paths--flip svg{transform:translate3d(0,var(--py,0px),0) rotate(var(--rot,0deg)) scale(var(--sc,1)) scaleX(-1)}
+
+/* ---------- ГЕРОЙ: ТЁМНЫЙ, С ВОЛНОЙ ---------- */
 .hero{background:var(--bg);color:var(--ink)}
 .hero__space{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .hero__space-in{
-  position:absolute;top:40%;left:71%;width:min(1020px,76vw);z-index:0;
+  position:absolute;top:56%;left:50%;width:min(1640px,132vw);z-index:0;
   transform:translate(-50%,-50%) translate3d(0,var(--par-y,0px),0);
 }
-/* Сцена дыры: холст WebGL, под ним запасная картинка.
+/* Сцена волны: сетка в перспективе на холсте.
    Маска растворяет прямоугольник холста в фоне страницы. */
-.bh-stage{
+.wave-stage{
   position:relative;width:100%;aspect-ratio:736/414;
-  animation:bhFloat 30s ease-in-out infinite;
-  -webkit-mask-image:radial-gradient(50% 50% at 50% 50%,#000 50%,rgba(0,0,0,.5) 80%,transparent 100%);
-  mask-image:radial-gradient(50% 50% at 50% 50%,#000 50%,rgba(0,0,0,.5) 80%,transparent 100%);
+  animation:waveFloat 30s ease-in-out infinite;
+  -webkit-mask-image:radial-gradient(72% 72% at 50% 45%,#000 40%,rgba(0,0,0,.55) 74%,transparent 100%);
+  mask-image:radial-gradient(72% 72% at 50% 45%,#000 40%,rgba(0,0,0,.55) 74%,transparent 100%);
 }
-.bh-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.bh-fallback{width:100%;height:auto;display:block}
-.bh-stage.is-live .bh-fallback{visibility:hidden}
-/* подсветка диска, пока курсор над первым экраном */
+.wave-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* Медленный дрейф всей сцены: сетка дышит, даже когда мышь неподвижна */
+@keyframes waveFloat{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(0,-2.2%,0) scale(1.035)}
+}
+/* подсветка волны, пока курсор над первым экраном */
 .hero__space-in{transition:filter .6s var(--ease)}
-.hero.is-spinning .hero__space-in{filter:brightness(1.16) contrast(1.04)}
+.hero.is-awake .hero__space-in{filter:brightness(1.16) contrast(1.04)}
 
 .hero .tag{border-color:rgba(255,255,255,.26);color:#fff}
 .hero .dot{background:#fff}
@@ -764,12 +775,12 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
   .rider__in{grid-template-columns:1fr;gap:44px}
   .rider__text .quote__text{max-width:none}
   .rider__figure{order:-1;width:min(320px,80%)}
-  .hero__space-in{left:52%;top:44%;width:172vw}
+  .hero__space-in{left:50%;top:58%;width:210vw}
   
   .glass-eye{display:none}
 }
 @media (prefers-reduced-motion:reduce){
-  .bh-stage,.glass-eye__iris,.glass-eye__pupil{animation:none}
+  .wave-stage,.glass-eye__iris,.glass-eye__pupil{animation:none}
   .glass-eye{display:none}
 }
 @media (hover:none){
@@ -799,11 +810,12 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
    для тех, кто просил в системе убрать анимации.
    ========================================================= */
 
-/* ---------- 26.1 Дыру можно крутить мышкой ---------- */
-/* Сам слой с дырой не ловит мышь (.hero__space), поэтому право
-   на события возвращаем точечно холсту. */
-.bh-canvas.is-grabbable{pointer-events:auto;cursor:grab;touch-action:pan-y}
-.bh-canvas.is-grabbing{cursor:grabbing}
+/* ---------- 26.1 Волну можно двигать мышкой ---------- */
+/* Тянем за первый экран целиком: холст лежит под слоем с текстом
+   и сам по себе мышь почти нигде не получает. */
+.hero.is-grabbable{cursor:grab}
+.hero.is-grabbing{cursor:grabbing}
+.hero.is-grabbable a,.hero.is-grabbable button{cursor:pointer}
 
 /* ---------- 26.2 Заголовки разделов по словам ---------- */
 /* Значение "words" ставит скрипт, разрезав заголовок. Без скрипта

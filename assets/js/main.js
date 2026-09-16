@@ -360,6 +360,40 @@
     }, 120);
   }
 
+  /* ---------- 18.5 ФОН СЕКЦИЙ ЖИВЁТ ОТ ПРОКРУТКИ ---------- */
+  /* Пучок линий сдвигается, разворачивается и слегка приближается,
+     пока секция проходит через экран. Меняем только transform —
+     это один композитный слой, страница не перерисовывается. */
+  function initPathsMotion() {
+    var hosts = $$('.paths');
+    if (!hosts.length || reduced) return;
+    var ticking = false;
+
+    function update() {
+      ticking = false;
+      var vh = window.innerHeight;
+      hosts.forEach(function (host) {
+        var r = host.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > vh + 200) return;
+        /* -1 — секция внизу экрана, 0 — по центру, 1 — вверху */
+        var p = 1 - 2 * ((r.top + r.height / 2) / vh);
+        var svg = host.firstElementChild;
+        if (!svg) return;
+        svg.style.setProperty('--py', (p * 46).toFixed(1) + 'px');
+        svg.style.setProperty('--rot', (p * 3.2).toFixed(2) + 'deg');
+        svg.style.setProperty('--sc', (1 + Math.abs(p) * 0.07).toFixed(3));
+      });
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    /* Линии рисуются лениво, поэтому первый расчёт — с запасом по времени */
+    window.setTimeout(update, 400);
+    update();
+  }
+
   /* ---------- 19. КНОПКА «НАВЕРХ» ---------- */
   function initToTop() {
     var btn = $('#toTop');
@@ -561,6 +595,7 @@
     initFaq();
     initGlow();
     initMarquee();
+    initPathsMotion();
     initToTop();
     initAnchors();
     initForm();
