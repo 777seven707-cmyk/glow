@@ -361,9 +361,9 @@
   }
 
   /* ---------- 18.5 ФОН СЕКЦИЙ ЖИВЁТ ОТ ПРОКРУТКИ ---------- */
-  /* Пучок линий сдвигается, разворачивается и слегка приближается,
-     пока секция проходит через экран. Меняем только transform —
-     это один композитный слой, страница не перерисовывается. */
+  /* Пучок линий сдвигается, разворачивается и приближается, пока секция
+     проходит через экран, а штрих по кривым бежит ровно настолько,
+     насколько прокручена страница. Своей анимации у линий больше нет. */
   function initPathsMotion() {
     var hosts = $$('.paths');
     if (!hosts.length || reduced) return;
@@ -372,6 +372,8 @@
     function update() {
       ticking = false;
       var vh = window.innerHeight;
+      /* 900 пикселей прокрутки = один полный проход штриха */
+      var flow = window.pageYOffset / 900;
       hosts.forEach(function (host) {
         var r = host.getBoundingClientRect();
         if (r.bottom < -200 || r.top > vh + 200) return;
@@ -382,6 +384,9 @@
         svg.style.setProperty('--py', (p * 46).toFixed(1) + 'px');
         svg.style.setProperty('--rot', (p * 3.2).toFixed(2) + 'deg');
         svg.style.setProperty('--sc', (1 + Math.abs(p) * 0.07).toFixed(3));
+        /* Штрих бежит от общей прокрутки страницы: вниз — вперёд,
+           вверх — назад. Стоит на месте — линии стоят. */
+        svg.style.setProperty('--flow', (-flow).toFixed(4));
       });
     }
 

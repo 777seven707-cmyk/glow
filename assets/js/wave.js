@@ -13,7 +13,7 @@
 
   var ROWS = 26;
   var COLS = 34;
-  var MIN_GAP = 26;        // ~38 кадров в секунду: сетке этого достаточно
+  var MIN_GAP = 33;        // 30 кадров в секунду: волна движется медленно, разницы не видно
 
   function init() {
     var host = document.getElementById('waveStage');
@@ -30,6 +30,11 @@
     host.appendChild(canvas);
 
     var w = 0, h = 0, dpr = 1;
+
+    /* На телефоне экран узкий: сетка проходит прямо по тексту.
+       Там она заметно бледнее и реже, иначе абзац не читается. */
+    var soft = isTouch ? 0.5 : 1;
+    var step = isTouch ? 4 : 3;
 
     function resize() {
       var r = host.getBoundingClientRect();
@@ -115,8 +120,8 @@
       var sway = (curX - 0.5) * 0.5 + curPushX * 0.55;
       var amp = 1 + lift * 0.55;                    // над первым экраном волна выше
       var wave =
-        Math.sin(u * 3.1 + t * 0.0007 + v * 2.2) * 0.06 * amp +
-        Math.cos(v * 5.5 - t * 0.0011) * 0.035 * amp +
+        Math.sin(u * 3.1 + t * 0.00028 + v * 2.2) * 0.06 * amp +
+        Math.cos(v * 5.5 - t * 0.00045) * 0.035 * amp +
         ((curY - 0.5) * 0.06 + curPushY * 0.13) * (1 - v);
 
       return {
@@ -130,14 +135,14 @@
       resize();
       if (w < 2 || h < 2) return;
 
-      curX += (aimX - curX) * 0.05;
-      curY += (aimY - curY) * 0.05;
-      curPushX += (pushX - curPushX) * 0.08;
-      curPushY += (pushY - curPushY) * 0.08;
-      lift += (liftTarget - lift) * 0.06;
+      curX += (aimX - curX) * 0.03;
+      curY += (aimY - curY) * 0.03;
+      curPushX += (pushX - curPushX) * 0.06;
+      curPushY += (pushY - curPushY) * 0.06;
+      lift += (liftTarget - lift) * 0.04;
 
       /* Отпустили — волна не застывает, а медленно возвращается к покою */
-      if (!dragging) { pushX *= 0.985; pushY *= 0.985; }
+      if (!dragging) { pushX *= 0.992; pushY *= 0.992; }
 
       ctx.clearRect(0, 0, w, h);
       ctx.lineWidth = 1;
@@ -152,29 +157,29 @@
           p = project(c / (COLS - 1), v, t);
           if (c === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
         }
-        ctx.strokeStyle = 'rgba(255,255,255,' + (0.06 + (1 - v) * 0.5 * (1 + lift * 0.3)).toFixed(3) + ')';
+        ctx.strokeStyle = 'rgba(255,255,255,' + ((0.06 + (1 - v) * 0.5 * (1 + lift * 0.3)) * soft).toFixed(3) + ')';
         ctx.stroke();
       }
 
       // Продольные — задают перспективу и глубину кадра
-      for (c = 0; c < COLS; c += 2) {
+      for (c = 0; c < COLS; c += step) {
         u = c / (COLS - 1);
         ctx.beginPath();
         for (r = 0; r < ROWS; r++) {
           p = project(u, r / (ROWS - 1), t);
           if (r === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
         }
-        ctx.strokeStyle = 'rgba(255,255,255,.18)';
+        ctx.strokeStyle = 'rgba(255,255,255,' + (0.18 * soft).toFixed(3) + ')';
         ctx.stroke();
       }
 
       // Узлы на ближних рядах — акцент, который ловит глаз
       for (r = 0; r < ROWS; r += 3) {
         v = r / (ROWS - 1);
-        for (c = 0; c < COLS; c += 3) {
+        for (c = 0; c < COLS; c += step) {
           p = project(c / (COLS - 1), v, t);
           if (p.fade <= 0.05) continue;
-          ctx.fillStyle = 'rgba(255,255,255,' + (p.fade * 0.7).toFixed(3) + ')';
+          ctx.fillStyle = 'rgba(255,255,255,' + (p.fade * 0.7 * soft).toFixed(3) + ')';
           ctx.beginPath();
           ctx.arc(p.x, p.y, 2 * p.fade + 0.5, 0, Math.PI * 2);
           ctx.fill();

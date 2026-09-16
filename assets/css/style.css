@@ -218,7 +218,7 @@ table{border-collapse:collapse;width:100%}
 
 .hero__title{
   font-family:var(--font-display);font-weight:800;
-  font-size:clamp(42px,11.5vw,168px);line-height:.9;letter-spacing:-.05em;
+  font-size:clamp(36px,9.2vw,132px);line-height:.92;letter-spacing:-.05em;
 }
 .hero__title .line{display:block;overflow:hidden;padding:.3em 0 .14em;margin:-.3em 0 -.14em}
 .hero__title .line > span{display:block;transform:translateY(105%);opacity:0}
@@ -572,11 +572,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
      Доли считаются от pathLength="1", то есть от длины самой кривой. */
   stroke-dasharray:.82 .18;
   opacity:var(--op);
-  animation:pathFlow var(--dur) linear infinite;
-  animation-play-state:paused;
+  /* Смещение штриха задаёт прокрутка: стоишь — линии стоят,
+     крутишь вниз — бегут. Значение --flow ставит скрипт,
+     --k разводит кривые по скорости, чтобы пучок не шёл монолитом. */
+  stroke-dashoffset:calc(var(--flow,0) * var(--k,1));
 }
-.paths.is-running path{animation-play-state:running}
-@keyframes pathFlow{from{stroke-dashoffset:0}  to{stroke-dashoffset:-1}}
 
 /* «Дыхание» пучка задано на контейнере, а не на каждой кривой.
    Это один композитный слой вместо 120 перерисовок в кадр:
@@ -598,22 +598,22 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
 .hero{background:var(--bg);color:var(--ink)}
 .hero__space{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .hero__space-in{
-  position:absolute;top:56%;left:50%;width:min(1640px,132vw);z-index:0;
-  transform:translate(-50%,-50%) translate3d(0,var(--par-y,0px),0);
+  position:absolute;inset:-6% -4%;z-index:0;
+  transform:translate3d(0,var(--par-y,0px),0);
 }
 /* Сцена волны: сетка в перспективе на холсте.
    Маска растворяет прямоугольник холста в фоне страницы. */
 .wave-stage{
-  position:relative;width:100%;aspect-ratio:736/414;
-  animation:waveFloat 30s ease-in-out infinite;
-  -webkit-mask-image:radial-gradient(72% 72% at 50% 45%,#000 40%,rgba(0,0,0,.55) 74%,transparent 100%);
-  mask-image:radial-gradient(72% 72% at 50% 45%,#000 40%,rgba(0,0,0,.55) 74%,transparent 100%);
+  position:absolute;inset:0;
+  animation:waveFloat 52s ease-in-out infinite;
+  -webkit-mask-image:radial-gradient(86% 82% at 50% 52%,#000 46%,rgba(0,0,0,.6) 78%,transparent 100%);
+  mask-image:radial-gradient(86% 82% at 50% 52%,#000 46%,rgba(0,0,0,.6) 78%,transparent 100%);
 }
 .wave-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* Медленный дрейф всей сцены: сетка дышит, даже когда мышь неподвижна */
 @keyframes waveFloat{
   0%,100%{transform:translate3d(0,0,0) scale(1)}
-  50%{transform:translate3d(0,-2.2%,0) scale(1.035)}
+  50%{transform:translate3d(0,-1.4%,0) scale(1.02)}
 }
 /* подсветка волны, пока курсор над первым экраном */
 .hero__space-in{transition:filter .6s var(--ease)}
@@ -775,7 +775,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
   .rider__in{grid-template-columns:1fr;gap:44px}
   .rider__text .quote__text{max-width:none}
   .rider__figure{order:-1;width:min(320px,80%)}
-  .hero__space-in{left:50%;top:58%;width:210vw}
+  .hero__space-in{inset:-8% -10%}
   
   .glass-eye{display:none}
 }
