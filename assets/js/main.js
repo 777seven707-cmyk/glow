@@ -331,72 +331,98 @@
   }
 
   /* ---------- 18. БЕГУЩАЯ СТРОКА РАЗГОНЯЕТСЯ ОТ ПРОКРУТКИ ---------- */
+  /* Двигаем строку сами, кадр за кадром. Раньше это была CSS-анимация,
+     а скорость менялась через animation-duration — но браузер на каждое
+     такое изменение пересчитывает фазу заново, и строка видимо дёргалась.
+     Своя петля просто прибавляет к сдвигу столько, сколько нужно. */
   function initMarquee() {
     var track = $('.marquee__track');
+    var host = $('.marquee');
     if (!track || reduced) return;
-    var BASE = 34;               // секунд на круг в покое
-    var last = window.pageYOffset, speed = 0, ticking = false;
 
-    function apply() {
-      ticking = false;
-      /* Чем быстрее прокрутка, тем короче круг — но не быстрее 7 секунд */
-      var dur = Math.max(7, BASE - speed * 0.22);
-      track.style.animationDuration = dur.toFixed(2) + 's';
+    var BASE = 62;               // пикселей в секунду в покое
+    var half = 0;                // длина одной половины строки (она продублирована)
+    var offset = 0, boost = 0, paused = false;
+    var lastScroll = window.pageYOffset, lastTime = 0;
+
+    function measure() { half = track.scrollWidth / 2; }
+    measure();
+    window.addEventListener('resize', measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+    if (host) {
+      host.addEventListener('mouseenter', function () { paused = true; });
+      host.addEventListener('mouseleave', function () { paused = false; });
     }
 
     window.addEventListener('scroll', function () {
       var now = window.pageYOffset;
-      speed = Math.min(120, Math.abs(now - last) * 3 + speed * 0.72);
-      last = now;
-      if (!ticking) { ticking = true; requestAnimationFrame(apply); }
+      /* Разгон копится от скорости прокрутки и гаснет сам */
+      boost = Math.min(900, boost + Math.abs(now - lastScroll) * 6);
+      lastScroll = now;
     }, { passive: true });
 
-    /* Прокрутка остановилась — плавно возвращаемся к спокойному темпу */
-    window.setInterval(function () {
-      if (speed < 0.5) return;
-      speed *= 0.8;
-      if (speed < 0.5) speed = 0;
-      apply();
-    }, 120);
+    function frame(now) {
+      requestAnimationFrame(frame);
+      if (!lastTime) { lastTime = now; return; }
+      var dt = Math.min(0.05, (now - lastTime) / 1000);   // после вкладки в фоне не прыгаем
+      lastTime = now;
+
+      boost *= 0.94;
+      if (boost < 1) boost = 0;
+      if (!paused && half > 0) {
+        offset += (BASE + boost) * dt;
+        if (offset >= half) offset -= half;              // половина проехала — начинаем заново
+        track.style.transform = 'translate3d(' + (-offset).toFixed(2) + 'px,0,0)';
+      }
+    }
+    requestAnimationFrame(frame);
   }
 
   /* ---------- 18.5 ФОН СЕКЦИЙ ЖИВЁТ ОТ ПРОКРУТКИ ---------- */
-  /* Пучок линий сдвигается, разворачивается и приближается, пока секция
-     проходит через экран, а штрих по кривым бежит ровно настолько,
-     насколько прокручена страница. Своей анимации у линий больше нет. */
+  /* Штрих по кривым плывёт сам по себе, а прокрутка его разгоняет.
+     Заодно пучок сдвигается, разворачивается и приближается, пока
+     секция проходит через экран. Меняются только transform и смещение
+     штриха — это композитные свойства, страница не перерисовывается. */
   function initPathsMotion() {
     var hosts = $$('.paths');
     if (!hosts.length || reduced) return;
-    var ticking = false;
 
-    function update() {
-      ticking = false;
+    var BASE = 0.075;            // полный проход штриха примерно за 13 секунд
+    var flow = 0, boost = 0, lastTime = 0;
+    var lastScroll = window.pageYOffset;
+
+    window.addEventListener('scroll', function () {
+      var now = window.pageYOffset;
+      boost = Math.min(4, boost + Math.abs(now - lastScroll) * 0.016);
+      lastScroll = now;
+    }, { passive: true });
+
+    function frame(now) {
+      requestAnimationFrame(frame);
+      if (!lastTime) { lastTime = now; return; }
+      var dt = Math.min(0.05, (now - lastTime) / 1000);   // после вкладки в фоне не прыгаем
+      lastTime = now;
+
+      boost *= 0.93;
+      if (boost < 0.001) boost = 0;
+      flow += (BASE + boost) * dt;
+
       var vh = window.innerHeight;
-      /* 900 пикселей прокрутки = один полный проход штриха */
-      var flow = window.pageYOffset / 900;
       hosts.forEach(function (host) {
         var r = host.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) return;
-        /* -1 — секция внизу экрана, 0 — по центру, 1 — вверху */
-        var p = 1 - 2 * ((r.top + r.height / 2) / vh);
+        if (r.bottom < -200 || r.top > vh + 200) return;   // вне экрана не считаем
         var svg = host.firstElementChild;
         if (!svg) return;
+        /* -1 — секция внизу экрана, 0 — по центру, 1 — вверху */
+        var p = 1 - 2 * ((r.top + r.height / 2) / vh);
         svg.style.setProperty('--py', (p * 46).toFixed(1) + 'px');
         svg.style.setProperty('--rot', (p * 3.2).toFixed(2) + 'deg');
         svg.style.setProperty('--sc', (1 + Math.abs(p) * 0.07).toFixed(3));
-        /* Штрих бежит от общей прокрутки страницы: вниз — вперёд,
-           вверх — назад. Стоит на месте — линии стоят. */
         svg.style.setProperty('--flow', (-flow).toFixed(4));
       });
     }
-
-    window.addEventListener('scroll', function () {
-      if (!ticking) { ticking = true; requestAnimationFrame(update); }
-    }, { passive: true });
-    window.addEventListener('resize', update);
-    /* Линии рисуются лениво, поэтому первый расчёт — с запасом по времени */
-    window.setTimeout(update, 400);
-    update();
+    requestAnimationFrame(frame);
   }
 
   /* ---------- 19. КНОПКА «НАВЕРХ» ---------- */
