@@ -71,14 +71,23 @@
     </a>
 
     <nav class="nav" id="nav" aria-label="Основная навигация">
-      <a href="#services" class="nav__link"><span>Услуги</span></a>
-      <a href="#pricing" class="nav__link"><span>Тарифы</span></a>
-      <a href="#process" class="nav__link"><span>Процесс</span></a>
-      <a href="#works" class="nav__link"><span>Форматы</span></a>
-      <a href="#faq" class="nav__link"><span>Вопросы</span></a>
+      <a data-i18n="t002" href="#services" class="nav__link"><span>Услуги</span></a>
+      <a data-i18n="t003" href="#pricing" class="nav__link"><span>Тарифы</span></a>
+      <a data-i18n="t004" href="#process" class="nav__link"><span>Процесс</span></a>
+      <a data-i18n="t005" href="#works" class="nav__link"><span>Форматы</span></a>
+      <a data-i18n="t006" href="#faq" class="nav__link"><span>Вопросы</span></a>
     </nav>
 
-    <a href="#contact" class="btn btn--sm header__cta" data-magnetic><span>Обсудить проект</span></a>
+    <div class="switch" role="group" aria-label="Язык и валюта">
+      <div class="switch__grp" data-switch="lang">
+        <button type="button" data-val="ru">RU</button><button type="button" data-val="en">EN</button><button type="button" data-val="kk">KZ</button>
+      </div>
+      <div class="switch__grp" data-switch="cur">
+        <button type="button" data-val="usd">$</button><button type="button" data-val="rub">₽</button><button type="button" data-val="kzt">₸</button>
+      </div>
+    </div>
+
+    <a data-i18n="t007" href="#contact" class="btn btn--sm header__cta" data-magnetic><span>Обсудить проект</span></a>
 
     <button class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="mobileMenu">
       <i></i><i></i>
@@ -89,13 +98,21 @@
 <!-- ============ МОБИЛЬНОЕ МЕНЮ ============ -->
 <div class="mmenu" id="mobileMenu" aria-hidden="true">
   <nav class="mmenu__nav">
-    <a href="#services"><em>01</em> Услуги</a>
-    <a href="#pricing"><em>02</em> Тарифы</a>
-    <a href="#process"><em>03</em> Процесс</a>
-    <a href="#works"><em>04</em> Форматы</a>
-    <a href="#faq"><em>05</em> Вопросы</a>
-    <a href="#contact"><em>06</em> Контакты</a>
+    <a data-i18n="t008" href="#services"><em>01</em> Услуги</a>
+    <a data-i18n="t009" href="#pricing"><em>02</em> Тарифы</a>
+    <a data-i18n="t010" href="#process"><em>03</em> Процесс</a>
+    <a data-i18n="t011" href="#works"><em>04</em> Форматы</a>
+    <a data-i18n="t012" href="#faq"><em>05</em> Вопросы</a>
+    <a data-i18n="t013" href="#contact"><em>06</em> Контакты</a>
   </nav>
+  <div class="switch" role="group" aria-label="Язык и валюта">
+      <div class="switch__grp" data-switch="lang">
+        <button type="button" data-val="ru">RU</button><button type="button" data-val="en">EN</button><button type="button" data-val="kk">KZ</button>
+      </div>
+      <div class="switch__grp" data-switch="cur">
+        <button type="button" data-val="usd">$</button><button type="button" data-val="rub">₽</button><button type="button" data-val="kzt">₸</button>
+      </div>
+    </div>
   <div class="mmenu__foot">
     <a href="mailto:hello@natvoeusmotrenie.studio">hello@natvoeusmotrenie.studio</a>
     <a href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
@@ -119,46 +136,46 @@
 
   <div class="container">
     <div class="hero__top" data-reveal>
-      <span class="tag"><i class="dot"></i> Принимаем 4 проекта на этот месяц</span>
-      <span class="hero__loc">Работаем удалённо · со всем миром · 2019 — сейчас</span>
+      <span data-i18n="t014" class="tag"><i class="dot"></i> Принимаем 4 проекта на этот месяц</span>
+      <span data-i18n="t015" class="hero__loc">Работаем удалённо · со всем миром · 2019 — сейчас</span>
     </div>
 
-    <h1 class="hero__title">
+    <h1 data-i18n="t016" class="hero__title">
       <span class="line" data-split><span>Сайты,</span></span>
       <span class="line" data-split><span>которые</span></span>
       <span class="line line--accent" data-split><span>приносят деньги</span></span>
     </h1>
 
     <div class="hero__bottom">
-      <p class="hero__lead" data-reveal>
+      <p data-i18n="t017" class="hero__lead" data-reveal>
         Мини-студия <b>«На твоё усмотрение»</b>. Делаем сайты под ключ: от идеи и текста
-        до вёрстки, домена и запуска. Три тарифа — <b>$70</b>, <b>$200</b>, <b>$500</b>.
+        до вёрстки, домена и запуска. Три тарифа — <b>{small}</b>, <b>{mid}</b>, <b>{big}</b>.
         Цена известна до старта, доплат по ходу не бывает.
       </p>
       <div class="hero__actions" data-reveal>
-        <a href="#pricing" class="btn" data-magnetic><span>Смотреть тарифы</span></a>
-        <a href="#contact" class="btn btn--glass" data-magnetic><span>Бесплатная консультация</span></a>
+        <a data-i18n="t018" href="#pricing" class="btn" data-magnetic><span>Смотреть тарифы</span></a>
+        <a data-i18n="t019" href="#contact" class="btn btn--glass" data-magnetic><span>Бесплатная консультация</span></a>
       </div>
     </div>
 
     <div class="hero__stats">
-      <div class="stat" data-reveal><b class="count" data-to="180">0</b><span>проектов<br>запущено</span></div>
-      <div class="stat" data-reveal><b class="count" data-to="3">0</b><span>дня — минимальный<br>срок сдачи</span></div>
-      <div class="stat" data-reveal><b class="count" data-to="98">0</b><span>% клиентов<br>возвращаются</span></div>
-      <div class="stat" data-reveal><b class="count" data-to="24">0</b><span>часа — среднее<br>время ответа</span></div>
+      <div class="stat" data-reveal><b class="count" data-to="180">0</b><span data-i18n="t020">проектов<br>запущено</span></div>
+      <div class="stat" data-reveal><b class="count" data-to="3">0</b><span data-i18n="t021">дня — минимальный<br>срок сдачи</span></div>
+      <div class="stat" data-reveal><b class="count" data-to="98">0</b><span data-i18n="t022">% клиентов<br>возвращаются</span></div>
+      <div class="stat" data-reveal><b class="count" data-to="24">0</b><span data-i18n="t023">часа — среднее<br>время ответа</span></div>
     </div>
 
-    <div class="hero__scroll" aria-hidden="true"><span>прокрути вниз</span><i></i></div>
+    <div class="hero__scroll" aria-hidden="true"><span data-i18n="t024">прокрути вниз</span><i></i></div>
   </div>
 </section>
 
 <!-- ============ БЕГУЩАЯ СТРОКА ============ -->
 <div class="marquee" aria-hidden="true">
   <div class="marquee__track">
-    <span>Лендинги</span><i>✦</i><span>Корпоративные сайты</span><i>✦</i><span>Интернет-магазины</span><i>✦</i>
-    <span>Портфолио</span><i>✦</i><span>Редизайн</span><i>✦</i><span>Адаптив</span><i>✦</i>
-    <span>Лендинги</span><i>✦</i><span>Корпоративные сайты</span><i>✦</i><span>Интернет-магазины</span><i>✦</i>
-    <span>Портфолио</span><i>✦</i><span>Редизайн</span><i>✦</i><span>Адаптив</span><i>✦</i>
+    <span data-i18n="t025">Лендинги</span><i>✦</i><span data-i18n="t026">Корпоративные сайты</span><i>✦</i><span data-i18n="t027">Интернет-магазины</span><i>✦</i>
+    <span data-i18n="t028">Портфолио</span><i>✦</i><span data-i18n="t029">Редизайн</span><i>✦</i><span data-i18n="t030">Адаптив</span><i>✦</i>
+    <span data-i18n="t025">Лендинги</span><i>✦</i><span data-i18n="t026">Корпоративные сайты</span><i>✦</i><span data-i18n="t027">Интернет-магазины</span><i>✦</i>
+    <span data-i18n="t028">Портфолио</span><i>✦</i><span data-i18n="t029">Редизайн</span><i>✦</i><span data-i18n="t030">Адаптив</span><i>✦</i>
   </div>
 </div>
 
@@ -167,9 +184,9 @@
   <div class="art paths" data-paths aria-hidden="true"></div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>01 / Услуги</span>
-      <h2 class="sec-title" data-reveal="wipe">Что входит<br>в работу</h2>
-      <p class="sec-desc" data-reveal>
+      <span data-i18n="t031" class="sec-num" data-reveal>01 / Услуги</span>
+      <h2 data-i18n="t032" class="sec-title" data-reveal="wipe">Что входит<br>в работу</h2>
+      <p data-i18n="t033" class="sec-desc" data-reveal>
         Продаём не «часы дизайнера», а готовый результат: сайт, который быстро
         открывается и понятен посетителю с первого экрана.
       </p>
@@ -178,39 +195,39 @@
     <div class="cards">
       <article class="card" data-reveal>
         <span class="card__num">01</span>
-        <h3>Дизайн</h3>
-        <p>Собираем макет под вашу задачу: структура экранов, шрифты, сетка, состояния кнопок. Показываем до вёрстки — правки бесплатны.</p>
-        <ul class="card__list"><li>Прототип</li><li>Макет</li><li>Мобильная версия</li></ul>
+        <h3 data-i18n="t034">Дизайн</h3>
+        <p data-i18n="t035">Собираем макет под вашу задачу: структура экранов, шрифты, сетка, состояния кнопок. Показываем до вёрстки — правки бесплатны.</p>
+        <ul class="card__list"><li data-i18n="t036">Прототип</li><li data-i18n="t037">Макет</li><li data-i18n="t038">Мобильная версия</li></ul>
       </article>
       <article class="card" data-reveal>
         <span class="card__num">02</span>
-        <h3>Вёрстка и код</h3>
-        <p>Чистый HTML/CSS/JS или готовая CMS. Аккуратная разметка, быстрый старт, анимации, которые не мешают, а помогают читать.</p>
-        <ul class="card__list"><li>От телефона до 4K</li><li>Все браузеры</li><li>Скорость 90+ в PageSpeed</li></ul>
+        <h3 data-i18n="t039">Вёрстка и код</h3>
+        <p data-i18n="t040">Чистый HTML/CSS/JS или готовая CMS. Аккуратная разметка, быстрый старт, анимации, которые не мешают, а помогают читать.</p>
+        <ul class="card__list"><li data-i18n="t041">От телефона до 4K</li><li data-i18n="t042">Все браузеры</li><li data-i18n="t043">Скорость 90+ в PageSpeed</li></ul>
       </article>
       <article class="card" data-reveal>
         <span class="card__num">03</span>
-        <h3>Тексты и смысл</h3>
-        <p>Помогаем сформулировать главное: что вы продаёте, кому и почему стоит выбрать вас. Если текста нет — напишем черновик сами.</p>
-        <ul class="card__list"><li>Структура</li><li>Главная мысль</li><li>Призывы к действию</li></ul>
+        <h3 data-i18n="t044">Тексты и смысл</h3>
+        <p data-i18n="t045">Помогаем сформулировать главное: что вы продаёте, кому и почему стоит выбрать вас. Если текста нет — напишем черновик сами.</p>
+        <ul class="card__list"><li data-i18n="t046">Структура</li><li data-i18n="t047">Главная мысль</li><li data-i18n="t048">Призывы к действию</li></ul>
       </article>
       <article class="card" data-reveal>
         <span class="card__num">04</span>
-        <h3>SEO-база</h3>
-        <p>Мета-теги, заголовки, микроразметка, sitemap, robots, Open Graph. Сайт готов к индексации в день запуска.</p>
-        <ul class="card__list"><li>Семантика</li><li>OG-превью</li><li>Sitemap + robots</li></ul>
+        <h3 data-i18n="t049">SEO-база</h3>
+        <p data-i18n="t050">Мета-теги, заголовки, микроразметка, sitemap, robots, Open Graph. Сайт готов к индексации в день запуска.</p>
+        <ul class="card__list"><li data-i18n="t051">Семантика</li><li data-i18n="t052">OG-превью</li><li>Sitemap + robots</li></ul>
       </article>
       <article class="card" data-reveal>
         <span class="card__num">05</span>
-        <h3>Запуск</h3>
-        <p>Регистрируем домен, настраиваем хостинг, SSL, почту на домене, подключаем аналитику и цели. Отдаём рабочий сайт, а не архив.</p>
-        <ul class="card__list"><li>Домен и SSL</li><li>Хостинг</li><li>Аналитика</li></ul>
+        <h3 data-i18n="t053">Запуск</h3>
+        <p data-i18n="t054">Регистрируем домен, настраиваем хостинг, SSL, почту на домене, подключаем аналитику и цели. Отдаём рабочий сайт, а не архив.</p>
+        <ul class="card__list"><li data-i18n="t055">Домен и SSL</li><li data-i18n="t056">Хостинг</li><li data-i18n="t057">Аналитика</li></ul>
       </article>
       <article class="card" data-reveal>
         <span class="card__num">06</span>
-        <h3>Поддержка</h3>
-        <p>После сдачи остаёмся на связи. Правим мелочи, объясняем, как менять контент, и записываем короткое видео-руководство.</p>
-        <ul class="card__list"><li>Гарантия</li><li>Видео-инструкция</li><li>Быстрые правки</li></ul>
+        <h3 data-i18n="t058">Поддержка</h3>
+        <p data-i18n="t059">После сдачи остаёмся на связи. Правим мелочи, объясняем, как менять контент, и записываем короткое видео-руководство.</p>
+        <ul class="card__list"><li data-i18n="t060">Гарантия</li><li data-i18n="t061">Видео-инструкция</li><li data-i18n="t062">Быстрые правки</li></ul>
       </article>
     </div>
   </div>
@@ -221,9 +238,9 @@
   <div class="art paths paths--flip" data-paths aria-hidden="true"></div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>02 / Тарифы</span>
-      <h2 class="sec-title" data-reveal="wipe">Тарифы</h2>
-      <p class="sec-desc" data-reveal>
+      <span data-i18n="t063" class="sec-num" data-reveal>02 / Тарифы</span>
+      <h2 data-i18n="t064" class="sec-title" data-reveal="wipe">Тарифы</h2>
+      <p data-i18n="t065" class="sec-desc" data-reveal>
         Три пакета на выбор. Цену фиксируем до старта — итог не вырастет
         «по ходу дела». Оплата пополам: половина на старте, половина при сдаче.
       </p>
@@ -233,72 +250,72 @@
 
       <article class="plan" data-reveal data-tilt>
         <header class="plan__head">
-          <span class="plan__label">Тариф 01</span>
-          <h3 class="plan__name">Малый</h3>
-          <p class="plan__for">Одностраничный сайт. Быстрый старт для услуги, продукта или личного бренда.</p>
+          <span data-i18n="t066" class="plan__label">Тариф 01</span>
+          <h3 data-i18n="t067" class="plan__name">Малый</h3>
+          <p data-i18n="t068" class="plan__for">Одностраничный сайт. Быстрый старт для услуги, продукта или личного бренда.</p>
         </header>
-        <div class="plan__price"><span class="cur">$</span><b class="count" data-to="70">0</b></div>
-        <div class="plan__meta"><span>3–5 дней</span><span>1 страница</span></div>
-        <a href="#contact" class="btn btn--block" data-magnetic><span>Выбрать «Малый»</span></a>
+        <div class="plan__price" data-price="small"><span class="cur">$</span><b class="count" data-to="70">0</b></div>
+        <div class="plan__meta"><span data-i18n="t069">3–5 дней</span><span data-i18n="t070">1 страница</span></div>
+        <a data-i18n="t071" href="#contact" class="btn btn--block" data-magnetic><span>Выбрать «Малый»</span></a>
         <ul class="plan__list">
-          <li>Лендинг до 6 смысловых блоков</li>
-          <li>Адаптив под телефон и планшет</li>
-          <li>Форма заявки на почту или в Telegram</li>
-          <li>Базовое SEO и Open Graph</li>
-          <li>Подключение домена и SSL</li>
-          <li>2 круга правок</li>
-          <li>Гарантия 14 дней</li>
+          <li data-i18n="t072">Лендинг до 6 смысловых блоков</li>
+          <li data-i18n="t073">Адаптив под телефон и планшет</li>
+          <li data-i18n="t074">Форма заявки на почту или в Telegram</li>
+          <li data-i18n="t075">Базовое SEO и Open Graph</li>
+          <li data-i18n="t076">Подключение домена и SSL</li>
+          <li data-i18n="t077">2 круга правок</li>
+          <li data-i18n="t078">Гарантия 14 дней</li>
         </ul>
       </article>
 
       <article class="plan plan--pop" data-reveal data-tilt>
-        <span class="plan__badge">Выбирают чаще всего</span>
+        <span data-i18n="t079" class="plan__badge">Выбирают чаще всего</span>
         <header class="plan__head">
-          <span class="plan__label">Тариф 02</span>
-          <h3 class="plan__name">Средний</h3>
-          <p class="plan__for">Полноценный сайт компании: услуги, кейсы, команда, контакты.</p>
+          <span data-i18n="t080" class="plan__label">Тариф 02</span>
+          <h3 data-i18n="t081" class="plan__name">Средний</h3>
+          <p data-i18n="t082" class="plan__for">Полноценный сайт компании: услуги, кейсы, команда, контакты.</p>
         </header>
-        <div class="plan__price"><span class="cur">$</span><b class="count" data-to="200">0</b></div>
-        <div class="plan__meta"><span>7–10 дней</span><span>до 6 страниц</span></div>
-        <a href="#contact" class="btn btn--block" data-magnetic><span>Выбрать «Средний»</span></a>
+        <div class="plan__price" data-price="mid"><span class="cur">$</span><b class="count" data-to="200">0</b></div>
+        <div class="plan__meta"><span data-i18n="t083">7–10 дней</span><span data-i18n="t084">до 6 страниц</span></div>
+        <a data-i18n="t085" href="#contact" class="btn btn--block" data-magnetic><span>Выбрать «Средний»</span></a>
         <ul class="plan__list">
-          <li>Всё из тарифа «Малый»</li>
-          <li>До 6 страниц с индивидуальным дизайном</li>
-          <li>Блог или раздел новостей</li>
-          <li>Админка: контент меняете сами</li>
-          <li>Анимации и интерактив</li>
-          <li>Мультиязычность (2 языка)</li>
-          <li>Аналитика и настройка целей</li>
-          <li>4 круга правок</li>
-          <li>Гарантия 30 дней</li>
+          <li data-i18n="t086">Всё из тарифа «Малый»</li>
+          <li data-i18n="t087">До 6 страниц с индивидуальным дизайном</li>
+          <li data-i18n="t088">Блог или раздел новостей</li>
+          <li data-i18n="t089">Админка: контент меняете сами</li>
+          <li data-i18n="t090">Анимации и интерактив</li>
+          <li data-i18n="t091">Мультиязычность (2 языка)</li>
+          <li data-i18n="t092">Аналитика и настройка целей</li>
+          <li data-i18n="t093">4 круга правок</li>
+          <li data-i18n="t094">Гарантия 30 дней</li>
         </ul>
       </article>
 
       <article class="plan" data-reveal data-tilt>
         <header class="plan__head">
-          <span class="plan__label">Тариф 03</span>
-          <h3 class="plan__name">Большой</h3>
-          <p class="plan__for">Магазин или крупный проект с каталогом, оплатой и личным кабинетом.</p>
+          <span data-i18n="t095" class="plan__label">Тариф 03</span>
+          <h3 data-i18n="t096" class="plan__name">Большой</h3>
+          <p data-i18n="t097" class="plan__for">Магазин или крупный проект с каталогом, оплатой и личным кабинетом.</p>
         </header>
-        <div class="plan__price"><span class="cur">$</span><b class="count" data-to="500">0</b></div>
-        <div class="plan__meta"><span>14–20 дней</span><span>без лимита страниц</span></div>
-        <a href="#contact" class="btn btn--block" data-magnetic><span>Выбрать «Большой»</span></a>
+        <div class="plan__price" data-price="big"><span class="cur">$</span><b class="count" data-to="500">0</b></div>
+        <div class="plan__meta"><span data-i18n="t098">14–20 дней</span><span data-i18n="t099">без лимита страниц</span></div>
+        <a data-i18n="t100" href="#contact" class="btn btn--block" data-magnetic><span>Выбрать «Большой»</span></a>
         <ul class="plan__list">
-          <li>Всё из тарифа «Средний»</li>
-          <li>Каталог товаров и корзина</li>
-          <li>Онлайн-оплата и доставка</li>
-          <li>Личный кабинет пользователя</li>
-          <li>Интеграции: CRM, почта, мессенджеры</li>
-          <li>Поиск и фильтры по каталогу</li>
-          <li>Оптимизация скорости и нагрузки</li>
-          <li>Безлимит правок в ходе проекта</li>
-          <li>Поддержка и гарантия 90 дней</li>
+          <li data-i18n="t101">Всё из тарифа «Средний»</li>
+          <li data-i18n="t102">Каталог товаров и корзина</li>
+          <li data-i18n="t103">Онлайн-оплата и доставка</li>
+          <li data-i18n="t104">Личный кабинет пользователя</li>
+          <li data-i18n="t105">Интеграции: CRM, почта, мессенджеры</li>
+          <li data-i18n="t106">Поиск и фильтры по каталогу</li>
+          <li data-i18n="t107">Оптимизация скорости и нагрузки</li>
+          <li data-i18n="t108">Безлимит правок в ходе проекта</li>
+          <li data-i18n="t109">Поддержка и гарантия 90 дней</li>
         </ul>
       </article>
 
     </div>
 
-    <p class="plans__note" data-reveal>
+    <p data-i18n="t110" class="plans__note" data-reveal>
       Не уверены, какой тариф ваш? Напишите пару слов о задаче — предложим вариант и честно скажем,
       если хватит более простого.
     </p>
@@ -310,42 +327,42 @@
   <div class="art paths paths--flip" data-paths aria-hidden="true"></div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>03 / Сравнение</span>
-      <h2 class="sec-title" data-reveal="wipe">Сравнение тарифов</h2>
+      <span data-i18n="t111" class="sec-num" data-reveal>03 / Сравнение</span>
+      <h2 data-i18n="t112" class="sec-title" data-reveal="wipe">Сравнение тарифов</h2>
     </div>
 
     <div class="table-wrap" data-reveal>
       <table class="table">
         <thead>
-          <tr><th>Что входит</th><th>Малый<em>$70</em></th><th>Средний<em>$200</em></th><th>Большой<em>$500</em></th></tr>
+          <tr><th data-i18n="t113">Что входит</th><th data-i18n="t114">Малый<em>{small}</em></th><th data-i18n="t115">Средний<em>{mid}</em></th><th data-i18n="t116">Большой<em>{big}</em></th></tr>
         </thead>
         <tbody>
-          <tr><td>Страниц</td><td>1</td><td>до 6</td><td>без лимита</td></tr>
-          <tr><td>Срок</td><td>3–5 дней</td><td>7–10 дней</td><td>14–20 дней</td></tr>
-          <tr><td>Индивидуальный дизайн</td><td><i class="yes"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Адаптив под мобильные</td><td><i class="yes"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Форма заявки</td><td><i class="yes"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Админка для контента</td><td><i class="no"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Блог / новости</td><td><i class="no"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Мультиязычность</td><td><i class="no"></i></td><td>2 языка</td><td>без лимита</td></tr>
-          <tr><td>Каталог и корзина</td><td><i class="no"></i></td><td><i class="no"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Онлайн-оплата</td><td><i class="no"></i></td><td><i class="no"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Интеграция с CRM</td><td><i class="no"></i></td><td>по запросу</td><td><i class="yes"></i></td></tr>
-          <tr><td>Кругов правок</td><td>2</td><td>4</td><td>без лимита</td></tr>
-          <tr><td>Гарантия</td><td>14 дней</td><td>30 дней</td><td>90 дней</td></tr>
+          <tr><td data-i18n="t117">Страниц</td><td>1</td><td data-i18n="t118">до 6</td><td data-i18n="t119">без лимита</td></tr>
+          <tr><td data-i18n="t120">Срок</td><td data-i18n="t069">3–5 дней</td><td data-i18n="t083">7–10 дней</td><td data-i18n="t098">14–20 дней</td></tr>
+          <tr><td data-i18n="t121">Индивидуальный дизайн</td><td><i class="yes"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
+          <tr><td data-i18n="t122">Адаптив под мобильные</td><td><i class="yes"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
+          <tr><td data-i18n="t123">Форма заявки</td><td><i class="yes"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
+          <tr><td data-i18n="t124">Админка для контента</td><td><i class="no"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
+          <tr><td data-i18n="t125">Блог / новости</td><td><i class="no"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
+          <tr><td data-i18n="t126">Мультиязычность</td><td><i class="no"></i></td><td data-i18n="t127">2 языка</td><td data-i18n="t119">без лимита</td></tr>
+          <tr><td data-i18n="t128">Каталог и корзина</td><td><i class="no"></i></td><td><i class="no"></i></td><td><i class="yes"></i></td></tr>
+          <tr><td data-i18n="t129">Онлайн-оплата</td><td><i class="no"></i></td><td><i class="no"></i></td><td><i class="yes"></i></td></tr>
+          <tr><td data-i18n="t130">Интеграция с CRM</td><td><i class="no"></i></td><td data-i18n="t131">по запросу</td><td><i class="yes"></i></td></tr>
+          <tr><td data-i18n="t132">Кругов правок</td><td>2</td><td>4</td><td data-i18n="t119">без лимита</td></tr>
+          <tr><td data-i18n="t060">Гарантия</td><td data-i18n="t133">14 дней</td><td data-i18n="t134">30 дней</td><td data-i18n="t135">90 дней</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="addons">
-      <h3 class="addons__title" data-reveal>Дополнительно — к любому тарифу</h3>
+      <h3 data-i18n="t136" class="addons__title" data-reveal>Дополнительно — к любому тарифу</h3>
       <ul class="addons__list">
-        <li data-reveal><span>Логотип и фирменный стиль</span><b>+$60</b></li>
-        <li data-reveal><span>Дополнительная страница</span><b>+$25</b></li>
-        <li data-reveal><span>Тексты под ключ (за страницу)</span><b>+$20</b></li>
-        <li data-reveal><span>Перенос сайта на новый хостинг</span><b>+$30</b></li>
-        <li data-reveal><span>Ежемесячная поддержка</span><b>$40/мес</b></li>
-        <li data-reveal><span>Срочный запуск (×2 скорость)</span><b>+50%</b></li>
+        <li data-i18n="t137" data-reveal><span>Логотип и фирменный стиль</span><b>{logo}</b></li>
+        <li data-i18n="t138" data-reveal><span>Дополнительная страница</span><b>{page}</b></li>
+        <li data-i18n="t139" data-reveal><span>Тексты под ключ (за страницу)</span><b>{textpg}</b></li>
+        <li data-i18n="t140" data-reveal><span>Перенос сайта на новый хостинг</span><b>{move}</b></li>
+        <li data-i18n="t141" data-reveal><span>Ежемесячная поддержка</span><b>{support}/мес</b></li>
+        <li data-i18n="t142" data-reveal><span>Срочный запуск (×2 скорость)</span><b>+50%</b></li>
       </ul>
     </div>
   </div>
@@ -356,9 +373,9 @@
   <div class="art paths" data-paths aria-hidden="true"></div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>04 / Процесс</span>
-      <h2 class="sec-title" data-reveal="wipe">Как проходит<br>работа</h2>
-      <p class="sec-desc" data-reveal>
+      <span data-i18n="t143" class="sec-num" data-reveal>04 / Процесс</span>
+      <h2 data-i18n="t144" class="sec-title" data-reveal="wipe">Как проходит<br>работа</h2>
+      <p data-i18n="t145" class="sec-desc" data-reveal>
         Пять шагов, известных заранее. На каждом вы видите результат и можете сказать
         «стоп» или «переделай» — пока это ничего не стоит.
       </p>
@@ -368,42 +385,42 @@
       <li class="step" data-reveal>
         <span class="step__n">01</span>
         <div class="step__body">
-          <h3>Знакомство и бриф</h3>
-          <p>Созваниваемся или переписываемся 20 минут. Выясняем задачу, аудиторию, примеры, которые вам нравятся. Сразу называем тариф и срок.</p>
+          <h3 data-i18n="t146">Знакомство и бриф</h3>
+          <p data-i18n="t147">Созваниваемся или переписываемся 20 минут. Выясняем задачу, аудиторию, примеры, которые вам нравятся. Сразу называем тариф и срок.</p>
         </div>
-        <span class="step__time">1 день</span>
+        <span data-i18n="t148" class="step__time">1 день</span>
       </li>
       <li class="step" data-reveal>
         <span class="step__n">02</span>
         <div class="step__body">
-          <h3>Структура и смыслы</h3>
-          <p>Собираем каркас: какие блоки, в каком порядке, что на первом экране. Здесь решается, будет сайт продавать или просто красиво выглядеть.</p>
+          <h3 data-i18n="t149">Структура и смыслы</h3>
+          <p data-i18n="t150">Собираем каркас: какие блоки, в каком порядке, что на первом экране. Здесь решается, будет сайт продавать или просто красиво выглядеть.</p>
         </div>
-        <span class="step__time">1–2 дня</span>
+        <span data-i18n="t151" class="step__time">1–2 дня</span>
       </li>
       <li class="step" data-reveal>
         <span class="step__n">03</span>
         <div class="step__body">
-          <h3>Дизайн</h3>
-          <p>Рисуем макет десктопа и мобильной версии. Показываем, собираем правки, доводим до состояния «нравится».</p>
+          <h3 data-i18n="t034">Дизайн</h3>
+          <p data-i18n="t152">Рисуем макет десктопа и мобильной версии. Показываем, собираем правки, доводим до состояния «нравится».</p>
         </div>
-        <span class="step__time">2–6 дней</span>
+        <span data-i18n="t153" class="step__time">2–6 дней</span>
       </li>
       <li class="step" data-reveal>
         <span class="step__n">04</span>
         <div class="step__body">
-          <h3>Разработка</h3>
-          <p>Верстаем, программируем логику, подключаем формы и интеграции. Вы следите за прогрессом по тестовой ссылке в любой момент.</p>
+          <h3 data-i18n="t154">Разработка</h3>
+          <p data-i18n="t155">Верстаем, программируем логику, подключаем формы и интеграции. Вы следите за прогрессом по тестовой ссылке в любой момент.</p>
         </div>
-        <span class="step__time">2–10 дней</span>
+        <span data-i18n="t156" class="step__time">2–10 дней</span>
       </li>
       <li class="step" data-reveal>
         <span class="step__n">05</span>
         <div class="step__body">
-          <h3>Запуск и передача</h3>
-          <p>Переносим на ваш домен, проверяем на реальных устройствах, отдаём доступы и видео-инструкцию. Дальше — гарантия и поддержка.</p>
+          <h3 data-i18n="t157">Запуск и передача</h3>
+          <p data-i18n="t158">Переносим на ваш домен, проверяем на реальных устройствах, отдаём доступы и видео-инструкцию. Дальше — гарантия и поддержка.</p>
         </div>
-        <span class="step__time">1 день</span>
+        <span data-i18n="t148" class="step__time">1 день</span>
       </li>
     </ol>
   </div>
@@ -414,9 +431,9 @@
   <div class="art paths" data-paths aria-hidden="true"></div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>05 / Форматы</span>
-      <h2 class="sec-title" data-reveal="wipe">Форматы,<br>с которыми работаем</h2>
-      <p class="sec-desc" data-reveal>Шесть типов проектов, которые закрывают почти любую задачу. Не нашли свою — напишите, обсудим отдельно.</p>
+      <span data-i18n="t159" class="sec-num" data-reveal>05 / Форматы</span>
+      <h2 data-i18n="t160" class="sec-title" data-reveal="wipe">Форматы,<br>с которыми работаем</h2>
+      <p data-i18n="t161" class="sec-desc" data-reveal>Шесть типов проектов, которые закрывают почти любую задачу. Не нашли свою — напишите, обсудим отдельно.</p>
     </div>
 
     <div class="works">
@@ -424,43 +441,43 @@
         <div class="work__vis" aria-hidden="true">
           <svg viewBox="0 0 200 130"><rect x="12" y="12" width="176" height="30" /><rect x="12" y="52" width="100" height="10" /><rect x="12" y="70" width="140" height="10" /><rect x="12" y="94" width="60" height="22" /></svg>
         </div>
-        <div class="work__info"><h3>Лендинг</h3><span>Малый · от $70</span></div>
-        <p>Одна страница, один оффер, одна цель — заявка. Идеально для запуска услуги или теста ниши.</p>
+        <div class="work__info"><h3 data-i18n="t162">Лендинг</h3><span data-i18n="t163">Малый · от {small}</span></div>
+        <p data-i18n="t164">Одна страница, один оффер, одна цель — заявка. Идеально для запуска услуги или теста ниши.</p>
       </a>
       <a href="#contact" class="work" data-reveal data-tilt>
         <div class="work__vis" aria-hidden="true">
           <svg viewBox="0 0 200 130"><rect x="12" y="12" width="176" height="18" /><rect x="12" y="40" width="82" height="76" /><rect x="106" y="40" width="82" height="36" /><rect x="106" y="84" width="82" height="32" /></svg>
         </div>
-        <div class="work__info"><h3>Корпоративный сайт</h3><span>Средний · от $200</span></div>
-        <p>Услуги, кейсы, команда, контакты. Лицо компании, которому доверяют подрядчики и клиенты.</p>
+        <div class="work__info"><h3 data-i18n="t165">Корпоративный сайт</h3><span data-i18n="t166">Средний · от {mid}</span></div>
+        <p data-i18n="t167">Услуги, кейсы, команда, контакты. Лицо компании, которому доверяют подрядчики и клиенты.</p>
       </a>
       <a href="#contact" class="work" data-reveal data-tilt>
         <div class="work__vis" aria-hidden="true">
           <svg viewBox="0 0 200 130"><rect x="12" y="12" width="176" height="16" /><rect x="12" y="38" width="54" height="40" /><rect x="73" y="38" width="54" height="40" /><rect x="134" y="38" width="54" height="40" /><rect x="12" y="88" width="176" height="28" /></svg>
         </div>
-        <div class="work__info"><h3>Интернет-магазин</h3><span>Большой · от $500</span></div>
-        <p>Каталог, фильтры, корзина, оплата и доставка. Плюс админка, в которой разберётся кто угодно.</p>
+        <div class="work__info"><h3 data-i18n="t168">Интернет-магазин</h3><span data-i18n="t169">Большой · от {big}</span></div>
+        <p data-i18n="t170">Каталог, фильтры, корзина, оплата и доставка. Плюс админка, в которой разберётся кто угодно.</p>
       </a>
       <a href="#contact" class="work" data-reveal data-tilt>
         <div class="work__vis" aria-hidden="true">
           <svg viewBox="0 0 200 130"><circle cx="46" cy="46" r="26" /><rect x="86" y="30" width="102" height="12" /><rect x="86" y="52" width="70" height="12" /><rect x="12" y="88" width="176" height="28" /></svg>
         </div>
-        <div class="work__info"><h3>Портфолио / личный бренд</h3><span>Малый · от $70</span></div>
-        <p>Для фотографов, дизайнеров, экспертов и мастеров. Работы на первом плане, контакты — под рукой.</p>
+        <div class="work__info"><h3 data-i18n="t171">Портфолио / личный бренд</h3><span data-i18n="t163">Малый · от {small}</span></div>
+        <p data-i18n="t172">Для фотографов, дизайнеров, экспертов и мастеров. Работы на первом плане, контакты — под рукой.</p>
       </a>
       <a href="#contact" class="work" data-reveal data-tilt>
         <div class="work__vis" aria-hidden="true">
           <svg viewBox="0 0 200 130"><rect x="12" y="12" width="80" height="104" /><rect x="104" y="12" width="84" height="48" /><rect x="104" y="68" width="84" height="48" /></svg>
         </div>
-        <div class="work__info"><h3>Редизайн старого сайта</h3><span>Средний · от $200</span></div>
-        <p>Оставляем то, что работает, переделываем остальное. Часто дешевле и быстрее, чем строить заново.</p>
+        <div class="work__info"><h3 data-i18n="t173">Редизайн старого сайта</h3><span data-i18n="t166">Средний · от {mid}</span></div>
+        <p data-i18n="t174">Оставляем то, что работает, переделываем остальное. Часто дешевле и быстрее, чем строить заново.</p>
       </a>
       <a href="#contact" class="work" data-reveal data-tilt>
         <div class="work__vis" aria-hidden="true">
           <svg viewBox="0 0 200 130"><rect x="12" y="12" width="176" height="104" rx="4" fill="none" stroke-width="6" /><rect x="34" y="40" width="60" height="10" /><rect x="34" y="60" width="120" height="10" /><rect x="34" y="80" width="90" height="10" /></svg>
         </div>
-        <div class="work__info"><h3>Сервис или веб-приложение</h3><span>Большой · от $500</span></div>
-        <p>Личные кабинеты, калькуляторы, панели, интеграции с внешними системами. Считаем индивидуально.</p>
+        <div class="work__info"><h3 data-i18n="t175">Сервис или веб-приложение</h3><span data-i18n="t169">Большой · от {big}</span></div>
+        <p data-i18n="t176">Личные кабинеты, калькуляторы, панели, интеграции с внешними системами. Считаем индивидуально.</p>
       </a>
     </div>
   </div>
@@ -470,22 +487,22 @@
 <section class="section section--split" id="why">
   <div class="container why">
     <div class="why__left">
-      <span class="sec-num" data-reveal>06 / Принципы</span>
-      <h2 class="sec-title" data-reveal="wipe">Почему<br>«На твоё<br>усмотрение»</h2>
-      <p class="sec-desc" data-reveal>
+      <span data-i18n="t177" class="sec-num" data-reveal>06 / Принципы</span>
+      <h2 data-i18n="t178" class="sec-title" data-reveal="wipe">Почему<br>«На твоё<br>усмотрение»</h2>
+      <p data-i18n="t179" class="sec-desc" data-reveal>
         Название — не случайность, а принцип: решения, в которых мы разбираемся лучше,
         берём на себя. Вам не придётся выбирать между шестнадцатью оттенками серого.
         Но последнее слово всегда за вами.
       </p>
-      <a href="#contact" class="btn" data-magnetic data-reveal><span>Начать проект</span></a>
+      <a data-i18n="t180" href="#contact" class="btn" data-magnetic data-reveal><span>Начать проект</span></a>
     </div>
 
     <div class="why__right">
-      <div class="why__item" data-reveal><b>Фиксированная цена</b><p>Тариф известен до старта. Дополнительные работы — только с вашего согласия и по прайсу, который вы видите на этой странице.</p></div>
-      <div class="why__item" data-reveal><b>Сроки, а не «скоро»</b><p>Каждый этап имеет дату. Если задерживаемся по своей вине — делаем скидку 10% за каждый просроченный день.</p></div>
-      <div class="why__item" data-reveal><b>Всё принадлежит вам</b><p>Домен, хостинг, исходники, доступы — оформляем на вас. Вы не привязаны к нам и можете уйти к любому подрядчику.</p></div>
-      <div class="why__item" data-reveal><b>Говорим по-человечески</b><p>Без «синергии оптимизации конверсионной воронки». Объясняем, что делаем и зачем, словами, понятными без словаря.</p></div>
-      <div class="why__item" data-reveal><b>Не берём лишнего</b><p>Если задача решается тарифом за $70 — предложим его, а не $500. Долгие отношения выгоднее разовой переплаты.</p></div>
+      <div class="why__item" data-reveal><b data-i18n="t181">Фиксированная цена</b><p data-i18n="t182">Тариф известен до старта. Дополнительные работы — только с вашего согласия и по прайсу, который вы видите на этой странице.</p></div>
+      <div class="why__item" data-reveal><b data-i18n="t183">Сроки, а не «скоро»</b><p data-i18n="t184">Каждый этап имеет дату. Если задерживаемся по своей вине — делаем скидку 10% за каждый просроченный день.</p></div>
+      <div class="why__item" data-reveal><b data-i18n="t185">Всё принадлежит вам</b><p data-i18n="t186">Домен, хостинг, исходники, доступы — оформляем на вас. Вы не привязаны к нам и можете уйти к любому подрядчику.</p></div>
+      <div class="why__item" data-reveal><b data-i18n="t187">Говорим по-человечески</b><p data-i18n="t188">Без «синергии оптимизации конверсионной воронки». Объясняем, что делаем и зачем, словами, понятными без словаря.</p></div>
+      <div class="why__item" data-reveal><b data-i18n="t189">Не берём лишнего</b><p data-i18n="t190">Если задача решается тарифом за {small} — предложим его, а не {big}. Долгие отношения выгоднее разовой переплаты.</p></div>
     </div>
   </div>
 </section>
@@ -495,14 +512,14 @@
   <div class="container rider__in">
 
     <div class="rider__text">
-      <span class="rider__eyebrow" data-reveal><i></i> Фокус на результате</span>
-      <p class="quote__text" data-reveal>
+      <span data-i18n="t191" class="rider__eyebrow" data-reveal><i></i> Фокус на результате</span>
+      <p data-i18n="t192" class="quote__text" data-reveal>
         «Хороший сайт — это не тот, который получил награду.
         Это тот, после которого вам написали».
       </p>
-      <span class="quote__author" data-reveal>— принцип студии</span>
+      <span data-i18n="t193" class="quote__author" data-reveal>— принцип студии</span>
       <div class="rider__actions" data-reveal>
-        <a href="#contact" class="btn btn--glass" data-magnetic><span>Обсудить задачу</span></a>
+        <a data-i18n="t194" href="#contact" class="btn btn--glass" data-magnetic><span>Обсудить задачу</span></a>
       </div>
     </div>
 
@@ -519,42 +536,42 @@
   <div class="art paths paths--flip" data-paths aria-hidden="true"></div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>07 / Вопросы</span>
-      <h2 class="sec-title" data-reveal="wipe">Частые вопросы</h2>
+      <span data-i18n="t195" class="sec-num" data-reveal>07 / Вопросы</span>
+      <h2 data-i18n="t196" class="sec-title" data-reveal="wipe">Частые вопросы</h2>
     </div>
 
     <div class="faq">
       <details class="faq__item" data-reveal>
-        <summary><span>Что нужно от меня, чтобы начать?</span><i></i></summary>
-        <div class="faq__body"><p>Минимум — описание задачи в двух-трёх предложениях и примеры сайтов, которые вам нравятся. Логотип, тексты и фотографии полезны, но если их нет — соберём вместе или подберём аккуратные заглушки и стоковые материалы.</p></div>
+        <summary data-i18n="t197"><span>Что нужно от меня, чтобы начать?</span><i></i></summary>
+        <div class="faq__body"><p data-i18n="t198">Минимум — описание задачи в двух-трёх предложениях и примеры сайтов, которые вам нравятся. Логотип, тексты и фотографии полезны, но если их нет — соберём вместе или подберём аккуратные заглушки и стоковые материалы.</p></div>
       </details>
       <details class="faq__item" data-reveal>
-        <summary><span>Цена действительно фиксированная?</span><i></i></summary>
-        <div class="faq__body"><p>Да. Тариф фиксируется до старта работ. Сумма может измениться только если вы сами захотите добавить что-то сверх пакета — и тогда мы заранее называем стоимость по прайсу из блока «Дополнительно».</p></div>
+        <summary data-i18n="t199"><span>Цена действительно фиксированная?</span><i></i></summary>
+        <div class="faq__body"><p data-i18n="t200">Да. Тариф фиксируется до старта работ. Сумма может измениться только если вы сами захотите добавить что-то сверх пакета — и тогда мы заранее называем стоимость по прайсу из блока «Дополнительно».</p></div>
       </details>
       <details class="faq__item" data-reveal>
-        <summary><span>Как происходит оплата?</span><i></i></summary>
-        <div class="faq__body"><p>50% после утверждения структуры и 50% перед передачей доступов. Для тарифа «Большой» возможна разбивка на три части по этапам. Принимаем карты, крипту и переводы — обсуждаем удобный вам способ.</p></div>
+        <summary data-i18n="t201"><span>Как происходит оплата?</span><i></i></summary>
+        <div class="faq__body"><p data-i18n="t202">50% после утверждения структуры и 50% перед передачей доступов. Для тарифа «Большой» возможна разбивка на три части по этапам. Принимаем карты, крипту и переводы — обсуждаем удобный вам способ.</p></div>
       </details>
       <details class="faq__item" data-reveal>
-        <summary><span>Сколько стоит домен и хостинг?</span><i></i></summary>
-        <div class="faq__body"><p>Это внешние расходы: домен обычно $10–15 в год, хостинг от $3 в месяц. Мы не берём наценку — вы платите напрямую регистратору, а настройку делаем бесплатно в рамках любого тарифа.</p></div>
+        <summary data-i18n="t203"><span>Сколько стоит домен и хостинг?</span><i></i></summary>
+        <div class="faq__body"><p data-i18n="t204">Это внешние расходы: домен обычно {domain} в год, хостинг от {hosting} в месяц. Мы не берём наценку — вы платите напрямую регистратору, а настройку делаем бесплатно в рамках любого тарифа.</p></div>
       </details>
       <details class="faq__item" data-reveal>
-        <summary><span>Смогу ли я сам менять контент?</span><i></i></summary>
-        <div class="faq__body"><p>В тарифах «Средний» и «Большой» — да, там есть админка, и мы записываем короткое видео о том, как ей пользоваться. В тарифе «Малый» правки текста вносим мы: обычно это пара минут и входит в гарантийный период.</p></div>
+        <summary data-i18n="t205"><span>Смогу ли я сам менять контент?</span><i></i></summary>
+        <div class="faq__body"><p data-i18n="t206">В тарифах «Средний» и «Большой» — да, там есть админка, и мы записываем короткое видео о том, как ей пользоваться. В тарифе «Малый» правки текста вносим мы: обычно это пара минут и входит в гарантийный период.</p></div>
       </details>
       <details class="faq__item" data-reveal>
-        <summary><span>Что, если мне не понравится результат?</span><i></i></summary>
-        <div class="faq__body"><p>Мы показываем работу на каждом этапе, поэтому сюрприза в конце не бывает. Если после первого макета вы понимаете, что направление не то, — возвращаем предоплату за вычетом уже проделанной работы по структуре.</p></div>
+        <summary data-i18n="t207"><span>Что, если мне не понравится результат?</span><i></i></summary>
+        <div class="faq__body"><p data-i18n="t208">Мы показываем работу на каждом этапе, поэтому сюрприза в конце не бывает. Если после первого макета вы понимаете, что направление не то, — возвращаем предоплату за вычетом уже проделанной работы по структуре.</p></div>
       </details>
       <details class="faq__item" data-reveal>
-        <summary><span>Вы работаете с моей страной / валютой?</span><i></i></summary>
-        <div class="faq__body"><p>Работаем удалённо и без географических ограничений. Цены указаны в долларах для прозрачности; итоговый платёж можно провести в удобной вам валюте по курсу на день оплаты.</p></div>
+        <summary data-i18n="t209"><span>Вы работаете с моей страной / валютой?</span><i></i></summary>
+        <div class="faq__body"><p data-i18n="t210">Работаем удалённо и без географических ограничений. Цены показаны в долларах, рублях и тенге; итоговый платёж можно провести в удобной вам валюте по курсу на день оплаты.</p></div>
       </details>
       <details class="faq__item" data-reveal>
-        <summary><span>Что происходит после сдачи?</span><i></i></summary>
-        <div class="faq__body"><p>Действует гарантия — 14, 30 или 90 дней в зависимости от тарифа: всё, что сломалось не по вашей вине, чиним бесплатно. Дальше можно подключить поддержку за $40 в месяц или обращаться разово.</p></div>
+        <summary data-i18n="t211"><span>Что происходит после сдачи?</span><i></i></summary>
+        <div class="faq__body"><p data-i18n="t212">Действует гарантия — 14, 30 или 90 дней в зависимости от тарифа: всё, что сломалось не по вашей вине, чиним бесплатно. Дальше можно подключить поддержку за {support} в месяц или обращаться разово.</p></div>
       </details>
     </div>
   </div>
@@ -565,9 +582,9 @@
   <div class="art paths" data-paths aria-hidden="true"></div>
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>08 / Контакты</span>
-      <h2 class="sec-title" data-reveal="wipe">Расскажите<br>о проекте</h2>
-      <p class="sec-desc" data-reveal>
+      <span data-i18n="t213" class="sec-num" data-reveal>08 / Контакты</span>
+      <h2 data-i18n="t214" class="sec-title" data-reveal="wipe">Расскажите<br>о проекте</h2>
+      <p data-i18n="t215" class="sec-desc" data-reveal>
         Ответим в течение суток, обычно быстрее. Консультация и оценка бесплатны
         и ни к чему не обязывают.
       </p>
@@ -576,34 +593,34 @@
     <div class="contact__grid">
       <form class="form" id="form" novalidate>
         <div class="field">
-          <label for="f-name">Как вас зовут</label>
-          <input type="text" id="f-name" name="name" placeholder="Иван" required>
-          <span class="field__err">Введите имя</span>
+          <label data-i18n="t216" for="f-name">Как вас зовут</label>
+          <input type="text" id="f-name" name="name" placeholder="Иван" data-i18n-ph="ph1" required>
+          <span data-i18n="t217" class="field__err">Введите имя</span>
         </div>
         <div class="field">
-          <label for="f-contact">Почта или Telegram</label>
-          <input type="text" id="f-contact" name="contact" placeholder="you@mail.com или @nickname" required>
-          <span class="field__err">Оставьте способ связи</span>
+          <label data-i18n="t218" for="f-contact">Почта или Telegram</label>
+          <input type="text" id="f-contact" name="contact" placeholder="you@mail.com или @nickname" data-i18n-ph="ph2" required>
+          <span data-i18n="t219" class="field__err">Оставьте способ связи</span>
         </div>
 
         <div class="field field--full">
-          <label>Тариф</label>
+          <label data-i18n="t220">Тариф</label>
           <div class="choice">
-            <label class="choice__item"><input type="radio" name="plan" value="Малый — $70"><span>Малый · $70</span></label>
-            <label class="choice__item"><input type="radio" name="plan" value="Средний — $200" checked><span>Средний · $200</span></label>
-            <label class="choice__item"><input type="radio" name="plan" value="Большой — $500"><span>Большой · $500</span></label>
-            <label class="choice__item"><input type="radio" name="plan" value="Пока не знаю"><span>Пока не знаю</span></label>
+            <label class="choice__item"><input type="radio" name="plan" data-plan="small"><span data-i18n="t221">Малый · {small}</span></label>
+            <label class="choice__item"><input type="radio" name="plan" data-plan="mid" checked><span data-i18n="t222">Средний · {mid}</span></label>
+            <label class="choice__item"><input type="radio" name="plan" data-plan="big"><span data-i18n="t223">Большой · {big}</span></label>
+            <label class="choice__item"><input type="radio" name="plan" data-plan="none"><span data-i18n="t224">Пока не знаю</span></label>
           </div>
         </div>
 
         <div class="field field--full">
-          <label for="f-msg">О задаче</label>
-          <textarea id="f-msg" name="message" rows="4" placeholder="Что за проект, для кого, к какому сроку нужен сайт"></textarea>
+          <label data-i18n="t225" for="f-msg">О задаче</label>
+          <textarea id="f-msg" name="message" rows="4" placeholder="Что за проект, для кого, к какому сроку нужен сайт" data-i18n-ph="ph3"></textarea>
         </div>
 
         <div class="field field--full form__foot">
-          <button type="submit" class="btn" data-magnetic><span>Отправить заявку</span></button>
-          <small>Нажимая кнопку, вы соглашаетесь на обработку указанных данных. Спама не будет.</small>
+          <button data-i18n="t226" type="submit" class="btn" data-magnetic><span>Отправить заявку</span></button>
+          <small data-i18n="t227">Нажимая кнопку, вы соглашаетесь на обработку указанных данных. Спама не будет.</small>
         </div>
 
         <p class="form__done" id="formDone" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span>Заявка сформирована — откроется почтовый клиент. Если он не открылся, напишите нам напрямую на hello@natvoeusmotrenie.studio</span></p>
@@ -611,7 +628,7 @@
 
       <aside class="contact__side">
         <div class="contact__block" data-reveal>
-          <span>Почта</span>
+          <span data-i18n="t229">Почта</span>
           <a href="mailto:hello@natvoeusmotrenie.studio">hello@natvoeusmotrenie.studio</a>
         </div>
         <div class="contact__block" data-reveal>
@@ -619,12 +636,12 @@
           <a href="https://t.me/" target="_blank" rel="noopener">@na_tvoe_usmotrenie</a>
         </div>
         <div class="contact__block" data-reveal>
-          <span>Часы работы</span>
-          <p>Пн–Пт, 10:00–19:00<br>Срочные вопросы — в любое время</p>
+          <span data-i18n="t230">Часы работы</span>
+          <p data-i18n="t231">Пн–Пт, 10:00–19:00<br>Срочные вопросы — в любое время</p>
         </div>
         <div class="contact__block" data-reveal>
-          <span>Сейчас свободно</span>
-          <p class="contact__slots"><b>4</b> слота на ближайший месяц</p>
+          <span data-i18n="t232">Сейчас свободно</span>
+          <p data-i18n="t233" class="contact__slots"><b>4</b> слота на ближайший месяц</p>
         </div>
       </aside>
     </div>
@@ -649,35 +666,38 @@
     </div>
     <div class="footer__row">
       <div class="footer__col">
-        <b>Студия</b>
-        <a href="#services">Услуги</a>
-        <a href="#pricing">Тарифы</a>
-        <a href="#process">Процесс</a>
+        <b data-i18n="t235">Студия</b>
+        <a data-i18n="t236" href="#services">Услуги</a>
+        <a data-i18n="t064" href="#pricing">Тарифы</a>
+        <a data-i18n="t237" href="#process">Процесс</a>
       </div>
       <div class="footer__col">
-        <b>Проекты</b>
-        <a href="#works">Форматы</a>
-        <a href="#compare">Сравнение</a>
-        <a href="#faq">Вопросы</a>
+        <b data-i18n="t238">Проекты</b>
+        <a data-i18n="t239" href="#works">Форматы</a>
+        <a data-i18n="t240" href="#compare">Сравнение</a>
+        <a data-i18n="t241" href="#faq">Вопросы</a>
       </div>
       <div class="footer__col">
-        <b>Связь</b>
-        <a href="mailto:hello@natvoeusmotrenie.studio">Почта</a>
+        <b data-i18n="t242">Связь</b>
+        <a data-i18n="t229" href="mailto:hello@natvoeusmotrenie.studio">Почта</a>
         <a href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
-        <a href="#contact">Оставить заявку</a>
+        <a data-i18n="t243" href="#contact">Оставить заявку</a>
       </div>
       <div class="footer__col footer__col--wide">
-        <b>Мини-студия разработки сайтов</b>
-        <p>Делаем понятные сайты по фиксированной цене. Тарифы $70 / $200 / $500, срок от 3 дней, гарантия до 90 дней.</p>
+        <b data-i18n="t244">Мини-студия разработки сайтов</b>
+        <p data-i18n="t245">Делаем понятные сайты по фиксированной цене. Тарифы {small} / {mid} / {big}, срок от 3 дней, гарантия до 90 дней.</p>
       </div>
     </div>
     <div class="footer__bottom">
-      <span>© <span id="year">2026</span> «На твоё усмотрение». Все права защищены.</span>
-      <a href="#top" class="to-top" data-magnetic><span>Наверх ↑</span></a>
+      <span data-i18n="t246">© <span id="year">2026</span> «На твоё усмотрение». Все права защищены.</span>
+      <a data-i18n="t247" href="#top" class="to-top" data-magnetic><span>Наверх ↑</span></a>
     </div>
   </div>
 </footer>
 
+<script src="assets/js/lang.js" defer></script>
+<script src="assets/js/i18n.js" defer></script>
+<script src="assets/js/stars.js" defer></script>
 <script src="assets/js/wave.js" defer></script>
 <script src="assets/js/paths.js" defer></script>
 <script src="assets/js/main.js"></script>

@@ -132,7 +132,8 @@
           if (start === null) start = ts;
           var p = Math.min((ts - start) / dur, 1);
           var eased = 1 - Math.pow(1 - p, 4);
-          el.textContent = Math.round(to * eased);
+          /* Разряды — неразрывным пробелом, иначе «38 000» разъедется по строкам */
+          el.textContent = String(Math.round(to * eased)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0');
           if (p < 1) requestAnimationFrame(step);
         }
         requestAnimationFrame(step);
@@ -140,6 +141,13 @@
       });
     }, { threshold: 0.5 });
     counters.forEach(function (el) { io.observe(el); });
+
+    /* Валюта сменилась — число в карточке тарифа другое, показываем сразу */
+    document.addEventListener('i18n:applied', function () {
+      $$('.plan__price .count').forEach(function (el) {
+        el.textContent = String(el.dataset.to).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0');
+      });
+    });
   }
 
   /* ---------- 6. ШАПКА: ПРЯТАТЬ / ПОКАЗЫВАТЬ + ПРОГРЕСС ---------- */
@@ -301,6 +309,19 @@
       title.innerHTML = '';
       parts.forEach(function (node) { title.appendChild(node); });
       title.setAttribute('data-reveal', 'words');
+    });
+  }
+
+  /* Перевод заменяет содержимое заголовка целиком — режем его заново */
+  function watchTitles() {
+    if (reduced) return;
+    document.addEventListener('i18n:applied', function () {
+      $$('.sec-title').forEach(function (title) {
+        var wasIn = title.classList.contains('is-in');
+        title.setAttribute('data-reveal', 'wipe');
+        initSplitTitles();
+        if (wasIn) title.classList.add('is-in');
+      });
     });
   }
 
@@ -484,12 +505,19 @@
       if (!ok) return;
 
       var data = new FormData(form);
-      var plan = data.get('plan') || 'не выбран';
+      /* Письмо уходит на языке, который выбран на сайте */
+      var L = {
+        ru: { none: 'не выбран', name: 'Имя', contact: 'Связь', plan: 'Тариф', task: 'О задаче', subj: 'Заявка с сайта' },
+        en: { none: 'not chosen', name: 'Name', contact: 'Contact', plan: 'Plan', task: 'About the task', subj: 'Enquiry from the website' },
+        kk: { none: 'таңдалмаған', name: 'Аты', contact: 'Байланыс', plan: 'Тариф', task: 'Міндет туралы', subj: 'Сайттан өтінім' }
+      }[document.documentElement.lang] || null;
+      var w = L || { none: 'не выбран', name: 'Имя', contact: 'Связь', plan: 'Тариф', task: 'О задаче', subj: 'Заявка с сайта' };
+      var plan = data.get('plan') || w.none;
       var body =
-        'Имя: ' + data.get('name') + '\n' +
-        'Связь: ' + data.get('contact') + '\n' +
-        'Тариф: ' + plan + '\n\n' +
-        'О задаче:\n' + (data.get('message') || '—');
+        w.name + ': ' + data.get('name') + '\n' +
+        w.contact + ': ' + data.get('contact') + '\n' +
+        w.plan + ': ' + plan + '\n\n' +
+        w.task + ':\n' + (data.get('message') || '—');
 
       /* Показываем, что заявка уходит: письмо открывается не мгновенно,
          и без отклика кажется, будто кнопка не сработала. */
@@ -501,7 +529,7 @@
 
       window.setTimeout(function () {
         window.location.href = 'mailto:' + MAIL +
-          '?subject=' + encodeURIComponent('Заявка с сайта — ' + plan) +
+          '?subject=' + encodeURIComponent(w.subj + ' — ' + plan) +
           '&body=' + encodeURIComponent(body);
 
         if (btn) btn.classList.remove('is-sending');
@@ -617,6 +645,7 @@
     initCursor();
     initMagnetic();
     initSplitTitles();   // режем заголовки до того, как за ними придёт наблюдатель
+    watchTitles();
     initReveal();
     initCounters();
     initHeader();
