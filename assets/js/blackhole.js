@@ -15,6 +15,7 @@ uniform float uTime;
 uniform float uSpin;
 uniform float uGain;
 uniform int   uSteps;
+uniform vec2  uCam;   /* поворот камеры: рыскание и наклон */
 
 float hash(vec3 p){ return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453123); }
 
@@ -62,7 +63,11 @@ vec3 disk(vec3 hit, float rr){
 void main(){
   vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y;
 
-  vec3 ro = vec3(0.0, 1.55, -15.0);
+  /* Камера летает по сфере вокруг дыры: мышь задаёт угол, радиус постоянен */
+  float cy = cos(uCam.x), sy = sin(uCam.x);
+  float cp = cos(uCam.y), sp = sin(uCam.y);
+  vec3 ro = 15.08 * vec3(sy * cp, sp, -cy * cp);
+
   vec3 ww = normalize(-ro);
   vec3 uu = normalize(cross(ww, vec3(0.0, 1.0, 0.0)));
   vec3 vv = cross(uu, ww);
@@ -171,6 +176,7 @@ void main(){
     var uSpin  = gl.getUniformLocation(prog, 'uSpin');
     var uGain  = gl.getUniformLocation(prog, 'uGain');
     var uSteps = gl.getUniformLocation(prog, 'uSteps');
+    var uCam   = gl.getUniformLocation(prog, 'uCam');
 
     host.appendChild(canvas);
     host.classList.add('is-live');           // прячет запасную картинку
@@ -194,6 +200,49 @@ void main(){
       gl.uniform2f(uRes, w, h);
     }
 
+    /* ---------- ВРАЩЕНИЕ МЫШКОЙ ----------
+       Камера крутится вокруг дыры: тянем — она облетает.
+       Целевые углы двигает мышь, текущие догоняют их плавно. */
+    var BASE_PITCH = 0.1031;                 // исходный наклон камеры
+    var MAX_PITCH  = 0.95;                   // дальше камера смотрит в полюс и картинка ломается
+    var yaw = 0, yawT = 0;
+    var pitch = BASE_PITCH, pitchT = BASE_PITCH;
+    var dragging = false, lastX = 0, lastY = 0;
+
+    function clampPitch(v) { return Math.max(-MAX_PITCH, Math.min(MAX_PITCH, v)); }
+
+    if (!reduced) {
+      canvas.classList.add('is-grabbable');
+
+      canvas.addEventListener('pointerdown', function (e) {
+        if (e.pointerType === 'touch') return;   // на телефоне палец должен прокручивать страницу
+        dragging = true;
+        lastX = e.clientX; lastY = e.clientY;
+        canvas.classList.add('is-grabbing');
+        if (canvas.setPointerCapture) canvas.setPointerCapture(e.pointerId);
+        e.preventDefault();
+      });
+
+      canvas.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        yawT   += (e.clientX - lastX) * 0.005;
+        pitchT  = clampPitch(pitchT + (e.clientY - lastY) * 0.004);
+        lastX = e.clientX; lastY = e.clientY;
+      });
+
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging = false;
+        canvas.classList.remove('is-grabbing');
+        if (canvas.releasePointerCapture && e.pointerId != null) {
+          try { canvas.releasePointerCapture(e.pointerId); } catch (err) {}
+        }
+      }
+      canvas.addEventListener('pointerup', endDrag);
+      canvas.addEventListener('pointercancel', endDrag);
+      canvas.addEventListener('lostpointercapture', endDrag);
+    }
+
     var spin = 1, spinTarget = 1;
     var hero = host.closest('.hero');
     if (hero && !reduced && !window.matchMedia('(hover: none)').matches) {
@@ -209,9 +258,15 @@ void main(){
     function draw(timeSec) {
       resize();
       spin += (spinTarget - spin) * 0.05;
+      yaw   += (yawT - yaw) * 0.12;
+      pitch += (pitchT - pitch) * 0.12;
+      gl.uniform2f(uCam, yaw, pitch);
       gl.uniform1f(uTime, timeSec);
       gl.uniform1f(uSpin, spin);
-      gl.uniform1f(uGain, 0.55);
+      /* Сверху диск виден целиком и заливает кадр светом — под белым
+         заголовком героя это мешает читать. Приглушаем на крутых углах. */
+      var lean = Math.min(1, Math.abs(pitch) / MAX_PITCH);
+      gl.uniform1f(uGain, 0.55 * (1 - 0.45 * lean));
       gl.uniform1i(uSteps, steps);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
@@ -236,7 +291,8 @@ void main(){
     function frame(now) {
       if (!alive) return;
       requestAnimationFrame(frame);
-      if (now - lastFrame < MIN_GAP) return;
+      var gap = dragging ? 20 : MIN_GAP;   /* при перетаскивании нужна плавность */
+      if (now - lastFrame < gap) return;
       lastFrame = now;
 
       var box = host.getBoundingClientRect();
@@ -248,8 +304,8 @@ void main(){
          drawArrays возвращается сразу, работа уходит на видеокарту асинхронно,
          поэтому по нему нагрузку не увидеть. */
       if (prev) {
-        var gap = now - prev;
-        avg = avg ? avg * 0.9 + gap * 0.1 : gap;
+        var delta = now - prev;
+        avg = avg ? avg * 0.9 + delta * 0.1 : delta;
         if (avg > MIN_GAP * 1.4) {   /* ниже ~17 кадров в секунду движение уже читается как рывки */
           if (++slow > 8) {
             slow = 0;

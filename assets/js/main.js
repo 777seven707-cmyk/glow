@@ -229,15 +229,157 @@
     });
   }
 
-  /* ---------- 10. FAQ: ОДИН ОТКРЫТЫЙ ПУНКТ ---------- */
+  /* ---------- 10. FAQ: ОДИН ОТКРЫТЫЙ ПУНКТ + ПЛАВНАЯ ВЫСОТА ---------- */
   function initFaq() {
     var items = $$('.faq__item');
+
+    /* Браузер открывает <details> мгновенно, поэтому высоту ведём сами:
+       0 → реальная высота текста, и наоборот при закрытии. */
+    function open(item) {
+      var body = $('.faq__body', item);
+      if (!body) return;
+      item.open = true;
+      if (reduced) { body.style.height = 'auto'; return; }
+      body.style.height = body.scrollHeight + 'px';
+    }
+
+    function close(item) {
+      var body = $('.faq__body', item);
+      if (!body) { item.open = false; return; }
+      if (reduced) { body.style.height = ''; item.open = false; return; }
+      body.style.height = body.scrollHeight + 'px';
+      requestAnimationFrame(function () { body.style.height = '0px'; });
+      window.setTimeout(function () { if (body.style.height === '0px') item.open = false; }, 450);
+    }
+
     items.forEach(function (item) {
-      item.addEventListener('toggle', function () {
-        if (!item.open) return;
-        items.forEach(function (other) { if (other !== item) other.open = false; });
+      var summary = $('summary', item);
+      var body = $('.faq__body', item);
+      if (!summary || !body) return;
+
+      /* Открытая высота зависит от ширины окна — пересчитываем */
+      window.addEventListener('resize', function () {
+        if (item.open && !reduced) body.style.height = body.scrollHeight + 'px';
+      });
+
+      summary.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (item.open) { close(item); return; }
+        items.forEach(function (other) { if (other !== item && other.open) close(other); });
+        open(item);
       });
     });
+  }
+
+  /* ---------- 16. ЗАГОЛОВКИ РАЗДЕЛОВ ПО СЛОВАМ ---------- */
+  /* Каждое слово в своём «окошке»: текст выезжает снизу с задержкой.
+     Переносы строк <br> остаются на месте. */
+  function initSplitTitles() {
+    if (reduced) return;
+    $$('.sec-title[data-reveal="wipe"]').forEach(function (title) {
+      var i = 0, parts = [];
+
+      Array.prototype.forEach.call(title.childNodes, function (node) {
+        if (node.nodeType === 3) {
+          node.textContent.split(/(\s+)/).forEach(function (chunk) {
+            if (!chunk) return;
+            if (!chunk.trim()) { parts.push(document.createTextNode(chunk)); return; }
+            var box = document.createElement('span');
+            box.className = 'w';
+            box.style.setProperty('--i', i++);
+            var inner = document.createElement('i');
+            inner.textContent = chunk;
+            box.appendChild(inner);
+            parts.push(box);
+          });
+        } else {
+          parts.push(node.cloneNode(true));
+        }
+      });
+
+      if (!parts.length) return;
+      title.innerHTML = '';
+      parts.forEach(function (node) { title.appendChild(node); });
+      title.setAttribute('data-reveal', 'words');
+    });
+  }
+
+  /* ---------- 17. СВЕЧЕНИЕ ЗА КУРСОРОМ НА ТЁМНЫХ СЕКЦИЯХ ---------- */
+  function initGlow() {
+    if (isTouch || reduced) return;
+    $$('.section--dark').forEach(function (sec) {
+      var layer = document.createElement('div');
+      layer.className = 'glow';
+      layer.setAttribute('aria-hidden', 'true');
+      sec.insertBefore(layer, sec.firstChild);
+
+      var x = 0, y = 0, queued = false;
+      function apply() {
+        queued = false;
+        layer.style.setProperty('--gx', x + 'px');
+        layer.style.setProperty('--gy', y + 'px');
+      }
+      sec.addEventListener('mousemove', function (e) {
+        var r = sec.getBoundingClientRect();
+        x = e.clientX - r.left;
+        y = e.clientY - r.top;
+        if (!queued) { queued = true; requestAnimationFrame(apply); }
+      });
+      sec.addEventListener('mouseenter', function () { sec.classList.add('is-lit'); });
+      sec.addEventListener('mouseleave', function () { sec.classList.remove('is-lit'); });
+    });
+  }
+
+  /* ---------- 18. БЕГУЩАЯ СТРОКА РАЗГОНЯЕТСЯ ОТ ПРОКРУТКИ ---------- */
+  function initMarquee() {
+    var track = $('.marquee__track');
+    if (!track || reduced) return;
+    var BASE = 34;               // секунд на круг в покое
+    var last = window.pageYOffset, speed = 0, ticking = false;
+
+    function apply() {
+      ticking = false;
+      /* Чем быстрее прокрутка, тем короче круг — но не быстрее 7 секунд */
+      var dur = Math.max(7, BASE - speed * 0.22);
+      track.style.animationDuration = dur.toFixed(2) + 's';
+    }
+
+    window.addEventListener('scroll', function () {
+      var now = window.pageYOffset;
+      speed = Math.min(120, Math.abs(now - last) * 3 + speed * 0.72);
+      last = now;
+      if (!ticking) { ticking = true; requestAnimationFrame(apply); }
+    }, { passive: true });
+
+    /* Прокрутка остановилась — плавно возвращаемся к спокойному темпу */
+    window.setInterval(function () {
+      if (speed < 0.5) return;
+      speed *= 0.8;
+      if (speed < 0.5) speed = 0;
+      apply();
+    }, 120);
+  }
+
+  /* ---------- 19. КНОПКА «НАВЕРХ» ---------- */
+  function initToTop() {
+    var btn = $('#toTop');
+    var hero = $('.hero');
+    if (!btn) return;
+    var ticking = false;
+
+    function update() {
+      ticking = false;
+      var limit = hero ? hero.offsetHeight * 0.8 : 600;
+      btn.classList.toggle('is-on', window.pageYOffset > limit);
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    });
+    update();
   }
 
   /* ---------- 11. ПЛАВНАЯ ПРОКРУТКА С УЧЁТОМ ШАПКИ ---------- */
@@ -284,11 +426,26 @@
         'Тариф: ' + plan + '\n\n' +
         'О задаче:\n' + (data.get('message') || '—');
 
-      window.location.href = 'mailto:' + MAIL +
-        '?subject=' + encodeURIComponent('Заявка с сайта — ' + plan) +
-        '&body=' + encodeURIComponent(body);
+      /* Показываем, что заявка уходит: письмо открывается не мгновенно,
+         и без отклика кажется, будто кнопка не сработала. */
+      var btn = $('button[type="submit"]', form);
+      var label = btn ? $('span', btn) : null;
+      var was = label ? label.textContent : '';
+      if (btn) btn.classList.add('is-sending');
+      if (label) label.textContent = 'Отправляем…';
 
-      if (done) done.hidden = false;
+      window.setTimeout(function () {
+        window.location.href = 'mailto:' + MAIL +
+          '?subject=' + encodeURIComponent('Заявка с сайта — ' + plan) +
+          '&body=' + encodeURIComponent(body);
+
+        if (btn) btn.classList.remove('is-sending');
+        if (label) label.textContent = was;
+        if (done) {
+          done.hidden = false;
+          requestAnimationFrame(function () { done.classList.add('is-on'); });
+        }
+      }, reduced ? 0 : 500);
     });
 
     $$('input, textarea', form).forEach(function (input) {
@@ -394,6 +551,7 @@
     initLoader();
     initCursor();
     initMagnetic();
+    initSplitTitles();   // режем заголовки до того, как за ними придёт наблюдатель
     initReveal();
     initCounters();
     initHeader();
@@ -401,6 +559,9 @@
     initMenu();
     initTilt();
     initFaq();
+    initGlow();
+    initMarquee();
+    initToTop();
     initAnchors();
     initForm();
     initHeroTheme();

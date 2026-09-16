@@ -792,3 +792,127 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
 }
 @media (max-width:900px){ .grid-lines i:nth-child(2),.grid-lines i:nth-child(4){display:none} }
 @media (prefers-reduced-motion:reduce){ .sec-num::before{transform:scaleX(1)} }
+
+/* =========================================================
+   26. ДОПОЛНИТЕЛЬНЫЕ ЭФФЕКТЫ
+   Всё ниже — украшения. Каждый блок отключается в конце файла
+   для тех, кто просил в системе убрать анимации.
+   ========================================================= */
+
+/* ---------- 26.1 Дыру можно крутить мышкой ---------- */
+/* Сам слой с дырой не ловит мышь (.hero__space), поэтому право
+   на события возвращаем точечно холсту. */
+.bh-canvas.is-grabbable{pointer-events:auto;cursor:grab;touch-action:pan-y}
+.bh-canvas.is-grabbing{cursor:grabbing}
+
+/* ---------- 26.2 Заголовки разделов по словам ---------- */
+/* Значение "words" ставит скрипт, разрезав заголовок. Без скрипта
+   в разметке остаётся "wipe" — старое раскрытие слева направо. */
+[data-reveal="words"]{opacity:1;transform:none;clip-path:none;transition:none}
+.sec-title .w{display:inline-block;overflow:hidden;vertical-align:top}
+.sec-title .w > i{
+  display:inline-block;font-style:inherit;
+  transform:translateY(105%);
+  transition:transform .85s var(--ease);
+  transition-delay:calc(var(--i) * 60ms);
+}
+.sec-title.is-in .w > i{transform:translateY(0)}
+
+/* ---------- 26.3 Схемы форматов собираются по частям ---------- */
+.work__vis svg > *{
+  opacity:0;transform:scale(.8);transform-box:fill-box;transform-origin:center;
+  transition:opacity .5s var(--ease),transform .6s var(--ease),fill .5s,stroke .5s;
+}
+.work.is-in .work__vis svg > *{opacity:1;transform:scale(1)}
+.work.is-in .work__vis svg > *:nth-child(1){transition-delay:.10s}
+.work.is-in .work__vis svg > *:nth-child(2){transition-delay:.20s}
+.work.is-in .work__vis svg > *:nth-child(3){transition-delay:.30s}
+.work.is-in .work__vis svg > *:nth-child(4){transition-delay:.40s}
+.work.is-in .work__vis svg > *:nth-child(5){transition-delay:.50s}
+
+/* ---------- 26.4 Мягкое свечение за курсором на тёмных секциях ---------- */
+.section--dark{position:relative}
+.glow{
+  position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;
+  transition:opacity .6s var(--ease);
+  background:radial-gradient(420px circle at var(--gx,50%) var(--gy,50%),
+             rgba(255,255,255,.07),transparent 65%);
+}
+.section--dark.is-lit .glow{opacity:1}
+.section--dark > .container{position:relative;z-index:1}
+
+/* ---------- 26.5 Метки в карточках услуг загораются по очереди ---------- */
+.card__list li{transition:border-color .45s var(--ease),background .45s var(--ease),color .45s var(--ease)}
+.card:hover .card__list li{border-color:var(--ink);background:rgba(255,255,255,.07)}
+.card:hover .card__list li:nth-child(1){transition-delay:.04s}
+.card:hover .card__list li:nth-child(2){transition-delay:.12s}
+.card:hover .card__list li:nth-child(3){transition-delay:.20s}
+
+/* ---------- 26.6 Наведённый тариф выходит вперёд ---------- */
+.plans .plan{transition:opacity .45s var(--ease),border-color .4s,background .4s}
+.plans:hover .plan:not(:hover){opacity:.5}
+
+/* ---------- 26.6.1 Наклон карточек форматов ---------- */
+/* У .work переход transform длится .5s — для слежения за курсором это
+   слишком медленно, поэтому элементам с наклоном ставим короткий. */
+.work[data-tilt]{transition:border-color .4s,transform .18s var(--ease)}
+.works:hover .work:not(:hover){opacity:.62;transition:opacity .45s var(--ease),border-color .4s}
+
+/* ---------- 26.7 FAQ: плавная высота ответа ---------- */
+/* Высоту ставит скрипт; анимация появления текста больше не нужна. */
+.faq__body{height:0;transition:height .45s var(--ease)}
+.faq__item[open] .faq__body p{animation:none}
+.faq__body p{opacity:0;transition:opacity .4s var(--ease) .1s}
+.faq__item[open] .faq__body p{opacity:1}
+
+/* ---------- 26.8 Живая форма ---------- */
+.field input,.field textarea{transition:border-color .4s,box-shadow .4s,background .4s}
+.field input:focus,.field textarea:focus{
+  box-shadow:0 8px 24px -18px rgba(255,255,255,.9);
+  background:rgba(255,255,255,.03);
+}
+.btn.is-sending{pointer-events:none;opacity:.7}
+.form__done{
+  display:flex;align-items:flex-start;gap:12px;
+  opacity:0;transform:translateY(8px);transition:opacity .5s var(--ease),transform .5s var(--ease);
+}
+.form__done.is-on{opacity:1;transform:none}
+.form__done svg{flex-shrink:0;width:22px;height:22px;margin-top:1px}
+.form__done svg path{
+  fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:36;stroke-dashoffset:36;
+}
+.form__done.is-on svg path{animation:checkDraw .5s var(--ease) .15s forwards}
+@keyframes checkDraw{to{stroke-dashoffset:0}}
+
+/* ---------- 26.9 Кнопка «наверх» ---------- */
+.to-top{
+  position:fixed;right:clamp(16px,2.5vw,34px);bottom:clamp(16px,2.5vw,34px);z-index:60;
+  width:48px;height:48px;display:grid;place-items:center;
+  border:1px solid var(--line-strong);border-radius:50%;
+  background:rgba(7,7,11,.72);color:var(--ink);cursor:pointer;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  opacity:0;transform:translateY(14px) scale(.9);pointer-events:none;
+  transition:opacity .45s var(--ease),transform .45s var(--ease),background .35s,border-color .35s;
+}
+.to-top.is-on{opacity:1;transform:none;pointer-events:auto}
+.to-top:hover{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.to-top svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- 26.9.1 Без скрипта ничего не должно пропасть ---------- */
+html:not(.js) .faq__body{height:auto}
+html:not(.js) .faq__body p{opacity:1}
+html:not(.js) .work__vis svg > *{opacity:1;transform:none}
+html:not(.js) .to-top{display:none}
+
+/* ---------- 26.10 Спокойный режим ---------- */
+@media (prefers-reduced-motion:reduce){
+  .sec-title .w > i{transform:none;transition:none}
+  .work__vis svg > *{opacity:1;transform:none;transition:none}
+  .glow{display:none}
+  .faq__body{height:auto;transition:none}
+  .faq__body p{opacity:1}
+  .form__done.is-on svg path{animation:none;stroke-dashoffset:0}
+  .to-top{transition:opacity .2s}
+  .plans:hover .plan:not(:hover){opacity:1}
+}
