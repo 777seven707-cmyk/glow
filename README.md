@@ -387,7 +387,7 @@ export default function Demo() {
 
 | Где | Что менять |
 |-----|------------|
-| `index.html` — блок `<!-- КОНТАКТЫ -->` и футер | почта `hello@natvoeusmotrenie.studio`, ссылка на Telegram |
+| `assets/js/contacts.js` | почта и Telegram — единственное место, где они заданы |
 | `assets/js/main.js` — константа `MAIL` в `initForm()` | адрес, на который уходит заявка |
 | `index.html` — блок `<!-- ТАРИФЫ -->` и таблица сравнения | цены, сроки, состав пакетов |
 | `index.html` — секция `#works` | форматы проектов, при желании — реальное портфолио |

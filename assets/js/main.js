@@ -521,7 +521,7 @@
     if (!form) return;
     var done = $('#formDone');
     /* Адрес берём из общего файла контактов, а не из копии здесь */
-    var MAIL = (window.CONTACTS && window.CONTACTS.mail) || 'hello@natvoeusmotrenie.studio';
+    var MAIL = (window.CONTACTS && window.CONTACTS.mail) || 'natvoeusmotrenie@gmail.com';
 
     function setErr(field, on) { field.classList.toggle('is-err', on); }
 

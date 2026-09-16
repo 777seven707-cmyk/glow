@@ -7,14 +7,14 @@
    ========================================================= */
 window.CONTACTS = {
   /* Telegram: только имя пользователя, без @ и без ссылки */
-  telegram: 'na_tvoe_usmotrenie',
+  telegram: 'nikita_na_tvoe_ysmotrenie',
 
   /* WhatsApp: номер в международном формате, только цифры.
      Например '77001234567'. Пусто — кнопки WhatsApp не будет. */
   whatsapp: '',
 
   /* Почта для заявок — на неё уходит письмо из формы */
-  mail: 'hello@natvoeusmotrenie.studio',
+  mail: 'natvoeusmotrenie@gmail.com',
 
   /* Вторая почта, например для вопросов по текущим проектам.
      Пусто — показывается только основная. */
