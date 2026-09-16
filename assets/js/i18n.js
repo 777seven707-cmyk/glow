@@ -111,7 +111,8 @@
     for (var r = 0; r < radios.length; r++) {
       var plan = radios[r].getAttribute('data-plan');
       var name = PLAN_NAMES[lang][plan];
-      radios[r].value = plan === 'none' ? name : name + ' — ' + table[plan];
+      /* Точка-разделитель, а не тире: тире уже стоит в теме письма */
+      radios[r].value = plan === 'none' ? name : name + ' · ' + table[plan];
     }
 
     document.documentElement.setAttribute('lang', HTML_LANG[lang]);
