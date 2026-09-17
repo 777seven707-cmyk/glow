@@ -44,22 +44,38 @@
     [K("←", 1, A), K("↓", 1, A), K("→", 1, A)]
   ];
 
+  function makeKey(item) {
+    var cap = document.createElement("div");
+    cap.className = "keycap " + (item.cls || "");
+    cap.style.width = "calc(var(--u) * " + item.w + " + var(--u) * .14 * " + (item.w - 1) + ")";
+
+    var top = document.createElement("div");
+    top.className = "keycap__top";
+    top.textContent = item.label;
+    cap.appendChild(top);
+
+    ["front", "back", "left", "right"].forEach(function (side) {
+      var f = document.createElement("div");
+      f.className = "keycap__side keycap__side--" + side;
+      cap.appendChild(f);
+    });
+    return cap;
+  }
+
   function buildRows(rows) {
     var frag = document.createDocumentFragment();
     rows.forEach(function (row) {
       var el = document.createElement("div");
       el.className = "kbd__row";
       row.forEach(function (item) {
-        var k = document.createElement("div");
         if (item.spacer) {
-          k.style.width = "calc(var(--u) * " + item.w + ")";
-          k.style.height = "var(--u)";
+          var gap = document.createElement("div");
+          gap.style.width = "calc(var(--u) * " + item.w + ")";
+          gap.style.height = "var(--u)";
+          el.appendChild(gap);
         } else {
-          k.className = "key " + item.cls;
-          k.style.width = "calc(var(--u) * " + item.w + " + var(--u) * .14 * " + (item.w - 1) + ")";
-          k.textContent = item.label;
+          el.appendChild(makeKey(item));
         }
-        el.appendChild(k);
       });
       frag.appendChild(el);
     });
@@ -89,11 +105,96 @@
     block.appendChild(main);
     block.appendChild(nav);
     kbd.appendChild(block);
+
+    ["front", "back", "left", "right"].forEach(function (side) {
+      var w = document.createElement("div");
+      w.className = "kbd__wall kbd__wall--" + side;
+      kbd.appendChild(w);
+    });
+    var bottom = document.createElement("div");
+    bottom.className = "kbd__bottom";
+    kbd.appendChild(bottom);
+
     mount.appendChild(kbd);
   }
 
+  /* ---------------------------------------------------------
+     1b. Кручение мышкой / пальцем / стрелками
+     --------------------------------------------------------- */
+  function initDrag(stage, spin) {
+    var rx = 58, ry = -24;              // наклон и поворот, градусы
+    var vx = 0, vy = reduce ? 0 : 0.14; // скорости
+    var dragging = false, lastX = 0, lastY = 0, idle = 0, touched = false;
+    var AUTO = reduce ? 0 : 0.14;
+
+    function apply() {
+      spin.style.transform = "rotateX(" + rx + "deg) rotateY(" + ry + "deg)";
+    }
+
+    function tick() {
+      if (!dragging) {
+        ry += vy;
+        rx = Math.min(84, Math.max(6, rx + vx));
+        vy *= 0.94;
+        vx *= 0.9;
+        if (Math.abs(vx) < 0.002) vx = 0;
+        idle++;
+        // через ~4 секунды покоя клавиатура снова начинает медленно вращаться
+        if (touched && idle > 240 && Math.abs(vy) < AUTO) vy += (AUTO - vy) * 0.02;
+        if (!touched && Math.abs(vy) < AUTO) vy = AUTO;
+        apply();
+      }
+      window.requestAnimationFrame(tick);
+    }
+
+    stage.addEventListener("pointerdown", function (e) {
+      dragging = true; touched = true; idle = 0;
+      lastX = e.clientX; lastY = e.clientY;
+      vx = vy = 0;
+      stage.classList.add("is-grabbed");
+      stage.setPointerCapture(e.pointerId);
+    });
+
+    stage.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - lastX, dy = e.clientY - lastY;
+      lastX = e.clientX; lastY = e.clientY;
+      ry += dx * 0.35;
+      rx = Math.min(84, Math.max(6, rx - dy * 0.25));
+      vy = dx * 0.35; vx = -dy * 0.25;
+      apply();
+    });
+
+    function release(e) {
+      if (!dragging) return;
+      dragging = false; idle = 0;
+      if (e && e.pointerId != null && stage.hasPointerCapture(e.pointerId)) {
+        stage.releasePointerCapture(e.pointerId);
+      }
+    }
+    stage.addEventListener("pointerup", release);
+    stage.addEventListener("pointercancel", release);
+
+    stage.addEventListener("keydown", function (e) {
+      var step = e.shiftKey ? 15 : 6;
+      if (e.key === "ArrowLeft") { ry -= step; touched = true; idle = 0; vy = 0; }
+      else if (e.key === "ArrowRight") { ry += step; touched = true; idle = 0; vy = 0; }
+      else if (e.key === "ArrowUp") { rx = Math.min(84, rx + step); touched = true; idle = 0; }
+      else if (e.key === "ArrowDown") { rx = Math.max(6, rx - step); touched = true; idle = 0; }
+      else return;
+      e.preventDefault();
+      apply();
+    });
+
+    apply();
+    window.requestAnimationFrame(tick);
+  }
+
   var kbdMount = document.getElementById("kbdMount");
+  var kbdStage = document.getElementById("kbdStage");
+  var kbdSpin = document.getElementById("kbdSpin");
   if (kbdMount) buildKeyboard(kbdMount);
+  if (kbdStage && kbdSpin) initDrag(kbdStage, kbdSpin);
 
   /* ---------------------------------------------------------
      2. Заголовок по буквам + выезжающий текст на скролле
@@ -102,41 +203,53 @@
   var titleEl = document.getElementById("posterTitle");
   var copyEl = document.getElementById("posterCopy");
   var spans = [];
+  var lines = titleEl ? Array.prototype.slice.call(titleEl.querySelectorAll(".poster__line")) : [];
 
-  if (titleEl) {
-    var text = titleEl.getAttribute("data-title") || titleEl.textContent.trim();
+  lines.forEach(function (line) {
+    var text = line.getAttribute("data-title") || line.textContent.trim();
     var chars = Array.from(text);
     var mid = Math.max(chars.length - 1, 1) / 2;
-    titleEl.textContent = "";
+    line.textContent = "";
     chars.forEach(function (ch, i) {
-      var s = document.createElement("span");
-      s.setAttribute("aria-hidden", "true");
-      s.textContent = ch === " " ? " " : ch;
-      s.dataset.fromCenter = String(mid <= 0 ? 0 : Math.abs(i - mid) / mid);
-      s.dataset.side = i < chars.length / 2 ? "1" : "-1";
-      titleEl.appendChild(s);
-      spans.push(s);
+      var sp = document.createElement("span");
+      sp.setAttribute("aria-hidden", "true");
+      sp.textContent = ch === " " ? " " : ch;
+      sp.dataset.fromCenter = String(mid <= 0 ? 0 : Math.abs(i - mid) / mid);
+      sp.dataset.side = i < chars.length / 2 ? "1" : "-1";
+      line.appendChild(sp);
+      spans.push(sp);
     });
     var sr = document.createElement("span");
     sr.className = "sr-only";
     sr.textContent = text;
-    titleEl.appendChild(sr);
-  }
+    line.appendChild(sr);
+  });
 
+  // обе строки подгоняются по ширине кадра: берётся самая длинная
   var probe = null;
   function fitTitle() {
-    if (!titleEl || !titleEl.parentElement) return;
+    if (!titleEl || !lines.length) return;
+    var box = titleEl.clientWidth;
+    if (!box) return;
     if (!probe) {
       probe = document.createElement("span");
       probe.setAttribute("aria-hidden", "true");
       probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;font-size:100px;left:-9999px;top:0";
-      probe.textContent = titleEl.getAttribute("data-title") || "";
-      titleEl.parentElement.appendChild(probe);
+      titleEl.appendChild(probe);
     }
-    var box = titleEl.parentElement.clientWidth;
-    var w = probe.offsetWidth;
-    if (!box || !w) return;
-    titleEl.style.fontSize = (box / w) * 100 + "px";
+    var widest = 0;
+    lines.forEach(function (line) {
+      probe.textContent = line.getAttribute("data-title") || "";
+      widest = Math.max(widest, probe.offsetWidth);
+    });
+    if (!widest) return;
+    var h1 = titleEl.querySelector("h1");
+    if (!h1) return;
+    var byWidth = (box / widest) * 100;
+    // заголовок не должен съедать больше 42% высоты кадра
+    var frame = titleEl.parentElement ? titleEl.parentElement.clientHeight : 0;
+    var byHeight = frame ? (frame * 0.42) / (lines.length * 0.84) : byWidth;
+    h1.style.fontSize = Math.min(byWidth, byHeight) + "px";
   }
 
   if (titleEl) {
@@ -154,13 +267,13 @@
   function paint(p) {
     var titleProgress = clamp01(p / 0.4);
     for (var i = 0; i < spans.length; i++) {
-      var s = spans[i];
-      var fc = parseFloat(s.dataset.fromCenter);
+      var sp = spans[i];
+      var fc = parseFloat(sp.dataset.fromCenter);
       var t = charReveal(titleProgress, fc);
       var y = (1 - t) * (18 + fc * 24);
-      var x = (1 - t) * (fc > 0.01 ? fc * 16 * parseFloat(s.dataset.side) : 0);
-      s.style.opacity = t;
-      s.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+      var x = (1 - t) * (fc > 0.01 ? fc * 16 * parseFloat(sp.dataset.side) : 0);
+      sp.style.opacity = t;
+      sp.style.transform = "translate3d(" + x + "px," + y + "px,0)";
     }
     if (copyEl) {
       var cp = clamp01((p - 0.62) / 0.34);
