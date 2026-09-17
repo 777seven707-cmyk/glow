@@ -49,17 +49,32 @@ ul,ol{list-style:none}
 .container{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:var(--pad)}
 .noscript{padding:14px var(--pad);background:var(--accent);color:#fff;font-size:14px}
 
-/* ---------- 3. ПЕРВЫЙ ЭКРАН ---------- */
-.hero{
-  position:relative;height:100vh;height:100svh;min-height:600px;width:100%;
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);
-  gap:clamp(16px,2.4vw,40px);
+/* ---------- 3. ПЕРВЫЙ ЭКРАН: КИНЕМАТОГРАФИЧЕСКИЙ СКРОЛЛ ---------- */
+/* --exp: 0 — кадр в правой колонке, 1 — кадр во весь экран. Значение ведёт скрипт. */
+.hero{position:relative}
+.hero__rig{height:250svh}
+.hero__stage{
+  position:sticky;top:0;height:100svh;min-height:540px;overflow:hidden;
   padding:var(--pad);
   padding-left:max(var(--pad),env(safe-area-inset-left));
   padding-right:max(var(--pad),env(safe-area-inset-right));
-  overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:clamp(16px,2.4vw,40px);
 }
-.hero__left{position:relative;order:1;display:flex;flex-direction:column;min-width:0;padding-left:clamp(4px,1.6vw,28px)}
+.hero__left{
+  position:relative;order:1;display:flex;flex-direction:column;min-width:0;padding-left:clamp(4px,1.6vw,28px);
+  opacity:calc(1 - var(--exp,0) * 1.8);
+  transform:translateY(calc(var(--exp,0) * -70px));
+}
+.hero__hint{
+  position:absolute;left:max(var(--pad),env(safe-area-inset-left));bottom:calc(var(--pad) + 2px);
+  display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);opacity:calc(1 - var(--exp,0) * 3);
+}
+.hero__hint i{
+  width:1px;height:26px;background:linear-gradient(180deg,var(--accent),transparent);
+  animation:hintPulse 2.2s ease-in-out infinite;
+}
+@keyframes hintPulse{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}
 
 /* 3a. навигация */
 .nav{display:flex;align-items:center;gap:clamp(20px,3.4vw,58px);padding-top:clamp(4px,.6vw,10px)}
@@ -109,29 +124,45 @@ ul,ol{list-style:none}
 .cta__icon svg{width:44%;height:44%}
 .cta:hover .cta__icon{background:var(--ink);color:#fff;transform:translateX(4px)}
 
-/* 3c. медиа-карточка */
+/* 3c. медиа-карточка: раскрывается из колонки в полный экран */
 .hero__media{
-  position:relative;order:2;isolation:isolate;border-radius:var(--radius-card);overflow:hidden;
-  background:#e8e2d8;min-width:0;
+  position:absolute;isolation:isolate;overflow:hidden;min-width:0;background:rgba(232,226,216,.9);
+  left:calc(52.5% * (1 - var(--exp,0)));
+  top:calc(var(--pad) * (1 - var(--exp,0)));
+  right:calc(var(--pad) * (1 - var(--exp,0)));
+  bottom:calc(var(--pad) * (1 - var(--exp,0)));
+  border-radius:calc(var(--radius-card) * (1 - var(--exp,0)));
 }
 .hero__fallback{position:absolute;inset:0}
 .hero__photo{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   opacity:0;transition:opacity .9s var(--ease-out);
+  transform:scale(calc(1 + var(--exp,0) * .06));
 }
 .hero__photo.is-ready{opacity:1}
 .hero__media::after{
   content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(0,0,0,.14),rgba(0,0,0,0) 38%);
+  background:linear-gradient(180deg,rgba(0,0,0,calc(.14 + var(--exp,0) * .18)),rgba(0,0,0,0) 38%),
+             linear-gradient(0deg,rgba(0,0,0,calc(var(--exp,0) * .5)),rgba(0,0,0,0) 45%);
 }
 .photo-credit{
   position:absolute;left:14px;bottom:12px;z-index:4;max-width:52%;
   font-size:10.5px;line-height:1.35;color:rgba(255,255,255,.72);text-shadow:0 1px 6px rgba(0,0,0,.6);
+  opacity:calc(1 - var(--exp,0) * 2.4);
 }
 .photo-credit a{border-bottom:1px solid rgba(255,255,255,.35)}
 
+/* подпись на раскрытом кадре */
+.hero__over{
+  position:absolute;left:clamp(20px,4vw,64px);bottom:clamp(28px,6vh,72px);z-index:5;
+  display:grid;gap:8px;color:#fff;opacity:calc((var(--exp,0) - .48) * 2.8);
+  transform:translateY(calc((1 - var(--exp,0)) * 30px));
+}
+.hero__over-k{font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.hero__over-t{font-size:clamp(1.5rem,3.4vw,3.2rem);font-weight:600;letter-spacing:-.022em;line-height:1.05;max-width:22ch;text-shadow:0 8px 40px rgba(0,0,0,.4)}
+
 /* выноски на карточке */
-.marker{position:absolute;z-index:3;--dot-r:17px}
+.marker{position:absolute;z-index:3;--dot-r:17px;opacity:calc(1 - var(--exp,0) * 2.4)}
 .marker--age{left:56%;top:26%}
 .marker--arena{left:59%;top:59%}
 .marker__dot{
@@ -154,6 +185,7 @@ ul,ol{list-style:none}
 /* плашка с цифрами в углу карточки */
 .factpill{
   position:absolute;right:0;bottom:0;z-index:3;display:flex;align-items:center;
+  opacity:calc(1 - var(--exp,0) * 2.4);
   gap:clamp(14px,1.8vw,30px);background:#fff;
   padding:clamp(14px,1.5vw,22px) clamp(20px,2.2vw,34px);
   border-top-left-radius:36px;border-bottom-right-radius:var(--radius-card);
@@ -553,7 +585,8 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
   .hero__text{line-height:1.8}
 }
 @media (max-width:1024px){
-  .hero{grid-template-columns:minmax(0,1fr) minmax(0,.78fr)}
+  .hero__stage{grid-template-columns:minmax(0,1fr) minmax(0,.78fr)}
+  .hero__media{left:calc(58% * (1 - var(--exp,0)))}
   .nav__links{display:none}
   .marker--age{left:46%;top:24%}
   .marker--arena{left:50%;top:60%}
@@ -567,7 +600,8 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
   .gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:900px){
-  .hero{grid-template-columns:minmax(0,1fr) minmax(0,.62fr)}
+  .hero__stage{grid-template-columns:minmax(0,1fr) minmax(0,.62fr)}
+  .hero__media{left:calc(64% * (1 - var(--exp,0)))}
   .hero__text{max-width:42ch}
   .marker--age{left:40%;top:22%}
   .marker--arena{left:44%;top:62%}
@@ -575,8 +609,11 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
 }
 @media (max-width:768px){
   :root{--pad:20px}
-  .hero{display:block;padding:0;color:#fff}
-  .hero__media{position:absolute;inset:0;border-radius:0}
+  .hero__rig{height:100svh}
+  .hero__stage{display:block;padding:0;color:#fff}
+  .hero__media{inset:0;left:0;top:0;right:0;bottom:0;border-radius:0}
+  .hero__left{opacity:1;transform:none}
+  .hero__hint,.hero__over{display:none}
   .hero__media::after{background:linear-gradient(180deg,rgba(12,10,9,.72) 0%,rgba(12,10,9,.45) 42%,rgba(12,10,9,.9) 100%)}
   .marker,.factpill:not(.factpill--mobile),.photo-credit{display:none}
   .hero__left{
@@ -617,7 +654,7 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
   .hero__text{max-width:none}
 }
 @media (max-height:620px){
-  .hero{min-height:0}
+  .hero__stage{min-height:0}
 }
 @media (max-width:1024px) and (orientation:landscape) and (max-height:540px){
   .hero__content{padding:10px 0;margin-top:auto}
@@ -683,7 +720,7 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.marquee__row{animation:none}}
 
-.section--deco{overflow:hidden}
+.section--deco{overflow:clip}
 .deco{position:absolute;pointer-events:none;color:var(--ink);opacity:.055;z-index:0}
 .deco--column{top:clamp(24px,3vw,56px);right:clamp(16px,4vw,80px);width:clamp(76px,6vw,112px)}
 .deco--pisa{top:clamp(24px,3vw,56px);right:clamp(16px,4vw,80px);width:clamp(96px,8vw,128px);opacity:.08}
@@ -930,3 +967,96 @@ html.no-motion .ph__box img,html.no-motion .card__photo img{transform:none}
 @media (max-width:640px){
   .window--oculus{height:clamp(240px,58vw,330px)}
 }
+
+/* ---------- 26. ПЛАВНЫЙ СКРОЛЛ (LENIS) ---------- */
+html.lenis,html.lenis body{height:auto}
+.lenis:not(.lenis-autoToggle).lenis-stopped{overflow:clip}
+.lenis [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-smooth iframe{pointer-events:none}
+html.lenis{scroll-behavior:auto}
+
+/* ---------- 27. ЗАНАВЕС ПРИ ЗАГРУЗКЕ ---------- */
+.curtain{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;pointer-events:none}
+.curtain i{
+  position:absolute;top:0;bottom:0;width:34%;background:#faf6ef;
+  transition:transform 1s var(--ease-out);
+}
+.curtain i:nth-child(1){left:0}
+.curtain i:nth-child(2){left:33.2%}
+.curtain i:nth-child(3){left:66.4%}
+.curtain__word{
+  position:relative;z-index:1;font-size:clamp(26px,6vw,64px);font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink);
+  transition:opacity .45s ease,transform .8s var(--ease-out);
+}
+.curtain__word::after{
+  content:"";position:absolute;left:0;right:.2em;bottom:-.42em;height:3px;
+  background:linear-gradient(90deg,#008C45 0 33.3%,#F4F5F0 33.3% 66.6%,#CD212A 66.6%);
+  transform:scaleX(0);transform-origin:left;animation:curtainLine .8s var(--ease-out) .12s forwards;
+}
+@keyframes curtainLine{to{transform:scaleX(1)}}
+.curtain.is-done i{transform:translateY(-101%)}
+.curtain.is-done i:nth-child(2){transition-delay:.07s}
+.curtain.is-done i:nth-child(3){transition-delay:.14s}
+.curtain.is-done .curtain__word{opacity:0;transform:translateY(-26px)}
+.curtain.is-gone{display:none}
+html:not(.js) .curtain{display:none}
+@media (prefers-reduced-motion:reduce){.curtain{display:none}}
+
+/* ---------- 28. КУРСОР С ПОДПИСЬЮ ---------- */
+.cursor{position:fixed;left:0;top:0;z-index:9990;pointer-events:none;opacity:0;transition:opacity .25s}
+.cursor.is-on{opacity:1}
+.cursor__dot{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--ink);transform:translate(-50%,-50%);transition:opacity .2s}
+.cursor__ring{
+  position:absolute;width:36px;height:36px;border:1px solid rgba(17,20,23,.4);border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:width .38s var(--ease-out),height .38s var(--ease-out),background .3s ease,border-color .3s ease;
+}
+.cursor.is-hover .cursor__ring{width:62px;height:62px;background:rgba(17,20,23,.05)}
+.cursor.is-label .cursor__ring{width:96px;height:96px;background:var(--ink);border-color:var(--ink)}
+.cursor.is-label .cursor__dot{opacity:0}
+.cursor__label{
+  position:absolute;transform:translate(-50%,-50%);color:#fff;font-size:11px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;opacity:0;transition:opacity .25s;
+}
+.cursor.is-label .cursor__label{opacity:1}
+@media (hover:none),(pointer:coarse){.cursor{display:none}}
+html.no-motion .cursor{display:none}
+
+/* ---------- 29. ЗАКРЕПЛЁННАЯ ГАЛЕРЕЯ ГОРОДОВ ---------- */
+.section.pin{padding-block:0}
+.pin__rig{height:calc(100svh + 150vh)}
+.pin__stage{
+  position:sticky;top:0;height:100svh;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;gap:clamp(20px,3.4vw,48px);
+}
+.sec-head--row{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;margin-bottom:0}
+.pin__hint{font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.pin__viewport{overflow:hidden;padding-inline:max(var(--pad),calc((100vw - var(--container)) / 2 + var(--pad)))}
+.pin__row{
+  display:flex;gap:clamp(12px,1.4vw,20px);width:max-content;
+  transform:translate3d(calc(var(--px,0px) * -1),0,0);will-change:transform;
+}
+.pin__row .card{flex:0 0 clamp(250px,23vw,330px)}
+@media (max-width:900px){
+  .section.pin{padding-block:var(--sec-pad)}
+  .pin__rig{height:auto}
+  .pin__stage{position:static;height:auto;display:block}
+  .pin__viewport{overflow:visible;padding-inline:0}
+  .pin__row{width:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));transform:none}
+  .pin__row .card{flex:auto}
+  .sec-head--row{flex-direction:column;align-items:flex-start;margin-bottom:clamp(24px,4vw,40px)}
+  .pin__hint{display:none}
+}
+
+/* ---------- 30. РАСКРЫТИЕ ФОТО МАСКОЙ И СКОС ПО СКОРОСТИ ---------- */
+.ph,.card{overflow:hidden}
+.ph .ph__box,.card .card__photo{clip-path:inset(0 0 100% 0);transition:clip-path 1.15s var(--ease-out) .08s}
+.ph.is-in .ph__box,.card.is-in .card__photo,.card:not([data-reveal]) .card__photo{clip-path:inset(0 0 0 0)}
+html:not(.js) .ph__box,html:not(.js) .card__photo{clip-path:none}
+.cards,.numbers,.gallery,#phraseGrid,#pastaGrid,#coffeeList{transform:skewY(var(--skew,0deg));transition:transform .18s linear}
+@media (prefers-reduced-motion:reduce){
+  .ph .ph__box,.card .card__photo{clip-path:none}
+  .cards,.numbers,.gallery,#phraseGrid,#pastaGrid,#coffeeList{transform:none}
+}
+html.no-motion .cards,html.no-motion .numbers,html.no-motion .gallery{transform:none}

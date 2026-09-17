@@ -21,6 +21,15 @@
 </head>
 <body>
 
+<div class="curtain" id="curtain" aria-hidden="true">
+  <i></i><i></i><i></i>
+  <span class="curtain__word">Italia</span>
+</div>
+
+<div class="cursor" id="cursor" aria-hidden="true">
+  <i class="cursor__dot"></i><i class="cursor__ring"></i><span class="cursor__label"></span>
+</div>
+
 <div class="progress" aria-hidden="true"><i id="progress"></i></div>
 
 <div class="bg" id="bg" aria-hidden="true">
@@ -44,68 +53,80 @@
 
 <!-- ============ ПЕРВЫЙ ЭКРАН ============ -->
 <section class="hero" id="top" data-mood="roma">
+ <div class="hero__rig" id="heroRig">
+  <div class="hero__stage">
 
-  <!-- медиа идёт первым в разметке: левая колонка должна печататься поверх без z-index -->
-  <div class="hero__media anim" style="--d:0">
-    <div class="hero__fallback" id="csHero" aria-hidden="true"></div>
-    <img class="hero__photo anim" style="--d:1" data-photo="Colosseum" data-photo-var="--nature-img"
-         alt="Колизей в Риме" decoding="async">
+   <!-- медиа идёт первым в разметке: левая колонка должна печататься поверх без z-index -->
+   <div class="hero__media anim" style="--d:0" data-cursor="Колизей">
+     <div class="hero__fallback" id="csHero" aria-hidden="true"></div>
+     <img class="hero__photo anim" style="--d:1" data-photo="Colosseum" data-photo-var="--nature-img"
+          alt="Колизей в Риме" decoding="async">
 
-    <div class="marker marker--age">
-      <span class="marker__line anim" style="--d:14"></span>
-      <span class="marker__dot anim" style="--d:13"></span>
-      <span class="marker__label anim" style="--d:15">Открыт в 80 году</span>
-    </div>
-    <div class="marker marker--arena marker--right">
-      <span class="marker__line anim" style="--d:17"></span>
-      <span class="marker__dot anim" style="--d:16"></span>
-      <span class="marker__label anim" style="--d:18">Арена 86 × 54 м</span>
-    </div>
+     <div class="marker marker--age">
+       <span class="marker__line anim" style="--d:14"></span>
+       <span class="marker__dot anim" style="--d:13"></span>
+       <span class="marker__label anim" style="--d:15">Открыт в 80 году</span>
+     </div>
+     <div class="marker marker--arena marker--right">
+       <span class="marker__line anim" style="--d:17"></span>
+       <span class="marker__dot anim" style="--d:16"></span>
+       <span class="marker__label anim" style="--d:18">Арена 86 × 54 м</span>
+     </div>
 
-    <div class="factpill anim" style="--d:19">
-      <span><b>20</b> регионов</span>
-      <span><b>62</b> объекта ЮНЕСКО</span>
-      <span><b>58,9</b> млн жителей</span>
-    </div>
-    <p class="photo-credit" data-photo-credit></p>
+     <div class="factpill anim" style="--d:19">
+       <span><b>20</b> регионов</span>
+       <span><b>62</b> объекта ЮНЕСКО</span>
+       <span><b>58,9</b> млн жителей</span>
+     </div>
+     <p class="photo-credit" data-photo-credit></p>
+
+     <!-- подпись проявляется, когда кадр раскрывается на весь экран -->
+     <div class="hero__over" aria-hidden="true">
+       <span class="hero__over-k">Roma · Amphitheatrum Flavium</span>
+       <span class="hero__over-t">Восемь лет стройки, две тысячи лет славы</span>
+     </div>
+   </div>
+
+   <div class="hero__left">
+     <nav class="nav" aria-label="Основная навигация">
+       <a class="brand" href="#top"><span class="brand__name anim" style="--d:2">Italia</span></a>
+       <ul class="nav__links">
+         <li class="anim" style="--d:4"><a href="#regions">Регионы</a></li>
+         <li class="anim" style="--d:5"><a href="#history">История</a></li>
+         <li class="anim" style="--d:6"><a href="#colosseum">Колизей</a></li>
+         <li class="anim" style="--d:7"><a href="#food">Кухня</a></li>
+       </ul>
+       <button class="burger anim" style="--d:8" id="navToggle" type="button"
+               aria-label="Открыть меню" aria-expanded="false" aria-controls="navSheet">
+         <span></span><span></span><span></span>
+       </button>
+     </nav>
+
+     <div class="hero__content">
+       <h1 class="hero__title">
+         <span class="hero__line anim" style="--d:9">Вся <span class="hl">Италия</span></span>
+         <span class="hero__line anim" style="--d:10">от Колизея до тарелки</span>
+       </h1>
+       <p class="hero__text anim" style="--d:11">Страна, где 2800 лет истории помещаются в один день пешком: античный амфитеатр, ренессансный купол, рынок с буратой и поезд, который идёт из Рима в Милан за три часа. Ниже — вся база: от карты регионов до того, почему капучино не пьют после обеда.</p>
+
+       <a class="cta" href="#country" data-cursor="Вперёд">
+         <span class="cta__label anim" style="--d:12">Смотреть страну</span>
+         <span class="cta__icon anim" style="--d:13" aria-hidden="true">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+         </span>
+       </a>
+
+       <div class="factpill factpill--mobile">
+         <span class="anim" style="--d:14"><b>20</b> регионов</span>
+         <span class="anim" style="--d:15"><b>62</b> ЮНЕСКО</span>
+         <span class="anim" style="--d:16"><b>58,9</b> млн</span>
+       </div>
+     </div>
+   </div>
+
+   <span class="hero__hint" aria-hidden="true"><i></i>прокрутите</span>
   </div>
-
-  <div class="hero__left">
-    <nav class="nav" aria-label="Основная навигация">
-      <a class="brand" href="#top"><span class="brand__name anim" style="--d:2">Italia</span></a>
-      <ul class="nav__links">
-        <li class="anim" style="--d:4"><a href="#regions">Регионы</a></li>
-        <li class="anim" style="--d:5"><a href="#history">История</a></li>
-        <li class="anim" style="--d:6"><a href="#colosseum">Колизей</a></li>
-        <li class="anim" style="--d:7"><a href="#food">Кухня</a></li>
-      </ul>
-      <button class="burger anim" style="--d:8" id="navToggle" type="button"
-              aria-label="Открыть меню" aria-expanded="false" aria-controls="navSheet">
-        <span></span><span></span><span></span>
-      </button>
-    </nav>
-
-    <div class="hero__content">
-      <h1 class="hero__title">
-        <span class="hero__line anim" style="--d:9">Вся <span class="hl">Италия</span></span>
-        <span class="hero__line anim" style="--d:10">от Колизея до тарелки</span>
-      </h1>
-      <p class="hero__text anim" style="--d:11">Страна, где 2800 лет истории помещаются в один день пешком: античный амфитеатр, ренессансный купол, рынок с буратой и поезд, который идёт из Рима в Милан за три часа. Ниже — вся база: от карты регионов до того, почему капучино не пьют после обеда.</p>
-
-      <a class="cta" href="#country">
-        <span class="cta__label anim" style="--d:12">Смотреть страну</span>
-        <span class="cta__icon anim" style="--d:13" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </span>
-      </a>
-
-      <div class="factpill factpill--mobile">
-        <span class="anim" style="--d:14"><b>20</b> регионов</span>
-        <span class="anim" style="--d:15"><b>62</b> ЮНЕСКО</span>
-        <span class="anim" style="--d:16"><b>58,9</b> млн</span>
-      </div>
-    </div>
-  </div>
+ </div>
 </section>
 
 <!-- ============ ВЫЕЗЖАЮЩЕЕ МЕНЮ ============ -->
@@ -213,7 +234,7 @@
 
     <div class="map-layout">
       <div>
-        <div class="map-wrap" data-reveal>
+        <div class="map-wrap" data-reveal data-cursor="Регион">
           <svg id="itMap" viewBox="0 0 610 793" role="group" aria-label="Карта регионов Италии">
             <path id="abruzzo" d="m 374.27021,304.03051 1.36,6.34 2.24,5.51 6.27,11.18 7.01,7.71 8.24,6.15 0.87,2.33 3.67,3.53 0.33,1.35 5.56,3.7 5.16,1.83 0.21,4.85 3.43,2.43 0,0 -1.17,1.85 0.91,0.84 -2.84,1.96 -2.3,2.84 -0.82,3.1 -2.36,1.66 -1.72,3.73 -4.76,5.13 -2.04,-0.37 0.79,-0.64 -1.07,-4.29 -1.1,-1.07 -2.44,-1.62 -1.05,1.32 -0.57,-0.22 -0.98,-2.19 -1.24,0.13 -0.94,-1.26 -2.91,2.38 -1.43,2.22 -2.22,0.15 -0.42,0.9 1.25,3.55 1.52,0.89 -0.42,1.03 -0.85,-0.13 -0.25,-1.01 -0.67,1.24 -1.99,0.05 -0.63,2.64 -0.79,-2.07 -1.16,0.09 -0.87,2.4 -1.33,0.05 -0.28,1.46 -1.87,-0.98 -2.1,0.52 0,0 -2.49,-3.27 -1.96,0.19 -2.4,-1.41 -1.03,0.65 -1.33,-0.4 -1.75,-3.31 -1.32,0.73 -1.07,-1.18 -1.78,-0.49 -1.06,2.09 -4.05,1.35 -1.48,-0.93 -0.73,-1.81 -1.84,-0.43 -1.48,-1.43 -1.73,-0.7 -1.4,1.36 -1,-3.63 1.28,-2.29 -1,-1.41 -1.01,0.18 -1.98,-2.28 -0.9,0.37 -7.65,-4.49 -2.03,-0.72 -0.02,1.24 -2.38,-0.64 -1.41,-2.25 0.15,-4.92 0.78,0.36 2.08,-1.78 0.05,-2.39 1.73,-0.13 6.56,3.53 1.24,-0.77 1.69,0.62 1.07,-2.23 1.5,-0.29 -0.53,-0.71 1.83,-0.33 -1.93,-1.22 -0.3,-1.63 -2.43,-0.84 -2.58,-2.54 -0.65,-3.28 -3.74,-2.48 2.08,-2.33 -3.99,-3.74 3.18,-2.42 -0.1,-2.38 -1,-1.86 1.03,-0.58 0.76,-2.76 2.75,1.04 0.61,-0.73 1.35,0 0.58,0.98 1.5,-0.77 2.26,0.31 1.35,-1.17 0.76,-3.43 -1.99,-0.63 -1.15,-1.37 0.54,-1.68 0,0 0,0 0,0 0,0 0,0 1.66,0.48 1.88,-1.33 0.57,0.46 0.6,-2.37 2.37,-0.39 0.3,-2.49 1.34,-1.49 0.24,-1.44 2.08,1.13 2.37,-1.11 0.67,0.94 1.35,-0.17 2.01,-0.94 0.46,-2.21 0.68,-0.38 2.78,-0.18 2.11,-1.41 4.99,-1.07 0,0 z"/>
             <path id="aosta-valley" d="m 49.07021,82.450505 0.58,1.17 3.82,-0.54 0.91,1.48 1.32,0.54 0.64,1.93 1.6,-1.15 2.47,1.61 1.17,-0.66 2.07,0.73 0,0 0.7,4.06 -0.7,5.05 1.71,3.1 1.62,0.600005 0.36,1.2 -1.66,2.83 1.82,3.73 -1.2,0.24 -0.73,3.04 -1.01,-0.65 -2.64,0.2 -4.89,3.47 -0.68,-0.61 -2.32,0.38 -1.97,-1.3 -1.41,0.66 -0.13,-0.87 -2.01,-1.25 -2.08,1.13 -1.85,-0.47 -1.23,0.39 -0.93,1.57 -3.54,2.84 -0.96,-0.67 -1.88,0.89 -2.8,0.07 -2.39,3.01 -3.07,-1.07 -0.9,0.68 -0.36,-2.85 -1.77,3.56 0,0 -2.72,-0.39 0.27,-1.63 -2.79,-0.76 -0.23,-5.06 -0.95,-1 1.17,-3.79 -1.74,-1.05 -2.6,0.18 -0.52,-1.45 -2.45,-0.92 -2.5199999,-2.91 0.3699999,-1.2 -0.7599999,-2.950005 1.0099999,-4.14 1.19,-0.34 0.99,0.64 0.73,-1.19 1.79,0.62 1.49,-0.47 0.53,-1.03 2.31,-0.81 0.32,-2.06 2.06,-1.74 3.16,4.8 2.57,-1.55 1.86,1.5 1.24,-2.11 2.13,-0.06 1.83,-2.42 4.72,1.84 4.45,-2.8 -0.04,-0.99 1.35,-1.05 2.22,0.42 0.3,-2.13 z"/>
@@ -262,7 +283,7 @@
     </header>
 
     <div class="tl">
-      <ul class="tl__track" id="tlTrack" tabindex="0" aria-label="Лента истории Италии"></ul>
+      <ul class="tl__track" id="tlTrack" tabindex="0" aria-label="Лента истории Италии" data-cursor="Тянуть"></ul>
       <div class="tl__foot">
         <button class="tl__btn" id="tlPrev" type="button" aria-label="Назад">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
@@ -277,7 +298,7 @@
 </section>
 
 <!-- ============ ОКНО В ФОН ============ -->
-<div class="window" data-mood="roma">
+<div class="window" data-mood="roma" data-cursor="Аркада">
   <div class="window__stage" aria-hidden="true"></div>
   <div class="window__paper" aria-hidden="true"></div>
   <div class="window__edge" aria-hidden="true"></div>
@@ -306,7 +327,7 @@
     </div>
 
     <div class="cut-layout">
-      <div class="cut-wrap" data-reveal><div id="csCut"></div></div>
+      <div class="cut-wrap" data-reveal data-cursor="Слой"><div id="csCut"></div></div>
       <div>
         <div id="csPanel" aria-live="polite"></div>
         <ul id="csList" aria-label="Слои Колизея"></ul>
@@ -351,36 +372,46 @@
 </section>
 
 <!-- ============ 05 ГОРОДА ============ -->
-<section class="section section--deco" id="cities" data-mood="oro">
-  <div class="container">
-    <header class="sec-head">
-      <span class="sec-num" data-reveal>05 — Города</span>
-      <h2 class="sec-title" data-reveal>Восемь городов, <em>восемь характеров</em></h2>
-    </header>
-      <span class="deco deco--pisa" aria-hidden="true">
-        <svg viewBox="0 0 170 540" fill="currentColor">
-          <defs>
-            <pattern id="pisaArch" width="17" height="46" patternUnits="userSpaceOnUse">
-              <rect width="17" height="46" fill="currentColor"/>
-              <path d="M4 44V20a4.5 4.5 0 0 1 9 0v24z" fill="#fff"/>
-            </pattern>
-          </defs>
-          <g transform="rotate(4 85 540)">
-            <rect x="26" y="486" width="118" height="42" rx="3"/>
-            <rect x="30" y="440" width="110" height="46" fill="url(#pisaArch)"/>
-            <rect x="31" y="394" width="108" height="46" fill="url(#pisaArch)"/>
-            <rect x="32" y="348" width="106" height="46" fill="url(#pisaArch)"/>
-            <rect x="33" y="302" width="104" height="46" fill="url(#pisaArch)"/>
-            <rect x="34" y="256" width="102" height="46" fill="url(#pisaArch)"/>
-            <rect x="35" y="210" width="100" height="46" fill="url(#pisaArch)"/>
-            <rect x="36" y="164" width="98" height="46" fill="url(#pisaArch)"/>
-            <rect x="44" y="120" width="82" height="44" fill="url(#pisaArch)"/>
-            <rect x="52" y="104" width="66" height="16" rx="3"/>
-            <rect x="58" y="86" width="54" height="18" rx="3"/>
-          </g>
-        </svg>
-      </span>
-    <div class="cards" id="cityGrid"></div>
+<section class="section section--deco pin" id="cities" data-mood="oro">
+  <span class="deco deco--pisa" aria-hidden="true">
+    <svg viewBox="0 0 170 540" fill="currentColor">
+      <defs>
+        <pattern id="pisaArch" width="17" height="46" patternUnits="userSpaceOnUse">
+          <rect width="17" height="46" fill="currentColor"/>
+          <path d="M4 44V20a4.5 4.5 0 0 1 9 0v24z" fill="#fff"/>
+        </pattern>
+      </defs>
+      <g transform="rotate(4 85 540)">
+        <rect x="26" y="486" width="118" height="42" rx="3"/>
+        <rect x="30" y="440" width="110" height="46" fill="url(#pisaArch)"/>
+        <rect x="31" y="394" width="108" height="46" fill="url(#pisaArch)"/>
+        <rect x="32" y="348" width="106" height="46" fill="url(#pisaArch)"/>
+        <rect x="33" y="302" width="104" height="46" fill="url(#pisaArch)"/>
+        <rect x="34" y="256" width="102" height="46" fill="url(#pisaArch)"/>
+        <rect x="35" y="210" width="100" height="46" fill="url(#pisaArch)"/>
+        <rect x="36" y="164" width="98" height="46" fill="url(#pisaArch)"/>
+        <rect x="44" y="120" width="82" height="44" fill="url(#pisaArch)"/>
+        <rect x="52" y="104" width="66" height="16" rx="3"/>
+        <rect x="58" y="86" width="54" height="18" rx="3"/>
+      </g>
+    </svg>
+  </span>
+
+  <div class="pin__rig" id="citiesRig">
+    <div class="pin__stage">
+      <div class="container">
+        <header class="sec-head sec-head--row">
+          <div>
+            <span class="sec-num" data-reveal>05 — Города</span>
+            <h2 class="sec-title" data-reveal>Восемь городов, <em>восемь характеров</em></h2>
+          </div>
+          <p class="pin__hint" aria-hidden="true">прокрутите — карточки поедут в сторону</p>
+        </header>
+      </div>
+      <div class="pin__viewport">
+        <div class="pin__row" id="cityGrid"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -418,7 +449,7 @@
 </section>
 
 <!-- ============ ОКУЛУС ============ -->
-<div class="window window--oculus" data-mood="oro">
+<div class="window window--oculus" data-mood="oro" data-cursor="Окулус">
   <div class="window__stage" aria-hidden="true"></div>
   <div class="window__paper" aria-hidden="true"></div>
   <div class="window__ring" aria-hidden="true"></div>
@@ -556,6 +587,7 @@
   </div>
 </footer>
 
+<script src="assets/js/vendor/lenis.min.js"></script>
 <script src="assets/js/backdrop.js"></script>
 <script src="assets/js/motion.js" defer></script>
 <script src="assets/js/data.js"></script>
