@@ -21,6 +21,8 @@
 </head>
 <body>
 
+<div class="progress" aria-hidden="true"><i id="progress"></i></div>
+
 <div class="bg" id="bg" aria-hidden="true">
   <i class="bg__blob bg__blob--1"></i>
   <i class="bg__blob bg__blob--2"></i>
@@ -274,6 +276,14 @@
   </div>
 </section>
 
+<!-- ============ ОКНО В ФОН ============ -->
+<div class="window" data-mood="roma">
+  <div class="window__stage" aria-hidden="true"></div>
+  <div class="window__paper" aria-hidden="true"></div>
+  <div class="window__edge" aria-hidden="true"></div>
+  <p class="window__cap">Италия строит арками <em>две тысячи восемьсот лет</em></p>
+</div>
+
 <!-- ============ 04 КОЛИЗЕЙ ============ -->
 <section class="section section--sand" id="colosseum" data-mood="roma">
   <div class="container">
@@ -407,6 +417,14 @@
   </div>
 </section>
 
+<!-- ============ ОКУЛУС ============ -->
+<div class="window window--oculus" data-mood="oro">
+  <div class="window__stage" aria-hidden="true"></div>
+  <div class="window__paper" aria-hidden="true"></div>
+  <div class="window__ring" aria-hidden="true"></div>
+  <p class="window__cap">Купол Пантеона: <em>43,3 м</em> и круглое окно в небо</p>
+</div>
+
 <!-- ============ 07 КУХНЯ ============ -->
 <section class="section" id="food" data-mood="verde">
   <div class="container">
@@ -531,12 +549,15 @@
       </ul>
     </div>
     <div class="footer__row">
+      <button class="motion-toggle" id="motionToggle" type="button" aria-pressed="true" hidden>Фон: движение включено</button>
       <span>Данные актуальны на сентябрь 2026 года. Карта, Колизей и значки нарисованы кодом.</span>
       <span>Buon viaggio</span>
     </div>
   </div>
 </footer>
 
+<script src="assets/js/backdrop.js"></script>
+<script src="assets/js/motion.js" defer></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/colosseum.js"></script>
 <script src="assets/js/map.js"></script>

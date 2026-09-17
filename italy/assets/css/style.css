@@ -303,7 +303,7 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
   border:1px solid var(--line);background:rgba(255,255,255,.7);font-size:13.5px;font-weight:500;color:var(--muted);cursor:pointer;
   transition:border-color .25s ease,color .25s ease,background .25s ease,transform .25s ease;
 }
-.chip:hover{color:var(--ink);border-color:rgba(17,20,23,.3);transform:translateY(-1px)}
+.chip:hover{color:var(--ink);border-color:rgba(17,20,23,.3);transform:translateY(-2px)}
 .chip.is-on{background:var(--ink);border-color:var(--ink);color:#fff}
 
 .map-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.86fr);gap:clamp(24px,3.4vw,52px);align-items:start}
@@ -366,7 +366,7 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
   border-radius:var(--radius-card);padding:22px;transition:transform .35s var(--ease-out),box-shadow .35s var(--ease-out);
 }
 .section--sand .tl__item{background:rgba(255,255,255,.76)}
-.tl__item:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(17,20,23,.08)}
+.tl__item:hover{--lift:-5px;box-shadow:0 22px 46px rgba(17,20,23,.1)}
 .tl__year{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--accent)}
 .tl__dot{position:absolute;top:22px;right:22px;width:8px;height:8px;border-radius:50%;background:var(--accent-soft)}
 .tl__title{font-size:1.3rem;font-weight:600;letter-spacing:-.02em;margin:10px 0 8px;line-height:1.15}
@@ -443,7 +443,7 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
 /* ---------- 11. КАРТОЧКИ ---------- */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(12px,1.4vw,20px)}
 .card{background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:var(--radius-card);overflow:hidden;transition:transform .35s var(--ease-out),box-shadow .35s var(--ease-out)}
-.card:hover{transform:translateY(-4px);box-shadow:0 20px 44px rgba(17,20,23,.09)}
+.card:hover{--lift:-5px;box-shadow:0 26px 54px rgba(17,20,23,.12)}
 .card__photo{position:relative;aspect-ratio:16/11;overflow:hidden;background:linear-gradient(150deg,#e6ddd1,#cdbda7)}
 .card__photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s var(--ease-out),transform 6s var(--ease-out)}
 .card__photo.is-ready img{opacity:1}
@@ -461,7 +461,7 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
 .kitchen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(28px,4vw,64px);align-items:start;margin-top:clamp(32px,4vw,56px)}
 #pastaGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .pasta{background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:var(--radius);padding:16px;transition:transform .3s var(--ease-out),box-shadow .3s var(--ease-out)}
-.pasta:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(17,20,23,.08)}
+.pasta:hover{--lift:-4px;box-shadow:0 16px 34px rgba(17,20,23,.09)}
 .pasta__ico{display:block;color:var(--accent);margin-bottom:10px;transition:transform .5s var(--ease-out)}
 .pasta:hover .pasta__ico{transform:rotate(-6deg) scale(1.08)}
 .pasta b{display:block;font-size:14.5px;font-weight:600}
@@ -769,4 +769,164 @@ body{background:transparent}
 @media (max-width:768px){
   .bg__blob{filter:blur(52px)}
   .bg__arches{background-size:132px 148px}
+}
+
+/* ---------- 22. ШЕЙДЕРНЫЙ ФОН ---------- */
+.bg__gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* когда работает WebGL, запасные слои на CSS не нужны */
+.bg.is-gl .bg__blob,
+.bg.is-gl .bg__tint,
+.bg.is-gl .bg__grain{display:none}
+.bg.is-gl .bg__arches{opacity:.7}
+
+.motion-toggle{
+  display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 14px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.6);color:var(--muted);
+  font-size:12.5px;font-weight:500;cursor:pointer;transition:.25s var(--ease-out);
+}
+.motion-toggle:hover{color:var(--ink);border-color:rgba(17,20,23,.3)}
+.motion-toggle[aria-pressed="false"]{color:var(--ink);background:#fff}
+
+/* выключенное движение гасит и остальные бесконечные анимации */
+html.no-motion .marquee__row,
+html.no-motion .bg__blob,
+html.no-motion .bg__grain,
+html.no-motion .map-dot-ring,
+html.no-motion .cut-spot.is-on .cut-spot__pulse{animation:none!important}
+
+/* ---------- 23. ОКНО В ФОН ---------- */
+.window{
+  position:relative;isolation:isolate;overflow:hidden;
+  height:clamp(230px,30vw,420px);
+  display:grid;place-items:end center;
+}
+.window__stage{position:absolute;inset:0;z-index:0}
+.window__stage canvas{width:100%;height:100%;display:block}
+/* бумага с вырезанной аркадой: сквозь арки виден живой градиент */
+.window__paper{
+  position:absolute;inset:0;z-index:1;background:#faf6ef;
+  -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400' preserveAspectRatio='none'><path fill='%23fff' fill-rule='evenodd' d='M0 0h300v400H0z M40 400V170a110 110 0 0 1 220 0v230z'/></svg>");
+  mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400' preserveAspectRatio='none'><path fill='%23fff' fill-rule='evenodd' d='M0 0h300v400H0z M40 400V170a110 110 0 0 1 220 0v230z'/></svg>");
+  -webkit-mask-repeat:repeat-x;mask-repeat:repeat-x;
+  -webkit-mask-size:clamp(170px,19vw,300px) 100%;mask-size:clamp(170px,19vw,300px) 100%;
+  -webkit-mask-position:center bottom;mask-position:center bottom;
+}
+/* тонкая обводка арок, чтобы край читался как камень */
+.window__edge{
+  position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400' preserveAspectRatio='none'><path d='M40 400V170a110 110 0 0 1 220 0v230' fill='none' stroke='%23111417' stroke-opacity='.18' stroke-width='3'/><path d='M138 52h24l6 26h-36z' fill='%23faf6ef' stroke='%23111417' stroke-opacity='.18' stroke-width='2.5'/></svg>");
+  background-repeat:repeat-x;background-size:clamp(170px,19vw,300px) 100%;background-position:center bottom;
+}
+.window__cap{
+  position:relative;z-index:3;margin-bottom:clamp(14px,2.4vw,30px);padding:10px 20px;border-radius:999px;
+  background:rgba(250,246,239,.9);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  font-size:clamp(13px,1.1vw,16px);font-weight:500;color:var(--ink);text-align:center;
+}
+.window__cap em{font-style:normal;color:var(--accent);font-weight:600}
+@media (max-width:640px){
+  .window{height:clamp(190px,44vw,260px)}
+  .window__cap{font-size:12.5px;padding:8px 14px}
+}
+
+/* ---------- 24. ДВИЖЕНИЕ ---------- */
+/* 24.1 разбитый на слова и буквы текст */
+.mv{display:block}
+.mv__w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.12em;margin-bottom:-.12em}
+.mv__i{
+  display:inline-block;transform:translateY(112%);opacity:0;
+  transition:transform .95s var(--ease-out),opacity .55s var(--ease-out);
+}
+.mv-host.is-shown .mv__i{transform:translateY(0);opacity:1}
+.mv__accent{color:var(--accent)}
+html:not(.js) .mv__i{transform:none;opacity:1}
+/* подсветка в заголовке остаётся картинкой, только слова внутри выезжают */
+.hero__line .hl .mv__w{padding-bottom:.06em;margin-bottom:-.06em}
+
+/* 24.2 наклон карточек и блик под курсором */
+.card,.tl__item,.pasta,.phrase,.coffee,.fact,.cs-facts div,.num{
+  transform:perspective(900px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)) translateY(var(--lift,0px));
+  transform-style:preserve-3d;
+  transition:transform .45s var(--ease-out),box-shadow .45s var(--ease-out),background .3s ease;
+  position:relative;
+}
+.card::after,.tl__item::after,.phrase::after,.num::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;
+  background:radial-gradient(220px 220px at var(--mx,50%) var(--my,50%),rgba(255,255,255,.5),rgba(255,255,255,0) 70%);
+  opacity:0;transition:opacity .4s var(--ease-out);
+}
+.card.is-tilt::after,.tl__item.is-tilt::after,.phrase.is-tilt::after,.num.is-tilt::after{opacity:1}
+
+/* 24.3 карта прорастает с севера на юг */
+#itMap path[id]{opacity:0;transform:translateY(10px)}
+#itMap.is-drawn path[id]{
+  opacity:1;transform:none;
+  transition:opacity .8s var(--ease-out),transform .9s var(--ease-out),fill-opacity .35s var(--ease-out),filter .3s;
+}
+#itMap .map-marks{opacity:0;transition:opacity 1s var(--ease-out) .9s}
+#itMap.is-drawn .map-marks{opacity:1}
+
+/* 24.4 лента истории: в центре карточка ярче */
+.tl__item{opacity:calc(.62 + var(--focus,1) * .38)}
+
+/* 24.5 параллакс внутри фоторамок */
+.ph__box img,.card__photo img{transform:translateY(var(--pary,0px)) scale(var(--imgscale,1.09))}
+.ph:hover .ph__box img,.card:hover .card__photo img{--imgscale:1.14}
+
+/* 24.6 полоса прогресса */
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:50;pointer-events:none}
+.progress i{
+  display:block;height:100%;transform:scaleX(0);transform-origin:left;
+  background:linear-gradient(90deg,var(--verde),var(--ochre),var(--accent));
+}
+
+/* 24.7 активный пункт меню */
+.nav__links a{position:relative;padding-bottom:3px}
+.nav__links a::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:var(--accent);
+  transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease-out);
+}
+.nav__links a.is-active{opacity:1}
+.nav__links a.is-active::after,.nav__links a:hover::after{transform:scaleX(1)}
+
+@media (prefers-reduced-motion:reduce){
+  .mv__i{transform:none!important;opacity:1!important}
+  #itMap path[id]{opacity:1;transform:none}
+  #itMap .map-marks{opacity:1}
+  .tl__item{opacity:1}
+  .ph__box img,.card__photo img{transform:none}
+}
+html.no-motion .ph__box img,html.no-motion .card__photo img{transform:none}
+
+/* ---------- 25. ОКУЛУС ---------- */
+.window--oculus{height:clamp(300px,38vw,520px);--r:clamp(110px,17vw,230px)}
+.window--oculus .window__paper{
+  -webkit-mask-image:radial-gradient(circle at 50% 48%,transparent 0 var(--r),#000 calc(var(--r) + 2.5px));
+  mask-image:radial-gradient(circle at 50% 48%,transparent 0 var(--r),#000 calc(var(--r) + 2.5px));
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-position:0 0;mask-position:0 0;
+}
+/* кессоны купола: концентрические кольца и короткие спицы у самого окна */
+.window--oculus .window__ring{
+  position:absolute;left:50%;top:48%;z-index:2;pointer-events:none;
+  width:calc(var(--r) * 3.2);height:calc(var(--r) * 3.2);transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:
+    repeating-radial-gradient(circle,rgba(17,20,23,.075) 0 1.2px,rgba(17,20,23,0) 1.2px calc(var(--r) * 0.17)),
+    repeating-conic-gradient(from 0deg,rgba(17,20,23,.06) 0deg 0.8deg,rgba(17,20,23,0) 0.8deg 7.5deg);
+  -webkit-mask-image:radial-gradient(circle,transparent 0 var(--r),#000 calc(var(--r) + 2px) calc(var(--r) * 1.28),transparent calc(var(--r) * 1.55));
+  mask-image:radial-gradient(circle,transparent 0 var(--r),#000 calc(var(--r) + 2px) calc(var(--r) * 1.28),transparent calc(var(--r) * 1.55));
+}
+/* тень от края окна — купол читается объёмнее */
+.window--oculus .window__paper{
+  box-shadow:inset 0 0 0 0 transparent;
+}
+.window--oculus::after{
+  content:"";position:absolute;left:50%;top:48%;z-index:2;pointer-events:none;
+  width:calc(var(--r) * 2 + 26px);height:calc(var(--r) * 2 + 26px);transform:translate(-50%,-50%);
+  border-radius:50%;box-shadow:0 0 0 13px rgba(250,246,239,.9),0 10px 30px rgba(17,20,23,.1);
+}
+.window--oculus .window__cap{margin-bottom:clamp(16px,3vw,38px)}
+@media (max-width:640px){
+  .window--oculus{height:clamp(240px,58vw,330px)}
 }
