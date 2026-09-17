@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Varmilo Sakura VA87M — механическая клавиатура в стиле цветущей вишни</title>
-<meta name="description" content="Varmilo Sakura VA87M: TKL на 87 клавиш, PBT-колпачки dye-sub, свитчи Cherry MX и электростатические Varmilo EC Sakura V2, новелти-кейкапы с торий, веером и Фудзи. Спеки, история и 3D-модель.">
-<meta name="theme-color" content="#ffe4ec">
+<title>Varmilo Sakura VA87M — разбор розовой механической клавиатуры</title>
+<meta name="description" content="Что такое Varmilo Sakura: спеки VA87M, свитчи Cherry MX и Varmilo EC Sakura V2, PBT-колпачки dye-sub, новелти-кейкапы и интерактивная 3D-модель, которую можно покрутить.">
+<meta name="theme-color" content="#ffe7ef">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Varmilo Sakura VA87M — механическая клавиатура в стиле цветущей вишни">
-<meta property="og:description" content="TKL на 87 клавиш, PBT dye-sub, Cherry MX или Varmilo EC Sakura V2. Спеки и 3D-модель.">
+<meta property="og:title" content="Varmilo Sakura VA87M — разбор розовой механической клавиатуры">
+<meta property="og:description" content="Спеки, история темы Sakura и 3D-модель, которую можно покрутить.">
 <meta property="og:locale" content="ru_RU">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,334 +18,208 @@
 </head>
 <body>
 
-<div class="grain" aria-hidden="true"></div>
+<!-- ============ ЕДИНЫЙ ФОН ============ -->
+<div class="bg" aria-hidden="true">
+  <div class="bg__sun" data-parallax="0.12"></div>
+  <div class="bg__scene" data-parallax="0.05">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" role="presentation">
+      <defs>
+        <linearGradient id="fuji" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#d3dcec"/>
+          <stop offset="50%" stop-color="#b6c2db"/>
+          <stop offset="100%" stop-color="#e3bccd"/>
+        </linearGradient>
+        <linearGradient id="hillFar" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e9bfcf"/><stop offset="100%" stop-color="#f3d2de"/>
+        </linearGradient>
+        <linearGradient id="hillNear" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e5a9be"/><stop offset="100%" stop-color="#efc0d0"/>
+        </linearGradient>
+      </defs>
+      <path d="M0 700 C 200 610 340 650 500 700 C 600 732 700 742 800 716 L 800 900 L 0 900 Z" fill="url(#hillFar)" opacity=".8"/>
+      <path d="M1600 690 C 1430 600 1300 640 1180 700 L 1180 900 L 1600 900 Z" fill="url(#hillFar)" opacity=".7"/>
+      <path d="M380 760 L 760 300 C 792 262 836 262 868 300 L 1248 760 Z" fill="url(#fuji)"/>
+      <path d="M690 396 L 760 314 C 794 274 834 274 868 314 L 938 396 C 906 380 886 410 856 396 C 826 382 808 412 778 398 C 748 384 726 412 690 396 Z" fill="#ffffff" opacity=".96"/>
+      <path d="M818 300 L 1248 760 L 920 760 Z" fill="#8f9bb5" opacity=".16"/>
+      <path d="M0 820 C 260 758 460 800 700 830 C 940 860 1180 828 1600 790 L 1600 900 L 0 900 Z" fill="url(#hillNear)" opacity=".9"/>
+    </svg>
+  </div>
+  <div class="bg__mist"></div>
+</div>
 <canvas id="petals" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
 
 <header class="nav">
-  <a href="#top">VARMILO SAKURA / 桜</a>
+  <a class="nav__brand" href="#top">Varmilo Sakura / 桜</a>
   <nav class="nav__links">
-    <a href="#story">История</a>
+    <a href="#about">О клавиатуре</a>
     <a href="#features">Детали</a>
     <a href="#specs">Спеки</a>
     <a href="#novelty">Кейкапы</a>
-    <a href="#model">3D-модель</a>
+    <a class="nav__cta" href="keyboard-3d.html">3D-модель →</a>
   </nav>
 </header>
 
-<!-- ============ ПОСТЕР ============ -->
-<section class="poster" id="poster">
-  <div class="poster__panel">
-    <article class="poster__card">
-      <div class="poster__visual">
+<!-- ============ ПЕРВЫЙ ЭКРАН ============ -->
+<main class="hero" id="top">
+  <canvas id="katana" class="katana-layer" aria-hidden="true"></canvas>
 
-        <!-- японская сцена: небо, солнце, Фудзи, тории, катана, ветка -->
-        <div class="scene" aria-hidden="true">
-          <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" role="presentation">
-            <defs>
-              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#fff6f9"/>
-                <stop offset="45%" stop-color="#ffe0ea"/>
-                <stop offset="100%" stop-color="#f9c6d6"/>
-              </linearGradient>
-              <linearGradient id="fuji" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#cfd9ea"/>
-                <stop offset="55%" stop-color="#b9c4da"/>
-                <stop offset="100%" stop-color="#e6c3d1"/>
-              </linearGradient>
-              <linearGradient id="blade" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="55%" stop-color="#e4e9f1"/>
-                <stop offset="100%" stop-color="#c3ccda"/>
-              </linearGradient>
-            </defs>
+  <p class="hero__kicker">Неофициальный разбор · механические клавиатуры</p>
 
-            <rect width="1600" height="900" fill="url(#sky)"/>
-            <circle cx="1180" cy="250" r="150" fill="#f0788f" opacity=".5"/>
-            <circle cx="1180" cy="250" r="112" fill="#e8607f" opacity=".85"/>
-
-            <!-- дальние холмы -->
-            <path d="M0 640 C 180 560 320 600 470 650 C 560 680 660 690 760 665 L 760 900 L 0 900 Z" fill="#e7b9cb" opacity=".65"/>
-            <path d="M1600 660 C 1440 590 1330 620 1220 668 L 1220 900 L 1600 900 Z" fill="#e7b9cb" opacity=".5"/>
-
-            <!-- гора Фудзи -->
-            <path d="M420 700 L 760 300 C 790 266 830 266 860 300 L 1200 700 Z" fill="url(#fuji)"/>
-            <path d="M700 380 L 760 312 C 792 276 828 276 860 312 L 920 380 C 890 366 872 392 844 380 C 816 368 800 396 772 384 C 744 372 726 396 700 380 Z" fill="#ffffff" opacity=".95"/>
-            <path d="M810 300 L 1200 700 L 900 700 Z" fill="#8f9bb5" opacity=".18"/>
-
-            <!-- тории -->
-            <g fill="#d84b6d" opacity=".92">
-              <path d="M255 470 h300 l-14 26 h-272 z"/>
-              <rect x="268" y="512" width="274" height="18" rx="6"/>
-              <rect x="300" y="500" width="24" height="230" rx="6"/>
-              <rect x="486" y="500" width="24" height="230" rx="6"/>
-              <rect x="386" y="530" width="38" height="14" rx="5"/>
-            </g>
-
-            <!-- вода / земля -->
-            <path d="M0 720 H1600 V900 H0 Z" fill="#fbdfe8" opacity=".85"/>
-            <g stroke="#e59bb3" stroke-width="3" fill="none" opacity=".55">
-              <path d="M120 790 q 40 -14 80 0 t 80 0"/>
-              <path d="M420 830 q 40 -14 80 0 t 80 0"/>
-              <path d="M980 806 q 40 -14 80 0 t 80 0"/>
-              <path d="M1320 848 q 40 -14 80 0 t 80 0"/>
-            </g>
-
-            <!-- ветка сакуры сверху -->
-            <g>
-              <path d="M0 40 C 180 90 300 60 430 150 C 520 212 600 200 680 260" stroke="#7a4b3f" stroke-width="13" fill="none" stroke-linecap="round"/>
-              <path d="M200 76 C 250 120 250 160 232 210" stroke="#7a4b3f" stroke-width="7" fill="none" stroke-linecap="round"/>
-              <path d="M420 146 C 470 176 486 220 470 266" stroke="#7a4b3f" stroke-width="6" fill="none" stroke-linecap="round"/>
-              <defs>
-                <g id="bl" fill="#ff9db6"><circle cx="0" cy="0" r="13"/><circle cx="16" cy="-9" r="12"/><circle cx="16" cy="9" r="12"/><circle cx="-16" cy="-9" r="12"/><circle cx="-16" cy="9" r="12"/><circle cx="0" cy="0" r="5" fill="#fff0f4"/></g>
-              </defs>
-              <use href="#bl" x="90" y="62"/><use href="#bl" x="210" y="86"/>
-              <use href="#bl" x="236" y="214"/><use href="#bl" x="330" y="104"/>
-              <use href="#bl" x="418" y="150"/><use href="#bl" x="474" y="272"/>
-              <use href="#bl" x="556" y="206"/><use href="#bl" x="664" y="258"/>
-              <use href="#bl" x="150" y="30"/><use href="#bl" x="30" y="64"/>
-            </g>
-          </svg>
-          <div class="scene__veil"></div>
-        </div>
-
-        <div class="poster__title" id="posterTitle">
-          <h1>
-            <span class="poster__line" data-title="VARMILO">VARMILO</span>
-            <span class="poster__line" data-title="SAKURA">SAKURA</span>
-          </h1>
-        </div>
-
-        <div class="poster__stamp">
-          <b>桜</b>
-          VA87M · TKL<br>87 клавиш
-        </div>
-
-        <!-- живая катана -->
-        <div class="katana" aria-hidden="true">
-          <svg viewBox="0 0 900 460" role="presentation">
-            <defs>
-              <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="38%" stop-color="#eef2f8"/>
-                <stop offset="62%" stop-color="#c8d2e0"/>
-                <stop offset="100%" stop-color="#9fabbd"/>
-              </linearGradient>
-              <linearGradient id="hamon" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#ffffff" stop-opacity=".0"/>
-                <stop offset="50%" stop-color="#ffffff" stop-opacity=".85"/>
-                <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-              </linearGradient>
-              <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#fff" stop-opacity="0"/>
-                <stop offset="45%" stop-color="#fff" stop-opacity=".95"/>
-                <stop offset="55%" stop-color="#fff" stop-opacity=".95"/>
-                <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
-              </linearGradient>
-              <path id="bladePath" d="M300 250 C 460 236 640 196 838 128 L 852 150 C 664 236 470 274 302 282 Z"/>
-              <clipPath id="bladeClip"><use href="#bladePath"/></clipPath>
-            </defs>
-
-            <!-- след от замаха -->
-            <g class="katana__trail" fill="none" stroke="#ffffff" stroke-linecap="round">
-              <path d="M250 330 C 460 300 690 230 880 120" stroke-width="26" opacity=".35"/>
-              <path d="M250 352 C 470 326 700 258 880 152" stroke-width="12" opacity=".25"/>
-            </g>
-
-            <!-- дуга разреза -->
-            <path class="katana__arc" d="M120 400 C 360 372 640 286 884 96"
-                  fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0"/>
-
-            <g class="katana__body">
-              <!-- клинок -->
-              <use href="#bladePath" fill="url(#steel)"/>
-              <!-- хамон: волнистая линия закалки -->
-              <g clip-path="url(#bladeClip)">
-                <path d="M300 268 q 60 -14 120 -18 t 120 -14 q 60 -6 120 -22 t 120 -30"
-                      fill="none" stroke="url(#hamon)" stroke-width="7"/>
-                <!-- блик, пробегающий по клинку -->
-                <rect class="katana__gleam" x="280" y="100" width="150" height="200" fill="url(#shine)"/>
-              </g>
-              <!-- цуба -->
-              <ellipse cx="292" cy="266" rx="15" ry="34" fill="#c9a24a"/>
-              <ellipse cx="292" cy="266" rx="7" ry="22" fill="#a8842f"/>
-              <!-- рукоять -->
-              <path d="M286 244 L 286 288 L 170 318 L 164 268 Z" fill="#4a2c32"/>
-              <g stroke="#f2d9df" stroke-width="3" opacity=".55">
-                <path d="M278 246 l 6 40 M262 250 l 6 40 M246 254 l 6 40 M230 258 l 6 40 M214 262 l 6 40 M198 266 l 6 40 M182 270 l 6 40"/>
-              </g>
-              <circle cx="168" cy="292" r="9" fill="#c9a24a"/>
-            </g>
-          </svg>
-        </div>
-
-        <!-- клавиатура: настоящий 3D-объект, крутится мышкой -->
-        <div class="kbd-stage" id="kbdStage" tabindex="0" role="img"
-             aria-label="Трёхмерная модель клавиатуры SAKURA. Потяните мышкой или используйте стрелки, чтобы повернуть.">
-          <div class="kbd-shadow" aria-hidden="true"></div>
-          <div class="kbd-spin" id="kbdSpin"><div id="kbdMount"></div></div>
-          <span class="kbd-hint">Потяни, чтобы покрутить · ↔ стрелки</span>
-        </div>
-      </div>
-
-      <div class="poster__copy" id="posterCopy">
-        <div class="copy">
-          <div class="copy__keys"><span>Bloom</span><span>Type</span><span>Return</span></div>
-          <h2>Varmilo Sakura | 咲くキーボード</h2>
-          <p>Розовый корпус, белые PBT-колпачки с dye-sub-легендами и пробел с рисунком: гора Фудзи, тории и лепестки. Восемьдесят семь клавиш формата TKL, Cherry MX или фирменные электростатические Varmilo EC Sakura V2.</p>
-          <p class="copy__sub">Печатай, пока цветёт. 散るまで、打っていて。</p>
-          <div class="copy__foot"><span>Varmilo · 阿米洛</span><span>Vol. 01</span><span>03.26 2026</span></div>
-        </div>
-      </div>
-    </article>
+  <div class="cut" id="heroCut">
+    <div class="hero__title" data-fit-title>
+      <span class="hero__line" data-title="VARMILO">VARMILO</span>
+      <span class="hero__line" data-title="SAKURA" data-delay="240">SAKURA</span>
+    </div>
   </div>
-</section>
 
-<!-- ============ ИСТОРИЯ ============ -->
-<section class="section section--paper reveal" id="story">
+  <p class="hero__about">
+    Сайт про одну клавиатуру — <b>Varmilo Sakura VA87M</b>: что это за тема,
+    из чего она собрана, чем отличаются свитчи и как она выглядит со всех сторон.
+  </p>
+
+  <div class="hero__meta">
+    <span>87 клавиш · TKL</span>
+    <span>PBT dye-sub</span>
+    <span>Cherry MX / Varmilo EC</span>
+    <span>356 × 134 × 33 мм</span>
+  </div>
+
+  <div class="hero__actions">
+    <a class="btn" href="keyboard-3d.html">Рассмотреть в 3D</a>
+    <a class="btn btn--ghost" href="#about">Что это за клавиатура</a>
+  </div>
+
+  <p class="hero__scroll"><i></i> Листай вниз</p>
+</main>
+
+<!-- ============ О КЛАВИАТУРЕ ============ -->
+<section class="section reveal" id="about">
   <div class="wrap">
-    <p class="eyebrow">Varmilo · 阿米洛 · с 2011 года</p>
-    <h2 class="h2">Что это за клавиатура</h2>
-    <p class="lead">Sakura — самая известная тема китайского производителя Varmilo: белые и розовые PBT-колпачки, розовый корпус и рисунок цветущей вишни на пробеле. Тема живёт больше десяти лет и выходила почти во всех корпусах компании: TKL VA87M на 87 клавиш, полноразмерный VA108M на 108, компактный 65% Miya Pro Sakura, сделанный вместе с Ducky, и более свежие ревизии Sakura R2.</p>
+    <p class="eyebrow" data-stagger>Varmilo · 阿米洛 · с 2011 года</p>
+    <h2 class="h2" data-stagger>Что это за клавиатура</h2>
+    <p class="lead" data-stagger>Sakura — самая известная тема китайского производителя Varmilo: белые и розовые PBT-колпачки, розовый корпус и рисунок цветущей вишни на пробеле. Тема живёт больше десяти лет и выходила почти во всех корпусах компании: TKL VA87M на 87 клавиш, полноразмерный VA108M, компактный 65% Miya Pro Sakura, сделанный вместе с Ducky, и свежие ревизии Sakura R2.</p>
 
     <div class="grid grid--3">
-      <article class="card"><span class="card__jp">桜</span><div class="card__no">01</div><h3>Тема, а не модель</h3><p>«Sakura» — раскраска. Один и тот же набор колпачков и корпус ставят на разные платы, поэтому под именем Sakura продаются и TKL, и фулсайз, и 65%.</p></article>
-      <article class="card"><span class="card__jp">印</span><div class="card__no">02</div><h3>Dye-sublimation</h3><p>Колпачки PBT толщиной 1,3–1,4 мм, легенды впечатаны краской в пластик, а не нанесены сверху. Такие надписи не стираются и не липнут.</p></article>
-      <article class="card"><span class="card__jp">静</span><div class="card__no">03</div><h3>Два мира свитчей</h3><p>Классика — Cherry MX Red, Brown, Blue и Silent Red. Альтернатива — фирменные электростатические Varmilo EC, где контакта деталей нет вовсе.</p></article>
+      <article class="card" data-stagger><span class="card__jp">桜</span><div class="card__no">01</div><h3>Тема, а не модель</h3><p>«Sakura» — раскраска. Один и тот же набор колпачков ставят на разные платы, поэтому под именем Sakura продаются и TKL, и фулсайз, и 65%.</p></article>
+      <article class="card" data-stagger><span class="card__jp">印</span><div class="card__no">02</div><h3>Dye-sublimation</h3><p>Колпачки PBT толщиной 1,3–1,4 мм, легенды впечатаны краской в пластик, а не нанесены сверху. Такие надписи не стираются и не липнут.</p></article>
+      <article class="card" data-stagger><span class="card__jp">静</span><div class="card__no">03</div><h3>Два мира свитчей</h3><p>Классика — Cherry MX Red, Brown, Blue и Silent Red. Альтернатива — фирменные электростатические Varmilo EC, где контакта деталей нет вовсе.</p></article>
     </div>
   </div>
 </section>
 
 <!-- ============ ДЕТАЛИ ============ -->
-<section class="section section--pink reveal" id="features">
+<section class="section reveal" id="features">
   <div class="wrap">
-    <p class="eyebrow">Детали</p>
-    <h2 class="h2">Из чего она собрана</h2>
-    <p class="lead">Ниже — то, что подтверждается спецификациями Varmilo и обзорами. Точный набор зависит от ревизии: у ранних VA87M разъём mini-USB, у поздних ревизий и Sakura R2 — USB-C и другая электроника.</p>
+    <p class="eyebrow" data-stagger>Детали</p>
+    <h2 class="h2" data-stagger>Из чего она собрана</h2>
+    <p class="lead" data-stagger>Точный набор зависит от ревизии: у ранних VA87M разъём mini-USB, у поздних и у Sakura R2 — USB-C и другая электроника.</p>
 
     <div class="grid grid--4">
-      <article class="card"><h3>87 клавиш</h3><p>Формат TKL: ряд F-клавиш и навигация есть, нумпада нет. Корпус 356 × 134 × 33 мм, около килограмма.</p></article>
-      <article class="card"><h3>PBT 1,3–1,4 мм</h3><p>Профиль Cherry, слегка шероховатая поверхность. Белые алфавиты, розовые модификаторы, розовые легенды.</p></article>
-      <article class="card"><h3>Cherry MX</h3><p>Red — линейный 45 г, Brown — тактильный 55 г, Blue — кликающий, Silent Red — линейный с демпфером.</p></article>
-      <article class="card"><h3>Varmilo EC Sakura V2</h3><p>Электростатика: ход 4 мм, срабатывание на 2 мм, усилие 45 г, до упора ~60 г. Контактов нет — ресурс практически не ограничен.</p></article>
-      <article class="card"><h3>NKRO</h3><p>Полный N-key rollover по USB: плата читает любое количество одновременно нажатых клавиш.</p></article>
-      <article class="card"><h3>Съёмный кабель</h3><p>Кабель отстёгивается и прячется в канавку под днищем — клавиатуру удобно возить с собой.</p></article>
-      <article class="card"><h3>Розовая подсветка</h3><p>Часть SKU идёт с розовым LED-бэклайтом, часть — вовсе без подсветки: Varmilo продаёт обе версии одной темы.</p></article>
-      <article class="card"><h3>Рисунок на колпачках</h3><p>Пробел, Esc и модификаторы уходят под иллюстрацию: сакура, тории, гора Фудзи. Это часть набора, а не наклейки.</p></article>
+      <article class="card" data-stagger><h3>87 клавиш</h3><p>Формат TKL: ряд F-клавиш и навигация есть, нумпада нет. Корпус 356 × 134 × 33 мм, около килограмма.</p></article>
+      <article class="card" data-stagger><h3>PBT 1,3–1,4 мм</h3><p>Профиль Cherry, слегка шероховатая поверхность. Белые алфавиты, розовые модификаторы, розовые легенды.</p></article>
+      <article class="card" data-stagger><h3>Cherry MX</h3><p>Red — линейный 45 г, Brown — тактильный 55 г, Blue — кликающий, Silent Red — линейный с демпфером.</p></article>
+      <article class="card" data-stagger><h3>Varmilo EC Sakura V2</h3><p>Электростатика: ход 4 мм, срабатывание на 2 мм, усилие 45 г, до упора ~60 г. Контактов нет — ресурс почти не ограничен.</p></article>
+      <article class="card" data-stagger><h3>NKRO</h3><p>Полный N-key rollover по USB: плата читает любое количество одновременно нажатых клавиш.</p></article>
+      <article class="card" data-stagger><h3>Съёмный кабель</h3><p>Кабель отстёгивается и прячется в канавку под днищем — клавиатуру удобно возить с собой.</p></article>
+      <article class="card" data-stagger><h3>Розовая подсветка</h3><p>Часть SKU идёт с розовым LED-бэклайтом, часть — вовсе без подсветки: Varmilo продаёт обе версии одной темы.</p></article>
+      <article class="card" data-stagger><h3>Рисунок на колпачках</h3><p>Пробел, Esc и модификаторы уходят под иллюстрацию: сакура, тории, гора Фудзи. Это часть набора, а не наклейки.</p></article>
     </div>
   </div>
 </section>
 
 <!-- ============ СПЕКИ ============ -->
-<section class="section section--paper reveal" id="specs">
+<section class="section reveal" id="specs">
   <div class="wrap">
-    <p class="eyebrow">Спецификации · VA87M Sakura</p>
-    <h2 class="h2">Сухие цифры</h2>
-    <dl class="specs">
-      <div class="spec"><dt>Раскладка</dt><dd>TKL, 87 клавиш, ANSI (есть ISO-версии)</dd></div>
+    <p class="eyebrow" data-stagger>Спецификации · VA87M Sakura</p>
+    <h2 class="h2" data-stagger>Сухие цифры</h2>
+    <dl class="specs" data-stagger>
+      <div class="spec"><dt>Раскладка</dt><dd>TKL, 87 клавиш, ANSI</dd></div>
       <div class="spec"><dt>Размеры</dt><dd>356 × 134 × 33 мм</dd></div>
       <div class="spec"><dt>Вес</dt><dd>≈ 0,9–1,0 кг</dd></div>
-      <div class="spec"><dt>Колпачки</dt><dd>PBT 1,3–1,4 мм, dye-sub, профиль Cherry</dd></div>
+      <div class="spec"><dt>Колпачки</dt><dd>PBT 1,3–1,4 мм, dye-sub</dd></div>
       <div class="spec"><dt>Свитчи Cherry</dt><dd>MX Red · Brown · Blue · Silent Red</dd></div>
-      <div class="spec"><dt>Свитчи Varmilo EC</dt><dd>Sakura V2: линейные, 45 г, 2 / 4 мм</dd></div>
-      <div class="spec"><dt>Подключение</dt><dd>USB, кабель съёмный (mini-USB или USB-C — по ревизии)</dd></div>
-      <div class="spec"><dt>Rollover</dt><dd>NKRO, мультимедиа на Fn-слое</dd></div>
-      <div class="spec"><dt>Подсветка</dt><dd>розовый LED или без подсветки</dd></div>
-      <div class="spec"><dt>Цена</dt><dd>примерно $100–200 в зависимости от свитчей и ревизии</dd></div>
+      <div class="spec"><dt>Varmilo EC Sakura V2</dt><dd>линейные, 45 г, 2 / 4 мм</dd></div>
+      <div class="spec"><dt>Подключение</dt><dd>USB, кабель съёмный</dd></div>
+      <div class="spec"><dt>Цена</dt><dd>примерно $100–200</dd></div>
     </dl>
-    <p class="lead" style="margin-top:1.4rem;font-size:13px">Данные собраны из карточек продавцов и обзоров (ссылки внизу страницы). У Varmilo много ревизий одной темы, поэтому перед покупкой стоит сверять спеки конкретного лота.</p>
   </div>
 </section>
 
-<!-- ============ НОВЕЛТИ ============ -->
-<section class="section section--pink reveal" id="novelty">
+<!-- ============ КЕЙКАПЫ ============ -->
+<section class="section reveal" id="novelty">
   <div class="wrap" style="text-align:center">
-    <p class="eyebrow">Novelty keys</p>
-    <h2 class="h2">Колпачки с картинками</h2>
-    <p class="lead" style="margin:0 auto">Тории, веер, цветущая ветка, бонсай — и пробел, на котором нарисована целая сцена: Фудзи, красное солнце, тории и лепестки над водой.</p>
-    <div class="novelty">
+    <p class="eyebrow" data-stagger>Novelty keys</p>
+    <h2 class="h2" data-stagger>Колпачки с картинками</h2>
+    <p class="lead" data-stagger style="margin:0 auto">Тории, веер, цветущая ветка, бонсай — и пробел, на котором нарисована целая сцена: Фудзи, красное солнце, тории и лепестки над водой.</p>
+    <div class="novelty" data-stagger>
       <div class="novelty__cap" title="Тории">⛩️</div>
       <div class="novelty__cap" title="Веер">🪭</div>
       <div class="novelty__cap" title="Сердце">💗</div>
       <div class="novelty__cap" title="Сакура">🌸</div>
       <div class="novelty__cap novelty__cap--wide" title="Пробел с горой Фудзи">🗻</div>
     </div>
-    <p style="margin-top:2.4rem"><a class="btn" href="#model">Покрутить 3D-модель →</a></p>
   </div>
 </section>
 
 <!-- ============ ЦИТАТА ============ -->
-<section class="section section--paper reveal">
+<section class="section reveal">
   <div class="wrap">
-    <blockquote class="quote">
-      «Электростатический свитч не имеет контактной группы — изнашиваться там нечему».
-      <small>Varmilo о технологии EC</small>
-    </blockquote>
+    <blockquote class="quote" data-stagger>Печатай, пока цветёт.<small>散るまで、打っていて</small></blockquote>
+  </div>
+</section>
+
+<!-- ============ ПЕРЕХОД НА 3D ============ -->
+<section class="section reveal">
+  <div class="next" data-stagger>
+    <div>
+      <p class="eyebrow">Вторая страница</p>
+      <h2 class="h2">Рассмотреть со всех сторон</h2>
+      <p class="lead">Трёхмерная модель VA87M: покрутить, приблизить колпачки, заглянуть на пробел с Фудзи и посмотреть на профиль корпуса сбоку.</p>
+      <p style="margin-top:2rem"><a class="btn" href="keyboard-3d.html">Открыть 3D-модель →</a></p>
+    </div>
+    <div class="next__preview" aria-hidden="true">
+      <svg viewBox="0 0 320 200" role="presentation">
+        <rect width="320" height="200" fill="#ffd9e5"/>
+        <ellipse cx="160" cy="150" rx="120" ry="16" fill="#e08fa6" opacity=".5"/>
+        <rect x="52" y="96" width="216" height="40" rx="7" fill="#e88ea6"/>
+        <rect x="56" y="88" width="208" height="34" rx="6" fill="#f6b4c6"/>
+        <g fill="#fff">
+          <rect x="64" y="94" width="14" height="10" rx="2"/><rect x="82" y="94" width="14" height="10" rx="2"/>
+          <rect x="100" y="94" width="14" height="10" rx="2"/><rect x="118" y="94" width="14" height="10" rx="2"/>
+          <rect x="136" y="94" width="14" height="10" rx="2"/><rect x="154" y="94" width="14" height="10" rx="2"/>
+          <rect x="172" y="94" width="14" height="10" rx="2"/><rect x="190" y="94" width="14" height="10" rx="2"/>
+          <rect x="208" y="94" width="14" height="10" rx="2"/><rect x="226" y="94" width="14" height="10" rx="2"/>
+          <rect x="64" y="108" width="176" height="10" rx="2"/>
+        </g>
+        <path d="M0 200 L 0 74 C 60 40 110 66 160 40 C 210 14 260 44 320 24 L 320 200 Z" fill="#f7c2d2" opacity=".45"/>
+      </svg>
+    </div>
   </div>
 </section>
 
 <!-- ============ ИСТОЧНИКИ ============ -->
-<section class="section section--pink reveal" id="sources">
+<section class="section reveal" id="sources">
   <div class="wrap">
-    <p class="eyebrow">Источники</p>
-    <h2 class="h2">Откуда цифры</h2>
+    <p class="eyebrow" data-stagger>Источники</p>
+    <h2 class="h2" data-stagger>Откуда цифры</h2>
     <div class="grid grid--3">
-      <article class="card"><h3>Varmilo</h3><p><a href="https://varmilo.com/pages/switches-parameter" target="_blank" rel="noopener">Параметры свитчей</a> и <a href="https://varmilo.com/blogs/switches/varmilo-ec-switches-better-than-the-rest" target="_blank" rel="noopener">как устроены EC</a> — официальный сайт производителя.</p></article>
-      <article class="card"><h3>Обзоры</h3><p><a href="https://www.rtings.com/keyboard/reviews/varmilo/va87m" target="_blank" rel="noopener">RTINGS о VA87M</a>, <a href="https://www.tomshardware.com/reviews/varmilo-ma108m-moonlight" target="_blank" rel="noopener">Tom’s Hardware про EC Sakura V2</a>, <a href="https://switchandclick.com/varmilo-va87m-review/" target="_blank" rel="noopener">Switch and Click</a>.</p></article>
-      <article class="card"><h3>Магазины</h3><p>Карточки <a href="https://www.newegg.com/pink-white-varmilo-sakura-cherry-mx-red/p/32N-00A4-000X4" target="_blank" rel="noopener">Newegg</a> и <a href="https://varmilo.com/products/sakura-r2-v3" target="_blank" rel="noopener">Sakura R2</a> — габариты, комплект и цены.</p></article>
+      <article class="card" data-stagger><h3>Varmilo</h3><p><a href="https://varmilo.com/pages/switches-parameter" target="_blank" rel="noopener">Параметры свитчей</a> и <a href="https://varmilo.com/blogs/switches/varmilo-ec-switches-better-than-the-rest" target="_blank" rel="noopener">как устроены EC</a>.</p></article>
+      <article class="card" data-stagger><h3>Обзоры</h3><p><a href="https://www.rtings.com/keyboard/reviews/varmilo/va87m" target="_blank" rel="noopener">RTINGS</a>, <a href="https://www.tomshardware.com/reviews/varmilo-ma108m-moonlight" target="_blank" rel="noopener">Tom’s Hardware</a>, <a href="https://switchandclick.com/varmilo-va87m-review/" target="_blank" rel="noopener">Switch and Click</a>.</p></article>
+      <article class="card" data-stagger><h3>Магазины</h3><p><a href="https://www.newegg.com/pink-white-varmilo-sakura-cherry-mx-red/p/32N-00A4-000X4" target="_blank" rel="noopener">Newegg</a> и <a href="https://varmilo.com/products/sakura-r2-v3" target="_blank" rel="noopener">Sakura R2</a>.</p></article>
     </div>
-    <p class="lead" style="margin-top:2rem;font-size:13px">Сайт неофициальный: сделан как витрина клавиатуры, Varmilo к нему отношения не имеет. Названия и товарные знаки принадлежат правообладателям.</p>
-  </div>
-</section>
-
-<!-- ============ 3D-МОДЕЛЬ ============ -->
-<section class="section section--paper section--model reveal" id="model">
-  <div class="wrap">
-    <p class="eyebrow">3D · собрано по размерам VA87M</p>
-    <h2 class="h2">Покрути её сам</h2>
-    <p class="lead">Модель построена из настоящей раскладки ANSI на 87 клавиш и габаритов корпуса 356 × 134 × 33 мм: колпачки с сужением кверху, шаг 19,05 мм, пробел 6,25u с рисунком. Тяни мышкой, крути колесом, переключай виды.</p>
-<div class="viewer">
-  <div class="viewer__stage">
-    <div id="scene3d" class="viewer__canvas" role="img"
-         aria-label="Трёхмерная модель клавиатуры Varmilo Sakura VA87M. Потяните мышкой, чтобы повернуть, колесом — приблизить."></div>
-    <p class="viewer__hint">Потяни — повернуть · колесо — приблизить · стрелки с клавиатуры</p>
-    <noscript><p class="viewer__hint">Для 3D-модели нужен JavaScript.</p></noscript>
-  </div>
-
-  <aside class="viewer__panel">
-    <h3 class="h2">Varmilo Sakura VA87M</h3>
-
-    <div class="viewer__views">
-      <button type="button" data-view="hero" class="chip is-on">Три четверти</button>
-      <button type="button" data-view="top" class="chip">Сверху</button>
-      <button type="button" data-view="side" class="chip">Сбоку</button>
-      <button type="button" data-view="macro" class="chip">Макро</button>
-      <button type="button" id="spinToggle" class="chip">Остановить вращение</button>
-    </div>
-
-    <dl class="specs specs--compact">
-      <div class="spec"><dt>Формат</dt><dd>TKL, 87 клавиш</dd></div>
-      <div class="spec"><dt>Корпус</dt><dd>356 × 134 × 33 мм</dd></div>
-      <div class="spec"><dt>Шаг клавиш</dt><dd>19,05 мм</dd></div>
-      <div class="spec"><dt>Колпачки</dt><dd>PBT 1,3–1,4 мм, dye-sub</dd></div>
-      <div class="spec"><dt>Свитчи</dt><dd>Cherry MX или Varmilo EC Sakura V2</dd></div>
-      <div class="spec"><dt>EC Sakura V2</dt><dd>линейный, 45 г, 2 / 4 мм</dd></div>
-    </dl>
-
-    <p class="viewer__note">Это художественная реконструкция, а не CAD-файл производителя: пропорции взяты из опубликованных размеров, рисунок пробела нарисован заново.</p>
-    <a class="btn" href="#story">← К обзору</a>
-  </aside>
-</div>
+    <p class="lead" data-stagger style="margin-top:2rem;font-size:15px">Сайт неофициальный, сделан как витрина клавиатуры. Varmilo к нему отношения не имеет, товарные знаки принадлежат правообладателям.</p>
   </div>
 </section>
 
 <footer class="foot">
   <span>Varmilo Sakura · 桜</span>
-  <span>Vol. 01 — 03.26 2026</span>
-  <a href="#model">3D-модель →</a>
+  <span>Неофициальный фан-сайт</span>
+  <a href="keyboard-3d.html">3D-модель →</a>
 </footer>
 
 <script src="assets/js/vendor/three.min.js"></script>
 <script src="assets/js/sakura.js" defer></script>
-<script src="assets/js/keyboard3d.js" defer></script>
+<script src="assets/js/katana3d.js" defer></script>
 </body>
 </html>

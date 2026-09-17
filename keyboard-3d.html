@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Varmilo Sakura VA87M — 3D-модель, которую можно покрутить</title>
+<meta name="description" content="Интерактивная 3D-модель клавиатуры Varmilo Sakura VA87M: поверните мышкой, приблизьте колпачки, рассмотрите пробел с горой Фудзи и профиль корпуса сбоку.">
+<meta name="theme-color" content="#ffe7ef">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&family=Saira+Extra+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/sakura.css">
+</head>
+<body>
+
+<!-- ============ ФОН: горная гряда ============ -->
+<div class="bg" aria-hidden="true">
+  <div class="bg__sun" data-parallax="0.1"></div>
+  <div class="bg__scene bg__scene--ridges" data-parallax="0.04">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" role="presentation">
+      <defs>
+        <linearGradient id="r4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#cdd7ea"/><stop offset="100%" stop-color="#e8cfdc"/></linearGradient>
+        <linearGradient id="r3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#bcc8e0"/><stop offset="100%" stop-color="#e2c1d2"/></linearGradient>
+        <linearGradient id="r2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e3a9c0"/><stop offset="100%" stop-color="#eec2d2"/></linearGradient>
+        <linearGradient id="r1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d98ea8"/><stop offset="100%" stop-color="#e9adc2"/></linearGradient>
+      </defs>
+      <!-- дальняя гряда -->
+      <path d="M0 560 L 190 430 L 300 500 L 430 380 L 560 500 L 700 400 L 860 520 L 1010 410 L 1180 520 L 1330 430 L 1460 520 L 1600 450 L 1600 900 L 0 900 Z" fill="url(#r4)" opacity=".55"/>
+      <!-- вершина в снегу -->
+      <path d="M470 700 L 780 330 C 806 298 842 298 868 330 L 1180 700 Z" fill="url(#r3)"/>
+      <path d="M716 416 L 782 340 C 810 306 840 306 868 340 L 934 416 C 902 402 884 430 856 418 C 828 406 812 434 782 420 C 752 406 738 430 716 416 Z" fill="#fff" opacity=".95"/>
+      <!-- средняя гряда -->
+      <path d="M0 660 L 170 560 L 300 640 L 470 540 L 620 660 L 760 590 L 900 690 L 1060 600 L 1220 690 L 1380 600 L 1600 680 L 1600 900 L 0 900 Z" fill="url(#r2)" opacity=".8"/>
+      <!-- ближняя гряда и дымка -->
+      <path d="M0 790 L 220 700 L 420 780 L 640 700 L 880 800 L 1120 720 L 1360 800 L 1600 740 L 1600 900 L 0 900 Z" fill="url(#r1)" opacity=".85"/>
+      <g fill="#fff" opacity=".35">
+        <ellipse cx="380" cy="660" rx="260" ry="26"/>
+        <ellipse cx="1080" cy="700" rx="320" ry="22"/>
+      </g>
+    </svg>
+  </div>
+  <div class="bg__mist"></div>
+</div>
+<canvas id="petals" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="nav__brand" href="sakura.html">← Varmilo Sakura / 桜</a>
+  <nav class="nav__links">
+    <a href="sakura.html#about">О клавиатуре</a>
+    <a href="sakura.html#specs">Спеки</a>
+    <a class="nav__cta" href="#viewer">К модели ↓</a>
+  </nav>
+</header>
+
+<!-- ============ ПРЕВЬЮ ============ -->
+<section class="preview">
+  <p class="eyebrow">Страница вторая · интерактив</p>
+  <h1 class="preview__title">Рассмотреть<br>со всех сторон</h1>
+  <p class="preview__lead">Трёхмерная модель <b>Varmilo Sakura VA87M</b>, собранная по реальным размерам: 87 клавиш, шаг 19,05 мм, корпус 356 × 134 × 33 мм. Крутите, приближайте, смотрите на профиль колпачков и рисунок на пробеле.</p>
+  <div class="preview__how">
+    <span>Тяни — повернуть</span>
+    <span>Колесо — приблизить</span>
+    <span>Стрелки — точная настройка</span>
+  </div>
+  <p style="margin-top:2.4rem"><a class="btn" href="#viewer">Открыть модель ↓</a></p>
+</section>
+
+<!-- ============ МОДЕЛЬ ============ -->
+<section class="section reveal" id="viewer">
+  <div class="wrap">
+    <div class="viewer">
+      <div class="viewer__stage" data-stagger>
+        <div id="scene3d" class="viewer__canvas" role="img"
+             aria-label="Трёхмерная модель клавиатуры Varmilo Sakura VA87M. Потяните мышкой, чтобы повернуть, колесом — приблизить."></div>
+        <p class="viewer__hint">Потяни — повернуть · колесо — приблизить</p>
+        <noscript><p class="viewer__hint">Для 3D-модели нужен JavaScript.</p></noscript>
+      </div>
+
+      <aside class="viewer__panel" data-stagger>
+        <h2>Varmilo Sakura VA87M</h2>
+        <div class="viewer__views">
+          <button type="button" data-view="hero" class="chip is-on">Три четверти</button>
+          <button type="button" data-view="top" class="chip">Сверху</button>
+          <button type="button" data-view="side" class="chip">Сбоку</button>
+          <button type="button" data-view="macro" class="chip">Макро</button>
+          <button type="button" id="spinToggle" class="chip">Остановить вращение</button>
+        </div>
+
+        <dl class="specs specs--compact">
+          <div class="spec"><dt>Формат</dt><dd>TKL, 87 клавиш</dd></div>
+          <div class="spec"><dt>Корпус</dt><dd>356 × 134 × 33 мм</dd></div>
+          <div class="spec"><dt>Шаг клавиш</dt><dd>19,05 мм</dd></div>
+          <div class="spec"><dt>Колпачки</dt><dd>PBT 1,3–1,4 мм, dye-sub</dd></div>
+          <div class="spec"><dt>Свитчи</dt><dd>Cherry MX или Varmilo EC Sakura V2</dd></div>
+        </dl>
+
+        <p class="viewer__note">Художественная реконструкция, а не CAD-файл производителя: пропорции взяты из опубликованных размеров, рисунок пробела нарисован заново.</p>
+        <a class="btn btn--ghost" href="sakura.html">← Вернуться к обзору</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>Varmilo Sakura · 桜</span>
+  <span>Неофициальный фан-сайт</span>
+  <a href="sakura.html">← К обзору</a>
+</footer>
+
+<script src="assets/js/vendor/three.min.js"></script>
+<script src="assets/js/sakura.js" defer></script>
+<script src="assets/js/keyboard3d.js" defer></script>
+</body>
+</html>
