@@ -394,7 +394,18 @@
   window.addEventListener("resize", resize);
   resize();
 
+  // кадры считаются только пока модель видна — иначе она зря греет ноутбук
+  var visible = true;
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+    }, { rootMargin: "120px" });
+    io.observe(host);
+  }
+
   function frame() {
+    window.requestAnimationFrame(frame);
+    if (!visible) return;
     if (autoSpin && !dragging) goal.theta -= 0.0022;
     applyCamera();
     if (petals) {
@@ -409,7 +420,6 @@
       pos.needsUpdate = true;
     }
     renderer.render(scene, camera);
-    window.requestAnimationFrame(frame);
   }
   host.classList.add("is-ready");
   frame();

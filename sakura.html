@@ -28,7 +28,7 @@
     <a href="#features">Детали</a>
     <a href="#specs">Спеки</a>
     <a href="#novelty">Кейкапы</a>
-    <a href="keyboard-3d.html">3D-модель</a>
+    <a href="#model">3D-модель</a>
   </nav>
 </header>
 
@@ -269,7 +269,7 @@
       <div class="novelty__cap" title="Сакура">🌸</div>
       <div class="novelty__cap novelty__cap--wide" title="Пробел с горой Фудзи">🗻</div>
     </div>
-    <p style="margin-top:2.4rem"><a class="btn" href="keyboard-3d.html">Покрутить 3D-модель →</a></p>
+    <p style="margin-top:2.4rem"><a class="btn" href="#model">Покрутить 3D-модель →</a></p>
   </div>
 </section>
 
@@ -297,12 +297,55 @@
   </div>
 </section>
 
+<!-- ============ 3D-МОДЕЛЬ ============ -->
+<section class="section section--paper section--model reveal" id="model">
+  <div class="wrap">
+    <p class="eyebrow">3D · собрано по размерам VA87M</p>
+    <h2 class="h2">Покрути её сам</h2>
+    <p class="lead">Модель построена из настоящей раскладки ANSI на 87 клавиш и габаритов корпуса 356 × 134 × 33 мм: колпачки с сужением кверху, шаг 19,05 мм, пробел 6,25u с рисунком. Тяни мышкой, крути колесом, переключай виды.</p>
+<div class="viewer">
+  <div class="viewer__stage">
+    <div id="scene3d" class="viewer__canvas" role="img"
+         aria-label="Трёхмерная модель клавиатуры Varmilo Sakura VA87M. Потяните мышкой, чтобы повернуть, колесом — приблизить."></div>
+    <p class="viewer__hint">Потяни — повернуть · колесо — приблизить · стрелки с клавиатуры</p>
+    <noscript><p class="viewer__hint">Для 3D-модели нужен JavaScript.</p></noscript>
+  </div>
+
+  <aside class="viewer__panel">
+    <h3 class="h2">Varmilo Sakura VA87M</h3>
+
+    <div class="viewer__views">
+      <button type="button" data-view="hero" class="chip is-on">Три четверти</button>
+      <button type="button" data-view="top" class="chip">Сверху</button>
+      <button type="button" data-view="side" class="chip">Сбоку</button>
+      <button type="button" data-view="macro" class="chip">Макро</button>
+      <button type="button" id="spinToggle" class="chip">Остановить вращение</button>
+    </div>
+
+    <dl class="specs specs--compact">
+      <div class="spec"><dt>Формат</dt><dd>TKL, 87 клавиш</dd></div>
+      <div class="spec"><dt>Корпус</dt><dd>356 × 134 × 33 мм</dd></div>
+      <div class="spec"><dt>Шаг клавиш</dt><dd>19,05 мм</dd></div>
+      <div class="spec"><dt>Колпачки</dt><dd>PBT 1,3–1,4 мм, dye-sub</dd></div>
+      <div class="spec"><dt>Свитчи</dt><dd>Cherry MX или Varmilo EC Sakura V2</dd></div>
+      <div class="spec"><dt>EC Sakura V2</dt><dd>линейный, 45 г, 2 / 4 мм</dd></div>
+    </dl>
+
+    <p class="viewer__note">Это художественная реконструкция, а не CAD-файл производителя: пропорции взяты из опубликованных размеров, рисунок пробела нарисован заново.</p>
+    <a class="btn" href="#story">← К обзору</a>
+  </aside>
+</div>
+  </div>
+</section>
+
 <footer class="foot">
   <span>Varmilo Sakura · 桜</span>
   <span>Vol. 01 — 03.26 2026</span>
-  <a href="keyboard-3d.html">3D-модель →</a>
+  <a href="#model">3D-модель →</a>
 </footer>
 
+<script src="assets/js/vendor/three.min.js"></script>
 <script src="assets/js/sakura.js" defer></script>
+<script src="assets/js/keyboard3d.js" defer></script>
 </body>
 </html>
