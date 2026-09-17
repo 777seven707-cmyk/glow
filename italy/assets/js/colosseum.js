@@ -48,28 +48,30 @@
     return d + 'Z';
   }
 
-  function buildFacade(svg) {
+  var facadeSeq = 0;
+
+  function buildFacade(svg, uid) {
     var defs = el('defs', null, svg);
 
-    var sky = el('linearGradient', { id: 'cs-sky', gradientUnits: 'userSpaceOnUse', x1: 0, y1: -380, x2: 0, y2: 560 }, defs);
+    var sky = el('linearGradient', { id: 'cs-sky-' + uid, gradientUnits: 'userSpaceOnUse', x1: 0, y1: -380, x2: 0, y2: 560 }, defs);
     el('stop', { offset: '0', 'stop-color': 'var(--sky-1)' }, sky);
     el('stop', { offset: '0.55', 'stop-color': 'var(--sky-2)' }, sky);
     el('stop', { offset: '1', 'stop-color': 'var(--sky-3)' }, sky);
 
-    var stone = el('linearGradient', { id: 'cs-stone', x1: '0', y1: '0', x2: '0', y2: '1' }, defs);
+    var stone = el('linearGradient', { id: 'cs-stone-' + uid, x1: '0', y1: '0', x2: '0', y2: '1' }, defs);
     el('stop', { offset: '0', 'stop-color': 'var(--stone-hi)' }, stone);
     el('stop', { offset: '1', 'stop-color': 'var(--stone-lo)' }, stone);
 
-    var sunGlow = el('radialGradient', { id: 'cs-sunglow' }, defs);
+    var sunGlow = el('radialGradient', { id: 'cs-sunglow-' + uid }, defs);
     el('stop', { offset: '0', 'stop-color': 'var(--sun)', 'stop-opacity': '.85' }, sunGlow);
     el('stop', { offset: '1', 'stop-color': 'var(--sun)', 'stop-opacity': '0' }, sunGlow);
 
-    var archGrad = el('linearGradient', { id: 'cs-arch', x1: '0', y1: '0', x2: '0', y2: '1' }, defs);
+    var archGrad = el('linearGradient', { id: 'cs-arch-' + uid, x1: '0', y1: '0', x2: '0', y2: '1' }, defs);
     el('stop', { offset: '0', 'stop-color': 'var(--arch-lo)' }, archGrad);
     el('stop', { offset: '1', 'stop-color': 'var(--arch-hi)' }, archGrad);
 
     /* небо и светило */
-    el('rect', { x: -900, y: -2400, width: W + 1800, height: H + 2400, fill: 'url(#cs-sky)' }, svg);
+    el('rect', { x: -900, y: -2400, width: W + 1800, height: H + 2400, fill: 'url(#cs-sky-' + uid + ')' }, svg);
 
     var stars = el('g', { class: 'cs-stars' }, svg);
     var seed = 7;
@@ -79,7 +81,7 @@
     }
 
     var lightG = el('g', { class: 'cs-light' }, svg);
-    el('circle', { class: 'cs-halo', cx: 0, cy: 0, r: 190, fill: 'url(#cs-sunglow)' }, lightG);
+    el('circle', { class: 'cs-halo', cx: 0, cy: 0, r: 190, fill: 'url(#cs-sunglow-' + uid + ')' }, lightG);
     el('circle', { class: 'cs-disc', cx: 0, cy: 0, r: 34, fill: 'var(--sun)' }, lightG);
 
     /* дальние холмы */
@@ -124,7 +126,7 @@
       el('path', {
         class: 'cs-band cs-band--' + (t + 1),
         d: ringPath(tiers[t].to, tiers[t].from - (t === 0 ? 4 : 0), 0, tierEnd[t]),
-        fill: 'url(#cs-stone)'
+        fill: 'url(#cs-stone-' + uid + ')'
       }, outer);
       el('path', { class: 'cs-cornice', d: ringPath(tiers[t].to, tiers[t].to - 7, 0, tierEnd[t]), fill: 'var(--stone-edge)' }, outer);
     }
@@ -204,10 +206,11 @@
     };
   }
 
-  function initHero() {
-    var host = document.getElementById('csHero');
+  function initFacade(host, opts) {
     if (!host) return;
+    opts = opts || {};
 
+    var uid = 'f' + (++facadeSeq);
     var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMax slice', class: 'cs-svg', 'aria-hidden': 'true', focusable: 'false' }, host);
     /* на вертикальном экране здание не обрезаем, а вписываем целиком */
     var portrait = window.matchMedia('(max-aspect-ratio: 1/1)');
@@ -215,12 +218,13 @@
     fitMode();
     if (portrait.addEventListener) portrait.addEventListener('change', fitMode);
     else if (portrait.addListener) portrait.addListener(fitMode);
-    var built = buildFacade(svg);
+    var built = buildFacade(svg, uid);
 
     var disc = svg.querySelector('.cs-disc'), halo = svg.querySelector('.cs-halo');
-    var slider = document.getElementById('csTime');
-    var label = document.getElementById('csTimeLabel');
-    var time = 19.4, auto = !reduced, lastTs = 0;
+    var slider = opts.slider ? document.querySelector(opts.slider) : null;
+    var label = opts.label ? document.querySelector(opts.label) : null;
+    var time = typeof opts.time === 'number' ? opts.time : 9.2;
+    var auto = !reduced && opts.auto === true, lastTs = 0;
 
     function paint(tm) {
       var s = skyAt(tm);
@@ -237,8 +241,8 @@
       host.style.setProperty('--arch-deep', rgb(mix(mix(s.stoneLo, [8, 7, 10], .72), [92, 52, 18], s.night * .55)));
       host.style.setProperty('--arch-lo', rgb(mix(s.stoneLo, [8, 7, 10], .6)));
       host.style.setProperty('--arch-hi', rgb(mix(s.stoneLo, [8, 7, 10], .85)));
-      host.style.setProperty('--hill-far', rgb(mix(s.b, [26, 22, 30], .72)));
-      host.style.setProperty('--hill-near', rgb(mix(s.c, [14, 12, 16], .84)));
+      host.style.setProperty('--hill-far', rgb(mix(s.b, [52, 47, 58], .58)));
+      host.style.setProperty('--hill-near', rgb(mix(s.c, [34, 30, 38], .62)));
       host.style.setProperty('--bird', rgb(mix(s.stoneLo, [10, 10, 12], .5)));
       host.style.setProperty('--night', s.night.toFixed(3));
 
@@ -264,8 +268,8 @@
       slider.addEventListener('input', function () { auto = false; time = parseFloat(slider.value); paint(time); });
     }
 
-    /* сутки за минуту, пока пользователь не взялся за ползунок */
-    if (!reduced) {
+    /* сутки примерно за минуту, пока пользователь не взялся за ползунок */
+    if (!reduced && opts.auto === true) {
       (function loop(ts) {
         if (auto && lastTs) {
           time = (time + (ts - lastTs) / 1000 * 0.42) % 24;
@@ -317,8 +321,8 @@
     var svg = el('svg', { viewBox: '0 0 ' + VW + ' ' + VH, class: 'cut-svg', role: 'img', 'aria-label': 'Разрез Колизея: веларий, аттик, ярусы трибун, арена и подземелья' }, host);
     var defs = el('defs', null, svg);
     var g1 = el('linearGradient', { id: 'cut-stone', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
-    el('stop', { offset: 0, 'stop-color': '#c9b59a' }, g1);
-    el('stop', { offset: 1, 'stop-color': '#7d6b58' }, g1);
+    el('stop', { offset: 0, 'stop-color': '#eadfcc' }, g1);
+    el('stop', { offset: 1, 'stop-color': '#c4b096' }, g1);
 
     /* веларий */
     var vel = el('g', { class: 'cut-layer', 'data-layer': 'velarium' }, svg);
@@ -450,7 +454,13 @@
     show('arena');
   }
 
-  function boot() { initHero(); initSection(); }
+  function boot() {
+    /* запасной вид в медиа-карточке: утренний свет, без автосмены */
+    initFacade(document.getElementById('csHero'), { time: 9.2, auto: false });
+    /* интерактивный блок в секции про Колизей */
+    initFacade(document.getElementById('csDay'), { time: 8.4, auto: true, slider: '#csTime', label: '#csTimeLabel' });
+    initSection();
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();

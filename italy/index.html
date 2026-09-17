@@ -2,11 +2,10 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Италия — вся база о стране: регионы, история, Колизей, кухня</title>
 <meta name="description" content="Интерактивный путеводитель по Италии: карта 20 регионов, лента истории от Рима до наших дней, разрез Колизея, кухня, разговорник с озвучкой, цифры и викторина.">
-<meta name="theme-color" content="#0a0a0b">
-<meta name="author" content="ITALIA">
+<meta name="theme-color" content="#ffffff">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Италия — вся база о стране">
@@ -16,104 +15,116 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
 
-<!-- ============ ПРЕЛОАДЕР ============ -->
-<div class="loader" id="loader" aria-hidden="true">
-  <div class="loader__inner">
-    <div class="loader__word"><span>I</span><span>T</span><span>A</span><span>L</span><span>I</span><span>A</span></div>
-    <div class="loader__tri"><i></i><i></i><i></i></div>
-    <div class="loader__bar"><i id="loaderBar"></i></div>
-    <div class="loader__num"><span id="loaderNum">0</span>%</div>
-  </div>
-</div>
-
 <noscript>
-  <p style="padding:16px var(--pad);background:#c4603f;color:#fff;font-size:14px;margin:0">
-    Часть страницы — карта регионов, лента истории, разрез Колизея, разговорник и викторина — собирается скриптами.
-    Включите JavaScript, чтобы увидеть их целиком.
-  </p>
+  <p class="noscript">Карта регионов, лента истории, разрез Колизея, разговорник и викторина собираются скриптами. Включите JavaScript, чтобы увидеть их целиком.</p>
 </noscript>
 
-<div class="grid-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-<div class="grain" aria-hidden="true"></div>
-<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
-<div class="scroll-progress" aria-hidden="true"><i id="scrollBar"></i></div>
-
-<!-- ============ ШАПКА ============ -->
-<header class="header" id="header">
-  <div class="container header__in">
-    <a href="#top" class="logo" data-magnetic>
-      <span class="logo__mark" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="logo__txt">Italia</span>
-    </a>
-    <nav class="nav" aria-label="Основная навигация">
-      <a href="#country" class="nav__link"><span>Страна</span></a>
-      <a href="#regions" class="nav__link"><span>Регионы</span></a>
-      <a href="#history" class="nav__link"><span>История</span></a>
-      <a href="#colosseum" class="nav__link"><span>Колизей</span></a>
-      <a href="#food" class="nav__link"><span>Кухня</span></a>
-      <a href="#language" class="nav__link"><span>Язык</span></a>
-      <a href="#travel" class="nav__link"><span>Практика</span></a>
-    </nav>
-    <a href="#quiz" class="btn btn--sm header__cta" data-magnetic><span>Викторина</span></a>
-    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="mobileMenu"><i></i><i></i></button>
-  </div>
-</header>
-
-<div class="mmenu" id="mobileMenu" aria-hidden="true">
-  <nav class="mmenu__nav" aria-label="Мобильная навигация">
-    <a href="#country"><em>01</em> Страна</a>
-    <a href="#regions"><em>02</em> Регионы</a>
-    <a href="#history"><em>03</em> История</a>
-    <a href="#colosseum"><em>04</em> Колизей</a>
-    <a href="#cities"><em>05</em> Города</a>
-    <a href="#art"><em>06</em> Искусство</a>
-    <a href="#food"><em>07</em> Кухня</a>
-    <a href="#language"><em>08</em> Язык</a>
-  </nav>
-</div>
-
-<main id="top">
-
 <!-- ============ ПЕРВЫЙ ЭКРАН ============ -->
-<section class="hero">
-  <div class="hero__art" id="csHero" aria-hidden="true"></div>
-  <canvas id="dust" aria-hidden="true"></canvas>
+<section class="hero" id="top">
 
-  <div class="container hero__in">
-    <p class="hero__kicker"><i aria-hidden="true"></i> Repubblica Italiana · 20 регионов · 62 объекта ЮНЕСКО</p>
-    <h1 class="hero__title">
-      <span class="line"><span>Италия</span></span>
-    </h1>
-    <p class="hero__sub">Страна, где <b>2800 лет истории</b> помещаются в один день пешком: античный амфитеатр, ренессансный купол, рынок с буратой и поезд, который идёт из Рима в Милан за три часа. Ниже — вся база: от карты регионов до того, почему капучино не пьют после обеда.</p>
+  <!-- медиа идёт первым в разметке: левая колонка должна печататься поверх без z-index -->
+  <div class="hero__media anim" style="--d:0">
+    <div class="hero__fallback" id="csHero" aria-hidden="true"></div>
+    <img class="hero__photo anim" style="--d:1" data-photo="Colosseum" data-photo-var="--nature-img"
+         alt="Колизей в Риме" decoding="async">
 
-    <div class="hero__bar">
-      <div class="hero__stats">
-        <div class="hstat"><b>58,94 млн</b><span>жителей</span></div>
-        <div class="hstat"><b>302 073 км²</b><span>площадь</span></div>
-        <div class="hstat"><b>7 894</b><span>коммуны</span></div>
-        <div class="hstat"><b>+39</b><span>телефонный код</span></div>
-      </div>
-      <div class="timectl">
-        <span class="timectl__lab">Свет над Колизеем</span>
-        <input type="range" id="csTime" min="0" max="23.99" step="0.01" value="19.4" aria-label="Время суток на первом экране">
-        <span class="timectl__val" id="csTimeLabel">19:24</span>
+    <div class="marker marker--age">
+      <span class="marker__line anim" style="--d:14"></span>
+      <span class="marker__dot anim" style="--d:13"></span>
+      <span class="marker__label anim" style="--d:15">Открыт в 80 году</span>
+    </div>
+    <div class="marker marker--arena marker--right">
+      <span class="marker__line anim" style="--d:17"></span>
+      <span class="marker__dot anim" style="--d:16"></span>
+      <span class="marker__label anim" style="--d:18">Арена 86 × 54 м</span>
+    </div>
+
+    <div class="factpill anim" style="--d:19">
+      <span><b>20</b> регионов</span>
+      <span><b>62</b> объекта ЮНЕСКО</span>
+      <span><b>58,9</b> млн жителей</span>
+    </div>
+    <p class="photo-credit" data-photo-credit>Фото: Wikimedia Commons</p>
+  </div>
+
+  <div class="hero__left">
+    <nav class="nav" aria-label="Основная навигация">
+      <a class="brand" href="#top"><span class="brand__name anim" style="--d:2">Italia</span></a>
+      <ul class="nav__links">
+        <li class="anim" style="--d:4"><a href="#regions">Регионы</a></li>
+        <li class="anim" style="--d:5"><a href="#history">История</a></li>
+        <li class="anim" style="--d:6"><a href="#colosseum">Колизей</a></li>
+        <li class="anim" style="--d:7"><a href="#food">Кухня</a></li>
+      </ul>
+      <button class="burger anim" style="--d:8" id="navToggle" type="button"
+              aria-label="Открыть меню" aria-expanded="false" aria-controls="navSheet">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="hero__content">
+      <h1 class="hero__title">
+        <span class="hero__line anim" style="--d:9">Вся <span class="hl">Италия</span></span>
+        <span class="hero__line anim" style="--d:10">от Колизея до тарелки</span>
+      </h1>
+      <p class="hero__text anim" style="--d:11">Страна, где 2800 лет истории помещаются в один день пешком: античный амфитеатр, ренессансный купол, рынок с буратой и поезд, который идёт из Рима в Милан за три часа. Ниже — вся база: от карты регионов до того, почему капучино не пьют после обеда.</p>
+
+      <a class="cta" href="#country">
+        <span class="cta__label anim" style="--d:12">Смотреть страну</span>
+        <span class="cta__icon anim" style="--d:13" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+
+      <div class="factpill factpill--mobile">
+        <span class="anim" style="--d:14"><b>20</b> регионов</span>
+        <span class="anim" style="--d:15"><b>62</b> ЮНЕСКО</span>
+        <span class="anim" style="--d:16"><b>58,9</b> млн</span>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ============ ВЫЕЗЖАЮЩЕЕ МЕНЮ ============ -->
+<div class="navsheet" id="navSheet" inert>
+  <div class="navsheet__scrim" data-nav-close></div>
+  <nav class="navsheet__panel" aria-label="Меню">
+    <ul class="navsheet__list">
+      <li style="--i:0"><a class="navsheet__link" href="#country">Страна<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+      <li style="--i:1"><a class="navsheet__link" href="#regions">Регионы<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+      <li style="--i:2"><a class="navsheet__link" href="#history">История<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+      <li style="--i:3"><a class="navsheet__link" href="#colosseum">Колизей<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+      <li style="--i:4"><a class="navsheet__link" href="#cities">Города<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+      <li style="--i:5"><a class="navsheet__link" href="#art">Искусство<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+      <li style="--i:6"><a class="navsheet__link" href="#food">Кухня<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+      <li style="--i:7"><a class="navsheet__link" href="#language">Язык<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+    </ul>
+    <div class="navsheet__foot">
+      <a class="navsheet__cta" href="#quiz">Пройти викторину
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <div class="navsheet__meta">
+        <a href="#travel">Практика поездки</a>
+        <a href="#numbers">Италия в цифрах</a>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<main>
+
 <!-- ============ 01 СТРАНА ============ -->
-<section class="section section--dark" id="country">
+<section class="section" id="country">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>01 / Страна</span>
-      <h2 class="sec-title" data-reveal="wipe">Сапог в центре <em>Средиземного моря</em></h2>
+      <span class="sec-num" data-reveal>01 — Страна</span>
+      <h2 class="sec-title" data-reveal>Сапог в центре <em>Средиземного моря</em></h2>
       <p class="sec-desc" data-reveal>Италия занимает полуостров длиной 1200 км, две крупнейшие острова Средиземного моря и ещё около восьмисот мелких. От альпийских ледников до африканской широты Лампедузы — четыре климатических пояса в одной стране.</p>
     </header>
 
@@ -129,9 +140,9 @@
 
       <div data-reveal>
         <div class="flag" aria-label="Флаг Италии"><i></i><i></i><i></i></div>
-        <p class="flag-note">Il Tricolore: зелёный, белый, красный. Появился в 1797 году в Реджо-нелль-Эмилия, официально утверждён при рождении республики.</p>
+        <p class="note">Il Tricolore: зелёный, белый, красный. Появился в 1797 году в Реджо-нелль-Эмилия, официально утверждён при рождении республики.</p>
 
-        <dl class="fgrid" style="margin-top:22px">
+        <dl class="fgrid">
           <div class="fact"><dt>Столица</dt><dd><b>Рим</b>2,75 млн жителей</dd></div>
           <div class="fact"><dt>Площадь</dt><dd><b>302 073 км²</b>10-е место в Европе</dd></div>
           <div class="fact"><dt>Берег</dt><dd><b>≈7 900 км</b>два моря и четыре залива</dd></div>
@@ -147,15 +158,22 @@
         </dl>
       </div>
     </div>
+
+    <div class="gallery" data-reveal>
+      <figure class="ph ph--tall"><div class="ph__box" data-photo="Dolomites" data-photo-alt="Доломитовые Альпы"></div><figcaption>Доломиты<span data-photo-credit></span></figcaption></figure>
+      <figure class="ph"><div class="ph__box" data-photo="Amalfi Coast" data-photo-alt="Амальфитанское побережье"></div><figcaption>Амальфитанское побережье<span data-photo-credit></span></figcaption></figure>
+      <figure class="ph"><div class="ph__box" data-photo="Mount Etna" data-photo-alt="Вулкан Этна"></div><figcaption>Этна, 3403 м<span data-photo-credit></span></figcaption></figure>
+      <figure class="ph"><div class="ph__box" data-photo="Matera" data-photo-alt="Сасси-ди-Матера"></div><figcaption>Сасси-ди-Матера<span data-photo-credit></span></figcaption></figure>
+    </div>
   </div>
 </section>
 
 <!-- ============ 02 РЕГИОНЫ ============ -->
-<section class="section" id="regions">
+<section class="section section--sand" id="regions">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>02 / Регионы</span>
-      <h2 class="sec-title" data-reveal="wipe">Двадцать стран <em>в одной</em></h2>
+      <span class="sec-num" data-reveal>02 — Регионы</span>
+      <h2 class="sec-title" data-reveal>Двадцать стран <em>в одной</em></h2>
       <p class="sec-desc" data-reveal>Италия объединилась только в 1861 году, и до сих пор каждый регион — отдельная кухня, диалект и характер. Наведите курсор или коснитесь региона: карточка справа покажет столицу, цифры, блюдо и вино.</p>
     </header>
 
@@ -218,11 +236,11 @@
 </section>
 
 <!-- ============ 03 ИСТОРИЯ ============ -->
-<section class="section section--dark" id="history">
+<section class="section" id="history">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>03 / История</span>
-      <h2 class="sec-title" data-reveal="wipe">От Ромула <em>до Олимпиады</em></h2>
+      <span class="sec-num" data-reveal>03 — История</span>
+      <h2 class="sec-title" data-reveal>От Ромула <em>до Олимпиады</em></h2>
       <p class="sec-desc" data-reveal>Двадцать два поворотных момента: нураги, республика, империя, распад, морские республики, Возрождение, объединение и сегодняшний день. Лента прокручивается колесом мыши, свайпом или стрелками.</p>
     </header>
 
@@ -230,10 +248,10 @@
       <ul class="tl__track" id="tlTrack" tabindex="0" aria-label="Лента истории Италии"></ul>
       <div class="tl__foot">
         <button class="tl__btn" id="tlPrev" type="button" aria-label="Назад">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
         </button>
         <button class="tl__btn" id="tlNext" type="button" aria-label="Вперёд">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5l7 7-7 7"/></svg>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
         </button>
         <span class="tl__rail"><i id="tlBar"></i></span>
       </div>
@@ -242,13 +260,25 @@
 </section>
 
 <!-- ============ 04 КОЛИЗЕЙ ============ -->
-<section class="section" id="colosseum">
+<section class="section section--sand" id="colosseum">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>04 / Колизей</span>
-      <h2 class="sec-title" data-reveal="wipe">Флавиев амфитеатр <em>в разрезе</em></h2>
+      <span class="sec-num" data-reveal>04 — Колизей</span>
+      <h2 class="sec-title" data-reveal>Флавиев амфитеатр <em>в разрезе</em></h2>
       <p class="sec-desc" data-reveal>Самый большой амфитеатр античного мира строили восемь лет на месте осушённого озера в парке Нерона — как подарок римлянам от новой династии. Нажмите на точку на чертеже или выберите слой в списке.</p>
     </header>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__row">
+        <span>Roma</span><span>·</span><span>Roma</span><span>·</span><span>Roma</span><span>·</span>
+        <span>Roma</span><span>·</span><span>Roma</span><span>·</span><span>Roma</span><span>·</span>
+      </div>
+    </div>
+
+    <div class="gallery gallery--two" data-reveal>
+      <figure class="ph"><div class="ph__box ph__box--wide" data-photo="Roman Forum" data-photo-alt="Римский форум"></div><figcaption>Римский форум рядом с амфитеатром<span data-photo-credit></span></figcaption></figure>
+      <figure class="ph"><div class="ph__box ph__box--wide" data-photo="Arch of Constantine" data-photo-alt="Арка Константина"></div><figcaption>Арка Константина, 315 год<span data-photo-credit></span></figcaption></figure>
+    </div>
 
     <div class="cut-layout">
       <div class="cut-wrap" data-reveal><div id="csCut"></div></div>
@@ -269,6 +299,15 @@
       <div><b>~15 млн</b><span>посетителей в год сегодня</span></div>
     </div>
 
+    <div class="daylight" data-reveal>
+      <div class="daylight__stage" id="csDay" aria-hidden="true"></div>
+      <div class="daylight__bar">
+        <span class="daylight__lab">Свет над Колизеем</span>
+        <input type="range" id="csTime" min="0" max="23.99" step="0.01" value="8.4" aria-label="Время суток на схеме Колизея">
+        <span class="daylight__val" id="csTimeLabel">08:24</span>
+      </div>
+    </div>
+
     <div class="split" style="margin-top:clamp(28px,4vw,56px)">
       <div class="prose" data-reveal>
         <p><b>Откуда имя.</b> Римляне звали здание Amphitheatrum Flavium. «Колизей» пришло позже — от Colossus Neronis, тридцатиметровой бронзовой статуи Нерона, которая стояла рядом.</p>
@@ -287,25 +326,59 @@
 </section>
 
 <!-- ============ 05 ГОРОДА ============ -->
-<section class="section section--dark" id="cities">
+<section class="section section--deco" id="cities">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>05 / Города</span>
-      <h2 class="sec-title" data-reveal="wipe">Восемь городов, <em>восемь характеров</em></h2>
+      <span class="sec-num" data-reveal>05 — Города</span>
+      <h2 class="sec-title" data-reveal>Восемь городов, <em>восемь характеров</em></h2>
     </header>
-    <div class="grid-cards" id="cityGrid"></div>
+      <span class="deco deco--pisa" aria-hidden="true">
+        <svg viewBox="0 0 170 540" fill="currentColor">
+          <defs>
+            <pattern id="pisaArch" width="17" height="46" patternUnits="userSpaceOnUse">
+              <rect width="17" height="46" fill="currentColor"/>
+              <path d="M4 44V20a4.5 4.5 0 0 1 9 0v24z" fill="#fff"/>
+            </pattern>
+          </defs>
+          <g transform="rotate(4 85 540)">
+            <rect x="26" y="486" width="118" height="42" rx="3"/>
+            <rect x="30" y="440" width="110" height="46" fill="url(#pisaArch)"/>
+            <rect x="31" y="394" width="108" height="46" fill="url(#pisaArch)"/>
+            <rect x="32" y="348" width="106" height="46" fill="url(#pisaArch)"/>
+            <rect x="33" y="302" width="104" height="46" fill="url(#pisaArch)"/>
+            <rect x="34" y="256" width="102" height="46" fill="url(#pisaArch)"/>
+            <rect x="35" y="210" width="100" height="46" fill="url(#pisaArch)"/>
+            <rect x="36" y="164" width="98" height="46" fill="url(#pisaArch)"/>
+            <rect x="44" y="120" width="82" height="44" fill="url(#pisaArch)"/>
+            <rect x="52" y="104" width="66" height="16" rx="3"/>
+            <rect x="58" y="86" width="54" height="18" rx="3"/>
+          </g>
+        </svg>
+      </span>
+    <div class="cards" id="cityGrid"></div>
   </div>
 </section>
 
 <!-- ============ 06 ИСКУССТВО ============ -->
-<section class="section" id="art">
+<section class="section section--sand section--deco" id="art">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>06 / Искусство</span>
-      <h2 class="sec-title" data-reveal="wipe">Возрождение <em>случилось здесь</em></h2>
+      <span class="sec-num" data-reveal>06 — Искусство</span>
+      <h2 class="sec-title" data-reveal>Возрождение <em>случилось здесь</em></h2>
       <p class="sec-desc" data-reveal>С XIV по XVI век на площади размером с область Италия переизобрела перспективу, анатомию, купол и само понятие художника. Эти шесть вещей стоит увидеть вживую — все они на местах, для которых были сделаны.</p>
     </header>
-    <div class="grid-cards" id="artGrid"></div>
+      <span class="deco deco--column" aria-hidden="true">
+        <svg viewBox="0 0 120 470" fill="currentColor">
+          <path d="M18 452h84v18H18zM26 436h68v16H26z"/>
+          <path d="M32 430h56v6H32z"/>
+          <path d="M34 66h52v364H34z" opacity=".55"/>
+          <g opacity=".85"><path d="M39 70h3v358h-3zM47 70h3v358h-3zM55 70h3v358h-3zM63 70h3v358h-3zM71 70h3v358h-3zM79 70h3v358h-3z"/></g>
+          <path d="M28 58h64v10H28zM22 44h76v14H22z"/>
+          <path d="M34 24c-9 0-14 7-14 13 0 5 4 8 8 8s7-3 7-7-3-6-6-6c-2 0-3 1-3 2 0-4 4-6 8-6 7 0 11 6 11 14h18c0-8 4-14 11-14 4 0 8 2 8 6 0-1-1-2-3-2-3 0-6 2-6 6s3 7 7 7 8-3 8-8c0-6-5-13-14-13-8 0-14 5-20 12-6-7-12-12-20-12z"/>
+          <path d="M22 12h76v12H22z"/>
+        </svg>
+      </span>
+    <div class="cards cards--art" id="artGrid"></div>
     <div class="split" style="margin-top:clamp(28px,4vw,56px)">
       <div class="prose" data-reveal>
         <p><b>Опера</b> родилась во Флоренции около 1600 года, а первый шедевр жанра — «Орфей» Монтеверди 1607 года. Отсюда же вся нотная терминология мира: allegro, piano, forte, tempo.</p>
@@ -320,27 +393,33 @@
 </section>
 
 <!-- ============ 07 КУХНЯ ============ -->
-<section class="section section--darker" id="food">
+<section class="section" id="food">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>07 / Кухня</span>
-      <h2 class="sec-title" data-reveal="wipe">Кухня, которую <em>признала ЮНЕСКО</em></h2>
+      <span class="sec-num" data-reveal>07 — Кухня</span>
+      <h2 class="sec-title" data-reveal>Кухня, которую <em>признала ЮНЕСКО</em></h2>
       <p class="sec-desc" data-reveal>10 декабря 2025 года итальянская кухня первой в мире вошла в список нематериального наследия ЮНЕСКО целиком — не отдельное блюдо, а сам способ готовить и есть вместе. Формально «итальянской кухни» не существует: есть двадцать региональных.</p>
     </header>
 
+    <div class="gallery gallery--three" data-reveal>
+      <figure class="ph"><div class="ph__box" data-photo="Neapolitan pizza" data-photo-alt="Неаполитанская пицца"></div><figcaption>Пицца наполетана<span data-photo-credit></span></figcaption></figure>
+      <figure class="ph"><div class="ph__box" data-photo="Pasta" data-photo-alt="Паста"></div><figcaption>Паста: 300+ форм<span data-photo-credit></span></figcaption></figure>
+      <figure class="ph"><div class="ph__box" data-photo="Espresso" data-photo-alt="Эспрессо"></div><figcaption>Эспрессо у стойки<span data-photo-credit></span></figcaption></figure>
+    </div>
+
     <div class="kitchen">
       <div>
-        <h3 class="sec-title" style="font-size:clamp(24px,2.6vw,34px);margin-bottom:18px" data-reveal>Формы пасты</h3>
-        <p class="sec-desc" style="margin-top:0;margin-bottom:20px" data-reveal>Форм больше трёхсот, названий — около 1300: одна и та же паста в соседних областях зовётся по-разному. Правило простое: чем гуще соус, тем сложнее форма, которая его удержит.</p>
+        <h3 class="sub-title" data-reveal>Формы пасты</h3>
+        <p class="sec-desc sec-desc--tight" data-reveal>Форм больше трёхсот, названий — около 1300: одна и та же паста в соседних областях зовётся по-разному. Правило простое: чем гуще соус, тем сложнее форма, которая его удержит.</p>
         <ul id="pastaGrid"></ul>
         <ul id="foodRules" aria-label="Правила за столом"></ul>
       </div>
       <div>
-        <h3 class="sec-title" style="font-size:clamp(24px,2.6vw,34px);margin-bottom:18px" data-reveal>Кофе по правилам</h3>
-        <p class="sec-desc" style="margin-top:0;margin-bottom:20px" data-reveal>Итальянцы выпивают около шести миллиардов эспрессо в год. Кофе пьют стоя у стойки за минуту — так дешевле и так принято.</p>
+        <h3 class="sub-title" data-reveal>Кофе по правилам</h3>
+        <p class="sec-desc sec-desc--tight" data-reveal>Итальянцы выпивают около шести миллиардов эспрессо в год. Кофе пьют стоя у стойки за минуту — так дешевле и так принято.</p>
         <div id="coffeeList"></div>
 
-        <dl class="fgrid" style="margin-top:26px">
+        <dl class="fgrid fgrid--tight">
           <div class="fact"><dt>Вино</dt><dd><b>47,4 млн гл</b>первое место в мире, 2025 год</dd></div>
           <div class="fact"><dt>Оливковое масло</dt><dd><b>2-е место</b>после Испании</dd></div>
           <div class="fact"><dt>Продукты DOP и IGP</dt><dd><b>≈900</b>больше, чем у любой страны ЕС</dd></div>
@@ -352,11 +431,11 @@
 </section>
 
 <!-- ============ 08 ЯЗЫК ============ -->
-<section class="section" id="language">
+<section class="section section--sand" id="language">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>08 / Язык</span>
-      <h2 class="sec-title" data-reveal="wipe">Шестнадцать фраз, <em>которых хватит</em></h2>
+      <span class="sec-num" data-reveal>08 — Язык</span>
+      <h2 class="sec-title" data-reveal>Шестнадцать фраз, <em>которых хватит</em></h2>
       <p class="sec-desc" data-reveal>Итальянский читается как пишется: ударение почти всегда на предпоследнем слоге, «c» перед e и i — это «ч», «gli» — мягкое «льи», «h» не читается никогда. Нажмите на динамик — браузер произнесёт фразу.</p>
     </header>
     <ul id="phraseGrid" aria-label="Разговорник"></ul>
@@ -365,11 +444,11 @@
 </section>
 
 <!-- ============ 09 ЦИФРЫ ============ -->
-<section class="section section--dark" id="numbers">
+<section class="section" id="numbers">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>09 / Цифры</span>
-      <h2 class="sec-title" data-reveal="wipe">Италия <em>в числах</em></h2>
+      <span class="sec-num" data-reveal>09 — Цифры</span>
+      <h2 class="sec-title" data-reveal>Италия <em>в числах</em></h2>
     </header>
     <div class="numbers" data-reveal>
       <div class="num"><b><span class="count" data-to="58.94" data-dec="2">0</span><i>млн</i></b><span>жителей на 2026 год. Держится только за счёт приезжих: смертей вдвое больше, чем рождений</span></div>
@@ -385,26 +464,26 @@
 </section>
 
 <!-- ============ 10 ВИКТОРИНА ============ -->
-<section class="section" id="quiz">
+<section class="section section--sand" id="quiz">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>10 / Проверка</span>
-      <h2 class="sec-title" data-reveal="wipe">Десять вопросов <em>по прочитанному</em></h2>
+      <span class="sec-num" data-reveal>10 — Проверка</span>
+      <h2 class="sec-title" data-reveal>Десять вопросов <em>по прочитанному</em></h2>
     </header>
     <div class="quiz" id="quizBox" data-reveal></div>
   </div>
 </section>
 
 <!-- ============ 11 ПРАКТИКА ============ -->
-<section class="section section--dark" id="travel">
+<section class="section" id="travel">
   <div class="container">
     <header class="sec-head">
-      <span class="sec-num" data-reveal>11 / Практика</span>
-      <h2 class="sec-title" data-reveal="wipe">Что знать <em>до поездки</em></h2>
+      <span class="sec-num" data-reveal>11 — Практика</span>
+      <h2 class="sec-title" data-reveal>Что знать <em>до поездки</em></h2>
     </header>
-    <div class="grid-cards" id="travelGrid"></div>
+    <div class="cards" id="travelGrid"></div>
 
-    <h3 class="sec-title" style="font-size:clamp(24px,2.6vw,34px);margin:clamp(40px,5vw,72px) 0 8px" data-reveal>Частые вопросы</h3>
+    <h3 class="sub-title" style="margin-top:clamp(40px,5vw,72px)" data-reveal>Частые вопросы</h3>
     <div id="faqList"></div>
   </div>
 </section>
@@ -412,9 +491,16 @@
 </main>
 
 <!-- ============ ПОДВАЛ ============ -->
+<div class="marquee marquee--big" aria-hidden="true">
+  <div class="marquee__row marquee__row--rev">
+    <span>Italia</span><span>·</span><span>Italia</span><span>·</span><span>Italia</span><span>·</span>
+    <span>Italia</span><span>·</span><span>Italia</span><span>·</span><span>Italia</span><span>·</span>
+  </div>
+</div>
+
 <footer class="footer">
   <div class="container">
-    <p class="footer__big" data-reveal="wipe">Andiamo</p>
+    <p class="footer__big" data-reveal>Andiamo</p>
     <div class="sources">
       <b>Источники цифр</b>
       <ul>
@@ -426,10 +512,11 @@
         <li><a href="https://www.ingv.it/" target="_blank" rel="noopener">INGV</a> — высота Этны</li>
         <li><a href="https://www.imf.org/en/Publications/WEO" target="_blank" rel="noopener">IMF WEO</a> — ВВП</li>
         <li>Контуры регионов — <a href="https://github.com/VictorCazanave/svg-maps" target="_blank" rel="noopener">@svg-maps/italy</a>, Victor Cazanave, CC BY 4.0</li>
+        <li>Фотографии — <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener">Wikimedia Commons</a>, авторы и лицензии подписаны под каждым снимком</li>
       </ul>
     </div>
     <div class="footer__row">
-      <span>Данные актуальны на сентябрь 2026 года. Вся графика нарисована кодом: SVG и canvas, без фотографий.</span>
+      <span>Данные актуальны на сентябрь 2026 года. Карта, Колизей и значки нарисованы кодом.</span>
       <span>Buon viaggio</span>
     </div>
   </div>
@@ -439,5 +526,6 @@
 <script src="assets/js/colosseum.js"></script>
 <script src="assets/js/map.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="assets/js/photos.js"></script>
 </body>
 </html>
