@@ -442,7 +442,7 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
 
 /* ---------- 11. КАРТОЧКИ ---------- */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(12px,1.4vw,20px)}
-.card{background:rgba(255,255,255,.76);border:1px solid var(--line);border-radius:var(--radius-card);overflow:hidden;transition:transform .35s var(--ease-out),box-shadow .35s var(--ease-out)}
+.card{background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:var(--radius-card);overflow:hidden;transition:transform .35s var(--ease-out),box-shadow .35s var(--ease-out)}
 .card:hover{transform:translateY(-4px);box-shadow:0 20px 44px rgba(17,20,23,.09)}
 .card__photo{position:relative;aspect-ratio:16/11;overflow:hidden;background:linear-gradient(150deg,#e6ddd1,#cdbda7)}
 .card__photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s var(--ease-out),transform 6s var(--ease-out)}
@@ -691,32 +691,45 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
 @media (max-width:900px){.deco{display:none}}
 
 /* ---------- 21. ЖИВОЙ ФОН ---------- */
-html{background:#fdfcfa}
+html{background:#faf6ef}
 body{background:transparent}
 
-.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:#fdfcfa}
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:#faf6ef}
 .bg__blob{
-  position:absolute;display:block;border-radius:50%;filter:blur(90px);opacity:.22;
+  position:absolute;display:block;border-radius:50%;filter:blur(72px);opacity:.16;
   will-change:transform;transform:translate3d(0,var(--bg-y,0px),0);
   transition:opacity 1.6s var(--ease-out);
 }
-.bg__blob--1{width:52vw;height:52vw;left:-12vw;top:-10vw;background:radial-gradient(circle at 40% 40%,rgba(194,69,45,.42),rgba(194,69,45,0) 70%);animation:drift1 52s ease-in-out infinite}
-.bg__blob--2{width:46vw;height:46vw;right:-10vw;top:6vh;background:radial-gradient(circle at 55% 45%,rgba(192,138,62,.42),rgba(192,138,62,0) 70%);animation:drift2 64s ease-in-out infinite}
-.bg__blob--3{width:58vw;height:58vw;left:18vw;bottom:-22vw;background:radial-gradient(circle at 50% 50%,rgba(31,122,77,.24),rgba(31,122,77,0) 70%);animation:drift3 74s ease-in-out infinite}
-.bg__blob--4{width:38vw;height:38vw;right:12vw;bottom:0;background:radial-gradient(circle at 50% 50%,rgba(122,86,168,.4),rgba(122,86,168,0) 70%);animation:drift1 88s ease-in-out infinite reverse}
-.bg__blob--5{width:48vw;height:48vw;left:6vw;top:24vh;background:radial-gradient(circle at 50% 50%,rgba(58,124,165,.36),rgba(58,124,165,0) 70%);animation:drift2 70s ease-in-out infinite reverse}
+.bg__blob--1{width:52vw;height:52vw;left:-12vw;top:-10vw;background:radial-gradient(circle at 40% 40%,rgba(194,69,45,.85),rgba(194,69,45,0) 72%);animation:drift1 52s ease-in-out infinite}
+.bg__blob--2{width:46vw;height:46vw;right:-10vw;top:6vh;background:radial-gradient(circle at 55% 45%,rgba(192,138,62,.85),rgba(192,138,62,0) 72%);animation:drift2 64s ease-in-out infinite}
+.bg__blob--3{width:58vw;height:58vw;left:18vw;bottom:-22vw;background:radial-gradient(circle at 50% 50%,rgba(31,122,77,.6),rgba(31,122,77,0) 72%);animation:drift3 74s ease-in-out infinite}
+.bg__blob--4{width:38vw;height:38vw;right:12vw;bottom:0;background:radial-gradient(circle at 50% 50%,rgba(122,86,168,.62),rgba(122,86,168,0) 72%);animation:drift1 88s ease-in-out infinite reverse}
+.bg__blob--5{width:48vw;height:48vw;left:6vw;top:24vh;background:radial-gradient(circle at 50% 50%,rgba(58,124,165,.66),rgba(58,124,165,0) 72%);animation:drift2 70s ease-in-out infinite reverse}
 
-/* фон меняет настроение от секции к секции */
-.bg[data-mood="roma"]  .bg__blob--1{opacity:.64}
-.bg[data-mood="roma"]  .bg__blob--2{opacity:.44}
-.bg[data-mood="oro"]   .bg__blob--2{opacity:.68}
-.bg[data-mood="oro"]   .bg__blob--1{opacity:.34}
-.bg[data-mood="verde"] .bg__blob--3{opacity:.7}
-.bg[data-mood="verde"] .bg__blob--2{opacity:.36}
-.bg[data-mood="mare"]  .bg__blob--5{opacity:.6}
-.bg[data-mood="mare"]  .bg__blob--3{opacity:.4}
-.bg[data-mood="notte"] .bg__blob--4{opacity:.62}
-.bg[data-mood="notte"] .bg__blob--1{opacity:.32}
+/* сплошная подкраска на весь экран: именно она читается как смена настроения */
+.bg__tint{position:absolute;inset:0;display:block;opacity:0;transition:opacity 1.6s var(--ease-out)}
+.bg__tint--roma {background:linear-gradient(155deg,rgba(194,69,45,.22),rgba(224,160,79,.11) 46%,rgba(255,255,255,0) 76%)}
+.bg__tint--oro  {background:linear-gradient(155deg,rgba(200,139,46,.24),rgba(232,198,122,.12) 50%,rgba(255,255,255,0) 78%)}
+.bg__tint--verde{background:linear-gradient(200deg,rgba(31,122,77,.2),rgba(150,190,120,.1) 50%,rgba(255,255,255,0) 78%)}
+.bg__tint--mare {background:linear-gradient(200deg,rgba(58,124,165,.24),rgba(120,180,200,.11) 50%,rgba(255,255,255,0) 78%)}
+.bg__tint--notte{background:linear-gradient(200deg,rgba(92,72,150,.2),rgba(160,120,180,.1) 50%,rgba(255,255,255,0) 78%)}
+.bg[data-mood="roma"]  .bg__tint--roma,
+.bg[data-mood="oro"]   .bg__tint--oro,
+.bg[data-mood="verde"] .bg__tint--verde,
+.bg[data-mood="mare"]  .bg__tint--mare,
+.bg[data-mood="notte"] .bg__tint--notte{opacity:1}
+
+/* пятна поверх подкраски */
+.bg[data-mood="roma"]  .bg__blob--1{opacity:.92}
+.bg[data-mood="roma"]  .bg__blob--2{opacity:.6}
+.bg[data-mood="oro"]   .bg__blob--2{opacity:.95}
+.bg[data-mood="oro"]   .bg__blob--1{opacity:.5}
+.bg[data-mood="verde"] .bg__blob--3{opacity:.95}
+.bg[data-mood="verde"] .bg__blob--2{opacity:.55}
+.bg[data-mood="mare"]  .bg__blob--5{opacity:.9}
+.bg[data-mood="mare"]  .bg__blob--3{opacity:.6}
+.bg[data-mood="notte"] .bg__blob--4{opacity:.88}
+.bg[data-mood="notte"] .bg__blob--1{opacity:.5}
 @keyframes drift1{0%,100%{translate:0 0}33%{translate:6vw 4vh}66%{translate:-4vw 7vh}}
 @keyframes drift2{0%,100%{translate:0 0}40%{translate:-7vw 5vh}70%{translate:3vw -4vh}}
 @keyframes drift3{0%,100%{translate:0 0}50%{translate:8vw -6vh}}
@@ -724,15 +737,15 @@ body{background:transparent}
 /* еле заметная аркада — намёк на Колизей */
 .bg__arches{
   position:absolute;inset:-5% -5% 0;display:block;opacity:.85;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='170' viewBox='0 0 150 170'><g fill='none' stroke='%23111417' stroke-opacity='.075' stroke-width='2'><path d='M18 168V52a32 32 0 0 1 64 0v116'/><path d='M100 168V86a24 24 0 0 1 48 0v82'/><path d='M0 168h150'/></g></svg>");
-  background-repeat:repeat;background-size:150px 170px;
-  mask-image:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.12) 55%,rgba(0,0,0,.45));
-  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.12) 55%,rgba(0,0,0,.45));
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='190' height='214' viewBox='0 0 150 170'><g fill='none' stroke='%23111417' stroke-opacity='.13' stroke-width='2'><path d='M18 168V52a32 32 0 0 1 64 0v116'/><path d='M100 168V86a24 24 0 0 1 48 0v82'/><path d='M0 168h150'/></g></svg>");
+  background-repeat:repeat;background-size:190px 214px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,0,0,.4) 55%,rgba(0,0,0,.8));
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,0,0,.4) 55%,rgba(0,0,0,.8));
   transform:translate3d(0,calc(var(--bg-y,0px) * .35),0);
 }
 /* зерно, чтобы фон не выглядел пластиковым */
 .bg__grain{
-  position:absolute;inset:-50%;display:block;opacity:.05;
+  position:absolute;inset:-50%;display:block;opacity:.07;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
   animation:grain 8s steps(8) infinite;
 }
@@ -744,16 +757,16 @@ body{background:transparent}
 
 /* секции пропускают фон сквозь себя */
 .section{background:transparent}
-.section--sand{background:rgba(243,238,229,.5)}
-.footer{background:rgba(243,238,229,.68)}
+.section--sand{background:rgba(247,240,229,.34)}
+.footer{background:rgba(247,240,229,.5)}
 .marquee--big{background:transparent}
-.num{background:rgba(255,255,255,.62)}
+.num{background:rgba(255,255,255,.55)}
 .hero__media{background:rgba(232,226,216,.9)}
 
 @media (prefers-reduced-motion:reduce){
   .bg__blob,.bg__grain{animation:none}
 }
 @media (max-width:768px){
-  .bg__blob{filter:blur(60px);opacity:.42}
-  .bg__arches{background-size:104px 118px}
+  .bg__blob{filter:blur(52px)}
+  .bg__arches{background-size:132px 148px}
 }
