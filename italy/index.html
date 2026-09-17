@@ -21,12 +21,22 @@
 </head>
 <body>
 
+<div class="bg" id="bg" aria-hidden="true">
+  <i class="bg__blob bg__blob--1"></i>
+  <i class="bg__blob bg__blob--2"></i>
+  <i class="bg__blob bg__blob--3"></i>
+  <i class="bg__blob bg__blob--4"></i>
+  <i class="bg__blob bg__blob--5"></i>
+  <span class="bg__arches"></span>
+  <span class="bg__grain"></span>
+</div>
+
 <noscript>
   <p class="noscript">Карта регионов, лента истории, разрез Колизея, разговорник и викторина собираются скриптами. Включите JavaScript, чтобы увидеть их целиком.</p>
 </noscript>
 
 <!-- ============ ПЕРВЫЙ ЭКРАН ============ -->
-<section class="hero" id="top">
+<section class="hero" id="top" data-mood="roma">
 
   <!-- медиа идёт первым в разметке: левая колонка должна печататься поверх без z-index -->
   <div class="hero__media anim" style="--d:0">
@@ -120,7 +130,7 @@
 <main>
 
 <!-- ============ 01 СТРАНА ============ -->
-<section class="section" id="country">
+<section class="section" id="country" data-mood="verde">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>01 — Страна</span>
@@ -169,7 +179,7 @@
 </section>
 
 <!-- ============ 02 РЕГИОНЫ ============ -->
-<section class="section section--sand" id="regions">
+<section class="section section--sand" id="regions" data-mood="mare">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>02 — Регионы</span>
@@ -236,7 +246,7 @@
 </section>
 
 <!-- ============ 03 ИСТОРИЯ ============ -->
-<section class="section" id="history">
+<section class="section" id="history" data-mood="notte">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>03 — История</span>
@@ -260,7 +270,7 @@
 </section>
 
 <!-- ============ 04 КОЛИЗЕЙ ============ -->
-<section class="section section--sand" id="colosseum">
+<section class="section section--sand" id="colosseum" data-mood="roma">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>04 — Колизей</span>
@@ -326,7 +336,7 @@
 </section>
 
 <!-- ============ 05 ГОРОДА ============ -->
-<section class="section section--deco" id="cities">
+<section class="section section--deco" id="cities" data-mood="oro">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>05 — Города</span>
@@ -360,7 +370,7 @@
 </section>
 
 <!-- ============ 06 ИСКУССТВО ============ -->
-<section class="section section--sand section--deco" id="art">
+<section class="section section--sand section--deco" id="art" data-mood="notte">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>06 — Искусство</span>
@@ -393,7 +403,7 @@
 </section>
 
 <!-- ============ 07 КУХНЯ ============ -->
-<section class="section" id="food">
+<section class="section" id="food" data-mood="verde">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>07 — Кухня</span>
@@ -431,7 +441,7 @@
 </section>
 
 <!-- ============ 08 ЯЗЫК ============ -->
-<section class="section section--sand" id="language">
+<section class="section section--sand" id="language" data-mood="mare">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>08 — Язык</span>
@@ -444,7 +454,7 @@
 </section>
 
 <!-- ============ 09 ЦИФРЫ ============ -->
-<section class="section" id="numbers">
+<section class="section" id="numbers" data-mood="oro">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>09 — Цифры</span>
@@ -464,7 +474,7 @@
 </section>
 
 <!-- ============ 10 ВИКТОРИНА ============ -->
-<section class="section section--sand" id="quiz">
+<section class="section section--sand" id="quiz" data-mood="roma">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>10 — Проверка</span>
@@ -475,7 +485,7 @@
 </section>
 
 <!-- ============ 11 ПРАКТИКА ============ -->
-<section class="section" id="travel">
+<section class="section" id="travel" data-mood="verde">
   <div class="container">
     <header class="sec-head">
       <span class="sec-num" data-reveal>11 — Практика</span>

@@ -326,7 +326,39 @@
     });
   }
 
-  /* ---------- 9. СТАРТ ---------- */
+  /* ---------- 9. ФОН РЕАГИРУЕТ НА СКРОЛЛ ---------- */
+  function initBackground() {
+    var bg = $('#bg');
+    if (!bg || reduced) return;
+    var ticking = false;
+    function update() {
+      /* пятна отстают от страницы — получается глубина без тяжёлых слоёв */
+      bg.style.setProperty('--bg-y', (-window.pageYOffset * 0.06).toFixed(1) + 'px');
+      pickMood();
+      ticking = false;
+    }
+
+    /* настроение берём у секции, которая ближе всего к середине экрана:
+       наблюдатель здесь давал бы разный результат в зависимости от порядка событий */
+    var moodEls = $$('[data-mood]'), mood = '';
+    function pickMood() {
+      var mid = window.innerHeight / 2, best = null, bestD = Infinity;
+      for (var i = 0; i < moodEls.length; i++) {
+        var r = moodEls[i].getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) continue;
+        var d = Math.abs((r.top + r.bottom) / 2 - mid);
+        if (d < bestD) { bestD = d; best = moodEls[i]; }
+      }
+      var next = best ? best.getAttribute('data-mood') : 'roma';
+      if (next !== mood) { mood = next; bg.setAttribute('data-mood', mood); }
+    }
+    addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
+  }
+
+  /* ---------- 10. СТАРТ ---------- */
   function boot() {
     initContent();
     initTimeline();
@@ -335,6 +367,7 @@
     initQuiz();
     initSpeech();
     initHeroParallax();
+    initBackground();
     initReveal();
   }
 
