@@ -1,11 +1,12 @@
 {
   "mcpServers": {
     "21st": {
-      "type": "http",
-      "url": "https://21st.dev/api/mcp",
-      "headers": {
-        "x-api-key": "${TWENTY_FIRST_API_KEY}"
-      }
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://21st.dev/api/mcp"
+      ]
     }
   }
 }
