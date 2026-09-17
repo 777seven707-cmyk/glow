@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAKURA — механическая клавиатура в стиле цветущей вишни</title>
+<meta name="description" content="SAKURA TKL — розовая механическая клавиатура: PBT-колпачки dye-sub, hot-swap, новелти-кейкапы с торий, веером и горой Фудзи. Тираж 500 штук.">
+<meta name="theme-color" content="#ffe4ec">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SAKURA — механическая клавиатура в стиле цветущей вишни">
+<meta property="og:description" content="TKL, hot-swap, PBT dye-sub, новелти-кейкапы. Тираж 500 штук.">
+<meta property="og:locale" content="ru_RU">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&family=Saira+Extra+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/sakura.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<canvas id="petals" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <a href="#top">SAKURA / 桜</a>
+  <nav class="nav__links">
+    <a href="#story">История</a>
+    <a href="#features">Детали</a>
+    <a href="#specs">Спеки</a>
+    <a href="#novelty">Кейкапы</a>
+    <a href="#order">Заказать</a>
+  </nav>
+</header>
+
+<!-- ============ ПОСТЕР ============ -->
+<section class="poster" id="poster">
+  <div class="poster__panel">
+    <article class="poster__card">
+      <div class="poster__visual">
+
+        <!-- японская сцена: небо, солнце, Фудзи, тории, катана, ветка -->
+        <div class="scene" aria-hidden="true">
+          <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" role="presentation">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#fff6f9"/>
+                <stop offset="45%" stop-color="#ffe0ea"/>
+                <stop offset="100%" stop-color="#f9c6d6"/>
+              </linearGradient>
+              <linearGradient id="fuji" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#cfd9ea"/>
+                <stop offset="55%" stop-color="#b9c4da"/>
+                <stop offset="100%" stop-color="#e6c3d1"/>
+              </linearGradient>
+              <linearGradient id="blade" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="55%" stop-color="#e4e9f1"/>
+                <stop offset="100%" stop-color="#c3ccda"/>
+              </linearGradient>
+            </defs>
+
+            <rect width="1600" height="900" fill="url(#sky)"/>
+            <circle cx="1180" cy="250" r="150" fill="#f0788f" opacity=".5"/>
+            <circle cx="1180" cy="250" r="112" fill="#e8607f" opacity=".85"/>
+
+            <!-- дальние холмы -->
+            <path d="M0 640 C 180 560 320 600 470 650 C 560 680 660 690 760 665 L 760 900 L 0 900 Z" fill="#e7b9cb" opacity=".65"/>
+            <path d="M1600 660 C 1440 590 1330 620 1220 668 L 1220 900 L 1600 900 Z" fill="#e7b9cb" opacity=".5"/>
+
+            <!-- гора Фудзи -->
+            <path d="M420 700 L 760 300 C 790 266 830 266 860 300 L 1200 700 Z" fill="url(#fuji)"/>
+            <path d="M700 380 L 760 312 C 792 276 828 276 860 312 L 920 380 C 890 366 872 392 844 380 C 816 368 800 396 772 384 C 744 372 726 396 700 380 Z" fill="#ffffff" opacity=".95"/>
+            <path d="M810 300 L 1200 700 L 900 700 Z" fill="#8f9bb5" opacity=".18"/>
+
+            <!-- тории -->
+            <g fill="#d84b6d" opacity=".92">
+              <path d="M255 470 h300 l-14 26 h-272 z"/>
+              <rect x="268" y="512" width="274" height="18" rx="6"/>
+              <rect x="300" y="500" width="24" height="230" rx="6"/>
+              <rect x="486" y="500" width="24" height="230" rx="6"/>
+              <rect x="386" y="530" width="38" height="14" rx="5"/>
+            </g>
+
+            <!-- катана на подставке -->
+            <g transform="translate(1080 690) rotate(-11)">
+              <rect x="0" y="0" width="360" height="12" rx="6" fill="url(#blade)"/>
+              <path d="M360 0 L 408 6 L 360 12 Z" fill="#dfe6f0"/>
+              <rect x="-16" y="-6" width="16" height="24" rx="4" fill="#c9a24a"/>
+              <rect x="-118" y="-2" width="102" height="16" rx="7" fill="#4a2c32"/>
+              <g stroke="#f2d9df" stroke-width="2" opacity=".7">
+                <path d="M-108 -2 l 14 16 M-88 -2 l 14 16 M-68 -2 l 14 16 M-48 -2 l 14 16 M-28 -2 l 12 14"/>
+              </g>
+            </g>
+            <g fill="#4a2c32" opacity=".55">
+              <rect x="1110" y="742" width="16" height="46" rx="6"/>
+              <rect x="1370" y="730" width="16" height="46" rx="6"/>
+            </g>
+
+            <!-- вода / земля -->
+            <path d="M0 720 H1600 V900 H0 Z" fill="#fbdfe8" opacity=".85"/>
+            <g stroke="#e59bb3" stroke-width="3" fill="none" opacity=".55">
+              <path d="M120 790 q 40 -14 80 0 t 80 0"/>
+              <path d="M420 830 q 40 -14 80 0 t 80 0"/>
+              <path d="M980 806 q 40 -14 80 0 t 80 0"/>
+              <path d="M1320 848 q 40 -14 80 0 t 80 0"/>
+            </g>
+
+            <!-- ветка сакуры сверху -->
+            <g>
+              <path d="M0 40 C 180 90 300 60 430 150 C 520 212 600 200 680 260" stroke="#7a4b3f" stroke-width="13" fill="none" stroke-linecap="round"/>
+              <path d="M200 76 C 250 120 250 160 232 210" stroke="#7a4b3f" stroke-width="7" fill="none" stroke-linecap="round"/>
+              <path d="M420 146 C 470 176 486 220 470 266" stroke="#7a4b3f" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <defs>
+                <g id="bl" fill="#ff9db6"><circle cx="0" cy="0" r="13"/><circle cx="16" cy="-9" r="12"/><circle cx="16" cy="9" r="12"/><circle cx="-16" cy="-9" r="12"/><circle cx="-16" cy="9" r="12"/><circle cx="0" cy="0" r="5" fill="#fff0f4"/></g>
+              </defs>
+              <use href="#bl" x="90" y="62"/><use href="#bl" x="210" y="86"/>
+              <use href="#bl" x="236" y="214"/><use href="#bl" x="330" y="104"/>
+              <use href="#bl" x="418" y="150"/><use href="#bl" x="474" y="272"/>
+              <use href="#bl" x="556" y="206"/><use href="#bl" x="664" y="258"/>
+              <use href="#bl" x="150" y="30"/><use href="#bl" x="30" y="64"/>
+            </g>
+          </svg>
+          <div class="scene__veil"></div>
+        </div>
+
+        <div class="poster__title">
+          <h1 id="posterTitle" data-title="SAKURA">SAKURA</h1>
+        </div>
+
+        <div class="poster__stamp">
+          <b>桜</b>
+          TKL · Hot-swap<br>Тираж 500
+        </div>
+
+        <!-- вращающаяся клавиатура -->
+        <div class="kbd-stage">
+          <div class="kbd-tilt"><div class="kbd-spin"><div id="kbdMount"></div></div></div>
+        </div>
+      </div>
+
+      <div class="poster__copy" id="posterCopy">
+        <div class="copy">
+          <div class="copy__keys"><span>Bloom</span><span>Type</span><span>Return</span></div>
+          <h2>Клавиатура, которая цветёт | 咲くキーボード</h2>
+          <p>Розовый корпус, белые PBT-колпачки с dye-sub-легендами и пробел с горой Фудзи под лепестками. Восемьдесят семь клавиш, собранных так, чтобы звук был глухим и мягким — как шаг по опавшим лепесткам.</p>
+          <p class="copy__sub">Печатай, пока цветёт. 散るまで、打っていて。</p>
+          <div class="copy__foot"><span>SAKURA Keyboards</span><span>Vol. 01</span><span>03.26 2026</span></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ ИСТОРИЯ ============ -->
+<section class="section section--paper reveal" id="story">
+  <div class="wrap">
+    <p class="eyebrow">Ханами / 花見</p>
+    <h2 class="h2">Три недели в году улица становится розовой</h2>
+    <p class="lead">Ханами — традиция смотреть, как цветёт вишня, и знать, что это скоро кончится. SAKURA собрана про то же чувство: вещь, к которой возвращаешься каждый день, сделана так, будто её нужно успеть рассмотреть. Розовый корпус, белые колпачки, акценты цвета сливы — и рисунок на пробеле, который видно только сверху.</p>
+
+    <div class="grid grid--3">
+      <article class="card"><span class="card__jp">静</span><div class="card__no">01</div><h3>Тихий ход</h3><p>Смазанные линейные свитчи 45 г, пенка между платой и корпусом, лента под PCB. Печать слышно, но она не мешает соседней комнате.</p></article>
+      <article class="card"><span class="card__jp">桜</span><div class="card__no">02</div><h3>Цвет, который не стирается</h3><p>PBT 1,5 мм, dye-sublimation. Легенды впечатаны в пластик краской, а не напечатаны сверху — через пять лет надписи такие же розовые.</p></article>
+      <article class="card"><span class="card__jp">器</span><div class="card__no">03</div><h3>Разбирается за минуту</h3><p>Hot-swap-сокеты Kailh: свитчи меняются руками, без пайки. Плата на gasket-креплении, снизу — винты под шестигранник.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ДЕТАЛИ ============ -->
+<section class="section section--pink reveal" id="features">
+  <div class="wrap">
+    <p class="eyebrow">Детали</p>
+    <h2 class="h2">Что внутри</h2>
+    <p class="lead">Ничего лишнего: раскладка TKL без цифрового блока, чтобы мышь стояла ближе к рукам, и полный набор навигации — стрелки, Home, PgUp, Delete.</p>
+
+    <div class="grid grid--4">
+      <article class="card"><h3>87 клавиш</h3><p>TKL: полный ряд F-клавиш и навигация, минус нумпад. На 18 см уже полноразмерной.</p></article>
+      <article class="card"><h3>Gasket mount</h3><p>Плата зажата силиконовыми прокладками — ход мягче, звук ниже, без звона алюминия.</p></article>
+      <article class="card"><h3>Три режима</h3><p>USB-C, Bluetooth 5.1 на три устройства и 2,4 ГГц-донгл. Переключение сочетанием Fn.</p></article>
+      <article class="card"><h3>4000 мА·ч</h3><p>До шести недель работы без подсветки. Индикатор заряда — три точки над навигацией.</p></article>
+      <article class="card"><h3>QMK / VIA</h3><p>Любая клавиша переназначается в браузере. Четыре слоя, макросы, свой Fn-слой.</p></article>
+      <article class="card"><h3>Подсветка</h3><p>Тёплая белая по периметру и под пробелом. Пять уровней, выключается насовсем.</p></article>
+      <article class="card"><h3>Кабель в оплётке</h3><p>Съёмный USB-C, 1,8 м, розовая тканевая оплётка и авиационный разъём в комплекте.</p></article>
+      <article class="card"><h3>Тираж 500</h3><p>Номер партии выгравирован на нижней панели. Допечаток этой раскладки не будет.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ СПЕКИ ============ -->
+<section class="section section--paper reveal" id="specs">
+  <div class="wrap">
+    <p class="eyebrow">Спецификации</p>
+    <h2 class="h2">Сухие цифры</h2>
+    <dl class="specs">
+      <div class="spec"><dt>Раскладка</dt><dd>TKL, 87 клавиш, ANSI</dd></div>
+      <div class="spec"><dt>Корпус</dt><dd>Анодированный алюминий, 1,1 кг</dd></div>
+      <div class="spec"><dt>Свитчи</dt><dd>Linear 45 g · hot-swap 5-pin</dd></div>
+      <div class="spec"><dt>Колпачки</dt><dd>PBT 1,5 мм, dye-sub, профиль Cherry</dd></div>
+      <div class="spec"><dt>Подключение</dt><dd>USB-C · BT 5.1 ×3 · 2,4 ГГц</dd></div>
+      <div class="spec"><dt>Аккумулятор</dt><dd>4000 мА·ч, до 6 недель</dd></div>
+      <div class="spec"><dt>Прошивка</dt><dd>QMK, настройка через VIA</dd></div>
+      <div class="spec"><dt>Размеры</dt><dd>356 × 138 × 41 мм</dd></div>
+      <div class="spec"><dt>Цена</dt><dd>$189</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ============ НОВЕЛТИ ============ -->
+<section class="section section--pink reveal" id="novelty">
+  <div class="wrap" style="text-align:center">
+    <p class="eyebrow">Novelty keys</p>
+    <h2 class="h2">Пять колпачков в коробке</h2>
+    <p class="lead" style="margin:0 auto">Тории, веер, сердце, бонсай и пробел с Фудзи. Ставятся вместо Ctrl, Alt и пробела — или не ставятся, это ваша клавиатура.</p>
+    <div class="novelty">
+      <div class="novelty__cap" title="Тории">⛩️</div>
+      <div class="novelty__cap" title="Веер">🪭</div>
+      <div class="novelty__cap" title="Сердце">💗</div>
+      <div class="novelty__cap" title="Бонсай">🌸</div>
+      <div class="novelty__cap novelty__cap--wide" title="Пробел с горой Фудзи">🗻</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ЦИТАТА ============ -->
+<section class="section section--paper reveal">
+  <div class="wrap">
+    <blockquote class="quote">
+      «Лепестки падают ровно тогда, когда перестаёшь на них смотреть».
+      <small>Из инструкции к SAKURA, страница 1</small>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="section section--pink cta reveal" id="order">
+  <div class="wrap">
+    <p class="eyebrow">Предзаказ</p>
+    <h2 class="h2">$189 · отгрузка 26 марта</h2>
+    <p class="lead" style="margin:0 auto">Партия 500 штук. Оплата при отгрузке, отмена в любой момент до неё.</p>
+    <p>
+      <a class="btn" href="mailto:hello@example.com?subject=SAKURA%20предзаказ">Оформить предзаказ</a>
+      <a class="btn btn--ghost" href="#specs">Смотреть спеки</a>
+    </p>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>SAKURA Keyboards · 桜</span>
+  <span>Vol. 01 — 03.26 2026</span>
+  <span>@sakura.kbd</span>
+</footer>
+
+<script src="assets/js/sakura.js" defer></script>
+</body>
+</html>

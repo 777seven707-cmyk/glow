@@ -20,6 +20,8 @@ splite.tsx                      SplineScene — ленивая загрузка 
 spotlight.tsx                   Spotlight — пятно света за курсором
 card.tsx                        Card из shadcn/ui
 spline-scene-basic.tsx          демо: Card + Spotlight + SplineScene
+sakura-editorial-poster.tsx     редакционный постер «сакура» на скролле
+sakura-editorial-poster-demo.tsx демо к нему
 ```
 
 Все файлы проверены `tsc --strict` — ошибок нет.
@@ -200,3 +202,26 @@ animate={reduced ? undefined : { pathLength: 1, opacity: [0.3, 0.6, 0.3], pathOf
 import { Button } from "@/components/ui/button";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 ```
+
+
+## sakura-editorial-poster
+
+Липкий постер: гигантский заголовок проявляется по буквам, снизу выезжает
+блок текста. Прогресс берётся из скролла (`forceProgress` фиксирует кадр,
+`preview` — статичная версия на весь экран). Шрифты подгружаются сами
+(Cormorant Garamond, Jost, Saira Extra Condensed).
+
+```tsx
+import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
+
+<SakuraEditorialPoster className="w-full" />
+```
+
+Зависимостей нет, но нужен Tailwind с поддержкой container-запросов
+(`@container`, `cqw`/`cqh`) — в Tailwind v4 это встроено, в v3 нужен
+`@tailwindcss/container-queries`.
+
+**Статическая версия — `sakura.html` в корне.** Та же вёрстка перенесена
+на обычный HTML/CSS/JS (`assets/css/sakura.css`, `assets/js/sakura.js`):
+японская SVG-сцена вместо фотографий, вращающаяся 3D-клавиатура на CSS
+и канвас с падающими лепестками.
