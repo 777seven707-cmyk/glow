@@ -1,0 +1,10 @@
+# секреты и локальные настройки — в репозиторий не попадают
+.env
+.env.*
+.mcp.local.json
+.claude/settings.local.json
+
+# мусор ОС и редакторов
+.DS_Store
+Thumbs.db
+*.swp
