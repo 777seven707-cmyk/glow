@@ -639,6 +639,9 @@ html:not(.js) [data-reveal]{opacity:1;transform:none}
   .map-city--cap .map-city__t{font-size:19px}
   .map-city__t--vol{font-size:16px}
 }
+@media (max-width:480px){
+  .score__list{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
 @media (max-width:420px){
   .hero__title{font-size:clamp(1.8rem,8.6vw,2.4rem)}
   .hero__text{font-size:14px;line-height:1.7}
@@ -1060,3 +1063,27 @@ html:not(.js) .ph__box,html:not(.js) .card__photo{clip-path:none}
   .cards,.numbers,.gallery,#phraseGrid,#pastaGrid,#coffeeList{transform:none}
 }
 html.no-motion .cards,html.no-motion .numbers,html.no-motion .gallery{transform:none}
+
+/* ---------- 31. ТАБЛО ВИКТОРИНЫ ---------- */
+.quiz-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.4fr);gap:clamp(20px,3vw,52px);align-items:start}
+.quiz{max-width:none}
+.score{position:sticky;top:24px;border:1px solid var(--line);border-radius:var(--radius-card);background:rgba(255,255,255,.72);padding:clamp(20px,2.4vw,28px)}
+.score__lab{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.score__num{display:flex;align-items:baseline;gap:8px;margin-top:6px}
+.score__num b{font-size:clamp(2.4rem,4vw,3.4rem);font-weight:600;letter-spacing:-.03em;line-height:1}
+.score__num span{font-size:14px;color:var(--muted)}
+.score__list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:20px 0 16px}
+.score__cell{
+  display:grid;place-items:center;aspect-ratio:1;border-radius:12px;border:1px solid var(--line);
+  font-size:11.5px;font-weight:600;color:var(--muted);background:rgba(255,255,255,.5);
+  transition:background .45s var(--ease-out),color .45s var(--ease-out),border-color .45s var(--ease-out),transform .45s var(--ease-out);
+}
+.score__cell.is-now{border-color:var(--ink);color:var(--ink);transform:scale(1.06)}
+.score__cell.is-right{background:rgba(31,122,77,.14);border-color:rgba(31,122,77,.5);color:#14603a}
+.score__cell.is-wrong{background:rgba(194,69,45,.14);border-color:rgba(194,69,45,.5);color:#8c2f1c}
+.score__hint{font-size:12.5px;color:var(--muted);line-height:1.5}
+@media (max-width:900px){
+  .quiz-layout{grid-template-columns:1fr}
+  .score{position:static;order:-1}
+  .score__list{grid-template-columns:repeat(10,minmax(0,1fr));gap:6px}
+}

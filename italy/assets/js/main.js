@@ -34,6 +34,7 @@
       sheet.classList.toggle('is-open', isOpen);
       btn.classList.toggle('is-active', isOpen);
       document.body.classList.toggle('nav-open', isOpen);
+      if (window.ITALIA_LENIS) { if (isOpen) window.ITALIA_LENIS.stop(); else window.ITALIA_LENIS.start(); }
       btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       btn.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
       if (isOpen) sheet.removeAttribute('inert');
@@ -259,6 +260,20 @@
     var host = $('#quizBox');
     if (!host || !D.QUIZ) return;
     var q = D.QUIZ, step = 0, score = 0, locked = false;
+    var board = $('#quizScore');
+    var marks = [];                       /* null — не отвечен, true/false — итог */
+
+    function renderBoard() {
+      if (!board) return;
+      board.innerHTML =
+        '<p class="score__lab">Ваш счёт</p>' +
+        '<p class="score__num"><b>' + score + '</b><span>из ' + q.length + '</span></p>' +
+        '<ol class="score__list">' + q.map(function (_, i) {
+          var st = marks[i] === true ? ' is-right' : marks[i] === false ? ' is-wrong' : (i === step ? ' is-now' : '');
+          return '<li class="score__cell' + st + '"><span>' + String(i + 1).padStart(2, '0') + '</span></li>';
+        }).join('') + '</ol>' +
+        '<p class="score__hint">' + (step >= q.length ? 'Можно пройти ещё раз' : 'Разбор появляется сразу после ответа') + '</p>';
+    }
 
     function render() {
       if (step >= q.length) return finish();
@@ -273,6 +288,7 @@
         }).join('') + '</div>' +
         '<p class="quiz__exp" hidden></p>';
       locked = false;
+      renderBoard();
     }
 
     function finish() {
@@ -287,7 +303,11 @@
           '<p class="quiz__verdict">' + verdict + '</p>' +
           '<button class="btn" type="button" id="quizAgain">Ещё раз</button>' +
         '</div>';
-      $('#quizAgain').addEventListener('click', function () { step = 0; score = 0; render(); });
+      renderBoard();
+      $('#quizAgain').addEventListener('click', function () {
+        step = 0; score = 0; marks = [];
+        render();
+      });
     }
 
     host.addEventListener('click', function (e) {
@@ -300,9 +320,11 @@
         b.classList.toggle('is-wrong', i === pick && pick !== right);
         b.disabled = true;
       });
+      marks[step] = pick === right;
       if (pick === right) score++;
       var exp = $('.quiz__exp', host);
       exp.textContent = item.e; exp.hidden = false;
+      renderBoard();
       setTimeout(function () { step++; render(); }, 1750);
     });
 
