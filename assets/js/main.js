@@ -46,14 +46,34 @@
     if (isTouch || reduced) return;
     var cur = $('#cursor');
     if (!cur) return;
-    var dot = $('.cursor__dot', cur), ring = $('.cursor__ring', cur);
+    var dot = $('.cursor__dot', cur), ring = $('.cursor__ring', cur), label = $('.cursor__label', cur);
     var mx = window.innerWidth / 2, my = window.innerHeight / 2;
     var rx = mx, ry = my;
+
+    // «Крутится быстрее» — единственная подсказка, привязанная к геометрии,
+    // а не к hover-таргету: сцена дыры декоративна (pointer-events:none),
+    // поэтому обычный mouseover до неё не долетит.
+    var bhStage = $('#bhStage');
+    var overBh = false;
 
     document.addEventListener('mousemove', function (e) {
       mx = e.clientX; my = e.clientY;
       dot.style.transform = 'translate(' + mx + 'px,' + my + 'px) translate(-50%,-50%)';
       cur.classList.add('is-on');
+
+      if (bhStage) {
+        var r = bhStage.getBoundingClientRect();
+        var inside = mx >= r.left && mx <= r.right && my >= r.top && my <= r.bottom;
+        if (inside !== overBh) {
+          overBh = inside;
+          if (inside && !cur.classList.contains('is-hover')) {
+            label.textContent = 'Ускоряется ↻';
+            cur.classList.add('is-label');
+          } else {
+            cur.classList.remove('is-label');
+          }
+        }
+      }
     });
     document.addEventListener('mouseleave', function () { cur.classList.remove('is-on'); });
 
@@ -61,6 +81,7 @@
       rx += (mx - rx) * 0.16;
       ry += (my - ry) * 0.16;
       ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
+      label.style.transform = 'translate(' + rx + 'px,' + (ry - 40) + 'px) translate(-50%,-50%)';
       requestAnimationFrame(loop);
     })();
 
@@ -69,7 +90,11 @@
       if (e.target.closest(hoverables)) cur.classList.add('is-hover');
     });
     document.addEventListener('mouseout', function (e) {
-      if (e.target.closest(hoverables)) cur.classList.remove('is-hover');
+      if (e.target.closest(hoverables)) {
+        cur.classList.remove('is-hover');
+        overBh = false;
+        cur.classList.remove('is-label');
+      }
     });
   }
 
@@ -383,6 +408,36 @@
     })();
   }
 
+  /* ---------- 16. РЕЛЬС ПРОЦЕССА: АКТИВНЫЙ ШАГ ПРИ СКРОЛЛЕ ---------- */
+  function initStepsRail() {
+    var wrap = $('#stepsWrap'), fill = $('#stepsRailFill');
+    var steps = wrap ? $$('.step', wrap) : [];
+    if (!wrap || !fill || !steps.length) return;
+    var ticking = false;
+    var refRatio = 0.4; // доля высоты окна, где шаг считается «текущим»
+
+    function update() {
+      var r = wrap.getBoundingClientRect();
+      var refY = window.innerHeight * refRatio;
+      var pct = r.height > 0 ? Math.max(0, Math.min(1, (refY - r.top) / r.height)) : 0;
+      fill.style.height = (pct * 100) + '%';
+
+      var activeIdx = -1;
+      steps.forEach(function (step, i) {
+        var sr = step.getBoundingClientRect();
+        if (sr.top + sr.height / 2 <= refY) activeIdx = i;
+      });
+      steps.forEach(function (step, i) { step.classList.toggle('is-active', i === activeIdx); });
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+
   /* ---------- 13. МЕЛОЧИ ---------- */
   function initMisc() {
     var y = $('#year');
@@ -406,6 +461,7 @@
     initHeroTheme();
     initParallax();
     initGlassEye();
+    initStepsRail();
     initMisc();
   }
 

@@ -57,7 +57,7 @@
 
 <!-- ============ ДЕКОР ============ -->
 <div class="grain" aria-hidden="true"></div>
-<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
+<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span><span class="cursor__label" id="cursorLabel"></span></div>
 <div class="scroll-progress" aria-hidden="true"><i id="scrollBar"></i></div>
 
 <!-- ============ ШАПКА ============ -->
@@ -366,7 +366,9 @@
       </p>
     </div>
 
-    <ol class="steps">
+    <div class="steps-wrap" id="stepsWrap">
+      <div class="steps__rail" aria-hidden="true"><i id="stepsRailFill"></i></div>
+      <ol class="steps">
       <li class="step" data-reveal>
         <span class="step__n">01</span>
         <div class="step__body">
@@ -407,7 +409,8 @@
         </div>
         <span class="step__time">1 день</span>
       </li>
-    </ol>
+      </ol>
+    </div>
   </div>
 </section>
 
@@ -665,7 +668,7 @@
       </div>
       <div class="footer__col footer__col--wide">
         <b>Мини-студия разработки сайтов</b>
-        <p>Делаем понятные сайты по фиксированной цене. Тарифы $70 / $200 / $500, срок от 3 дней, гарантия до 90 дней.</p>
+        <p>Делаем понятные сайты по фиксированной цене. Тарифы $70 / $200 / $500, срок от 3 дней, гарантия до 90 дней. Даже эта страница весит ≈33 КБ после сжатия — html, css и js целиком, включая шейдер WebGL-чёрной дыры на первом экране. На слабой видеокарте дыра сама тихо становится картинкой — ничего не зависает.</p>
       </div>
     </div>
     <div class="footer__bottom">
