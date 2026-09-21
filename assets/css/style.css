@@ -282,6 +282,20 @@ html:not(.js) .loader{display:none}
 .card__list li{font-size:12px;padding:6px 12px;border:1px solid var(--line-strong);border-radius:100px;transition:border-color .5s}
 .card:hover .card__list li{border-color:var(--line-strong)}
 
+/* ---------- 11b. ВИДЫ БИЗНЕСА ---------- */
+.biz{margin-top:clamp(56px,7vw,104px)}
+.biz__title{font-family:var(--font-display);font-size:clamp(20px,2.4vw,30px);font-weight:600;letter-spacing:-.025em}
+.biz__desc{margin-top:10px;font-size:15px;line-height:1.6;color:var(--muted);max-width:60ch}
+.biz-grid{margin-top:clamp(28px,3vw,40px);display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+.biz-card{background:var(--bg);padding:clamp(20px,2vw,28px);display:flex;flex-direction:column;transition:background .5s var(--ease)}
+.biz-card:hover{background:rgba(255,255,255,.035)}
+.biz-card__tag{
+  align-self:flex-start;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:5px 10px;border:1px solid var(--line-strong);border-radius:100px;
+}
+.biz-card h4{font-family:var(--font-display);font-size:16px;font-weight:600;letter-spacing:-.02em;line-height:1.3;margin:16px 0 10px}
+.biz-card p{font-size:13.5px;line-height:1.55;color:var(--muted)}
+
 /* ---------- 12. ТАРИФЫ ---------- */
 .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,1.6vw,24px);align-items:start}
 .plan{
@@ -502,6 +516,7 @@ html:not(.js) .loader{display:none}
 @media (max-width:1080px){
   .cards{grid-template-columns:repeat(2,1fr)}
   .works{grid-template-columns:repeat(2,1fr)}
+  .biz-grid{grid-template-columns:repeat(3,1fr)}
   .plans{grid-template-columns:1fr;max-width:620px;margin-inline:auto}
   .plan__for{min-height:0}
   .footer__row{grid-template-columns:repeat(2,1fr)}
@@ -511,6 +526,7 @@ html:not(.js) .loader{display:none}
 @media (max-width:900px){
   .nav,.header__cta{display:none}
   .burger{display:block}
+  .biz-grid{grid-template-columns:repeat(2,1fr)}
   .why{grid-template-columns:1fr}
   .why__left{position:static}
   .contact__grid{grid-template-columns:1fr}
@@ -519,7 +535,7 @@ html:not(.js) .loader{display:none}
   .step__time{grid-column:2;text-align:left;font-size:12px;padding-top:0}
 }
 @media (max-width:640px){
-  .cards,.works{grid-template-columns:1fr}
+  .cards,.works,.biz-grid{grid-template-columns:1fr}
   .form{grid-template-columns:1fr}
   .footer__row{grid-template-columns:1fr;gap:26px}
   .hero__scroll{display:none}
