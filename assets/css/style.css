@@ -129,22 +129,6 @@ table{border-collapse:collapse;width:100%}
 .burger.is-open i:nth-child(1){transform:translateY(6px) rotate(45deg)}
 .burger.is-open i:nth-child(2){transform:translateY(-6px) rotate(-45deg)}
 
-/* ---------- 5b. ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА И ВАЛЮТЫ ---------- */
-.switch{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.switch__grp{display:flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:100px;padding:3px}
-.switch__grp button{
-  font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:.02em;
-  min-height:28px;padding:5px 10px;border-radius:100px;background:none;border:none;
-  color:var(--muted);cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease);
-}
-.switch__grp button:hover{color:var(--ink)}
-.switch__grp button.is-active{background:var(--ink);color:var(--on-ink)}
-.mmenu .switch{margin-top:32px}
-.mmenu .switch__grp{border-color:rgba(255,255,255,.18)}
-.mmenu .switch__grp button{color:rgba(255,255,255,.6)}
-.mmenu .switch__grp button:hover{color:#fff}
-.mmenu .switch__grp button.is-active{background:#fff;color:#0b0b12}
-
 /* ---------- 6. МОБИЛЬНОЕ МЕНЮ ---------- */
 .mmenu{
   position:fixed;inset:0;z-index:890;background:#0b0b12;color:#fff;
@@ -335,10 +319,7 @@ html:not(.js) .loader{display:none}
 .plan__for{font-size:14.5px;line-height:1.55;opacity:.65;min-height:4.6em}
 .plan__price{display:flex;align-items:flex-start;gap:4px;margin:26px 0 10px;font-family:var(--font-display);font-weight:800;letter-spacing:-.05em;line-height:1}
 .plan__price .cur{font-size:clamp(20px,2vw,26px);margin-top:.35em;opacity:.55}
-.plan__price b{font-size:clamp(48px,6.4vw,82px);font-variant-numeric:tabular-nums;white-space:nowrap}
-/* ₽/₸ рендерятся длиннее, чем $ — уменьшаем кегль, чтобы не переносилось */
-.plan__price--long b{font-size:clamp(30px,4.2vw,46px);letter-spacing:-.02em}
-.plan__price--long .cur{font-size:clamp(16px,1.6vw,20px)}
+.plan__price b{font-size:clamp(48px,6.4vw,82px);font-variant-numeric:tabular-nums}
 .plan__meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
 .plan__meta span{font-family:var(--font-mono);font-size:12px;padding:6px 12px;border:1px solid currentColor;opacity:.5;border-radius:100px}
 .plan__list{margin-top:28px;padding-top:26px;border-top:1px solid currentColor;display:flex;flex-direction:column;gap:13px}
@@ -543,7 +524,7 @@ html:not(.js) .loader{display:none}
   .hero__actions{justify-content:flex-start}
 }
 @media (max-width:900px){
-  .nav,.header__cta,.header .switch{display:none}
+  .nav,.header__cta{display:none}
   .burger{display:block}
   .biz-grid{grid-template-columns:repeat(2,1fr)}
   .why{grid-template-columns:1fr}
@@ -628,19 +609,17 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
   position:absolute;top:40%;left:71%;width:min(1020px,76vw);z-index:0;
   transform:translate(-50%,-50%) translate3d(0,var(--par-y,0px),0);
 }
-/* Сцена волны: холст Canvas 2D с анимированными линиями.
+/* Сцена дыры: холст WebGL, под ним запасная картинка.
    Маска растворяет прямоугольник холста в фоне страницы. */
-.wave-stage{
+.bh-stage{
   position:relative;width:100%;aspect-ratio:736/414;
-  animation:waveFloat 30s ease-in-out infinite;
+  animation:bhFloat 30s ease-in-out infinite;
   -webkit-mask-image:radial-gradient(50% 50% at 50% 50%,#000 50%,rgba(0,0,0,.5) 80%,transparent 100%);
   mask-image:radial-gradient(50% 50% at 50% 50%,#000 50%,rgba(0,0,0,.5) 80%,transparent 100%);
 }
-.wave-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-@keyframes waveFloat{
-  0%,100%{transform:translateY(0) rotate(0deg)}
-  50%{transform:translateY(-14px) rotate(.6deg)}
-}
+.bh-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.bh-fallback{width:100%;height:auto;display:block}
+.bh-stage.is-live .bh-fallback{visibility:hidden}
 /* подсветка диска, пока курсор над первым экраном */
 .hero__space-in{transition:filter .6s var(--ease)}
 .hero.is-spinning .hero__space-in{filter:brightness(1.16) contrast(1.04)}
@@ -668,10 +647,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
 .at-hero .header__cta::before{background:var(--on-ink)}
 .at-hero .header__cta:hover{color:#fff}
 .at-hero .scroll-progress i{background:#fff}
-.at-hero .header .switch__grp{border-color:rgba(255,255,255,.28)}
-.at-hero .header .switch__grp button{color:rgba(255,255,255,.65)}
-.at-hero .header .switch__grp button:hover{color:#fff}
-.at-hero .header .switch__grp button.is-active{background:#fff;color:var(--on-ink)}
 
 /* ---------- 25.2 Стеклянная кнопка (liquid glass) ---------- */
 .btn--glass{
@@ -810,7 +785,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,t
   .glass-eye{display:none}
 }
 @media (prefers-reduced-motion:reduce){
-  .wave-stage,.glass-eye__iris,.glass-eye__pupil{animation:none}
+  .bh-stage,.glass-eye__iris,.glass-eye__pupil{animation:none}
   .glass-eye{display:none}
 }
 @media (hover:none){
