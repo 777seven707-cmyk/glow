@@ -132,7 +132,8 @@
           if (start === null) start = ts;
           var p = Math.min((ts - start) / dur, 1);
           var eased = 1 - Math.pow(1 - p, 4);
-          el.textContent = Math.round(to * eased);
+          var n = Math.round(to * eased);
+          el.textContent = n >= 1000 ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : n;
           if (p < 1) requestAnimationFrame(step);
         }
         requestAnimationFrame(step);
