@@ -1,0 +1,8 @@
+{
+  "name": "havn",
+  "private": true,
+  "description": "HAVN — a digital sanctuary. Static site; the only Node code is api/chat.js, a single serverless function for the Talk feature.",
+  "engines": {
+    "node": ">=18"
+  }
+}

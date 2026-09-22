@@ -1,40 +1,54 @@
 # HAVN — a digital sanctuary
 
-A one-page, single-scroll experience built around calm instead of conversion —
-and, since this update, real support for anyone having a hard time. No
-pricing, no portfolio, no "start a project" funnel. Pure HTML/CSS/JS, no
-build step, no framework dependencies.
+A slow, single-scroll homepage built around calm instead of conversion, plus
+a handful of dedicated pages (one per topic, and a Talk page) — and, since
+this update, real support for anyone having a hard time. No pricing, no
+portfolio, no "start a project" funnel. Plain HTML/CSS/JS throughout, no
+build step, no framework dependencies — except `api/chat.js`, one small
+serverless function behind the Talk page (see "Talk" below), which is
+Node but still has no build step and no framework of its own.
 
 ## Concept
 
 HAVN isn't a studio site. It's a place a visitor arrives at, slows down in,
 and — if they need it — finds something that actually helps: a catalog of
-what hard feelings tend to look like, a breathing and grounding exercise, a
-private mood check-in, a small animal companion, and a list of real, verified
-crisis resources. The atmospheric sections (Philosophy, Spaces, Ritual,
-Presence, Moments) are still here — they're the "sanctuary" half. Topics,
-Tools, Companion and Support are the "help" half. Neither is a demo of the
-other; they're meant to work together.
+what hard feelings tend to look like, a breathing/grounding/reframing
+toolkit, a private mood check-in, a small animal companion, a live AI
+companion to talk to, and a list of real, verified crisis resources. The
+atmospheric sections (Philosophy, Spaces, Ritual, Presence, Moments) are
+still here — they're the "sanctuary" half. Topics, Tools, Companion, Talk
+and Support are the "help" half. Neither is a demo of the other; they're
+meant to work together.
 
 **This is not a substitute for professional care.** The Support section says
-so explicitly, in both languages, next to real crisis-line contacts. See
-"On the support content" below before repurposing this for anything beyond
-a portfolio/demo project.
+so explicitly, in both languages, next to real crisis-line contacts, and the
+Talk page repeats it above the chat itself. See "Support resources" and
+"Talk" below before repurposing any of this for anything beyond a
+portfolio/demo project — Talk especially, since it's the one part of the
+site that responds to people dynamically instead of showing fixed, reviewed
+text.
 
 ## Structure
 
 ```
 index.html                 all sections, SVG defs (glass filter, mark/cloud/bird symbols)
+talk.html                  the Talk page — live AI companion chat (needs api/chat.js deployed)
 topics/*.html               one static, crawlable page per topic (generated — see below)
 assets/css/style.css       design tokens, atmosphere, glass, motion, responsive
 assets/js/content.js       bilingual (en/ru) copy: topics, tool labels, pet
-                            affirmations, crisis resources, every UI string
+                            affirmations, crisis resources, CRISIS_PATTERNS
+                            keyword list, every UI string
 assets/js/main.js          i18n engine, loader, reveals, mood/parallax, cursor,
-                            sound, topic pages, breathing/grounding/mood tools,
-                            pet companion, nav
+                            sound, topic pages, breathing/grounding/reframing/
+                            mood tools, pet companion, nav
+assets/js/talk.js          Talk page only: chat UI, crisis-keyword scan,
+                            session-only (sessionStorage) history, /api/chat calls
+api/chat.js                serverless function (Vercel) that calls the Claude
+                            API server-side — the only non-static piece; see "Talk"
 assets/img/favicon.svg     the HAVN mark (orb + horizon)
 assets/img/og-cover.png    1200×630 share preview, rendered from the same mark
 scripts/build-topic-pages.js  one-off Node generator for topics/*.html (below)
+package.json                just an "engines" pin for api/chat.js — nothing to install
 components/ui/             React/shadcn reference components (not used by the
                             static site — see "Moving to React" below)
 .nojekyll                  so GitHub Pages serves files as-is
@@ -51,11 +65,20 @@ python3 -m http.server 8000
 
 ## Deploy
 
-Static site, any host works.
+Static site, any host works — **except** for the Talk page's chat, which
+needs `api/chat.js` to actually run somewhere. Everything else (including
+the rest of the Talk page itself — it just shows a "not connected yet"
+message without the function) works on any static host, unchanged.
 
 **GitHub Pages:** Settings → Pages → Source: `Deploy from a branch` → root.
+This serves every static file, `talk.html` included, but GitHub Pages can't
+run `api/chat.js` — Talk's chat won't work unless you also deploy that
+function elsewhere (below) and are OK with it living on a different origin.
 **Netlify / Vercel / Cloudflare Pages:** connect the repo, leave the build
-command empty, publish directory = repo root.
+command empty, publish directory = repo root. **Vercel specifically** also
+auto-deploys `api/chat.js` as a serverless function with zero config, which
+is why it's the simplest option if you want Talk fully working — see "Talk"
+below for the exact steps.
 
 If you publish under a real domain, change `og:image` / `twitter:image` in
 `index.html` to an absolute URL — otherwise Telegram/WhatsApp/Slack previews
@@ -225,14 +248,87 @@ plays a gentle bounce/tail-wag and surfaces a random line from its own
 affirmation pool (16 general, 9 feed-themed, 9 play-themed, per language).
 None of it decays — there's no hunger bar, no neglect state, nothing that
 could make a hard week feel like a second failure. The companion can be
-renamed via a native `prompt()`. It exists to be a soft, low-stakes,
-always-available presence — not a chatbot, not a game with a score.
+renamed via a native `prompt()`. On the homepage it exists to be a soft,
+low-stakes, always-available presence — pre-written affirmations, not a
+chatbot. If a visitor wants an actual conversation, that's a separate,
+clearly-labeled destination: the Talk page, below.
 
 All of the above's state (`havn_pet_species`, `havn_pet_name`,
 `havn_mood_<date>`, `havn_lang`) lives only in the visitor's own
-`localStorage`. The site makes zero network requests beyond loading its own
-static files — verified by watching the network panel through every
-interaction above.
+`localStorage`. Every homepage feature makes zero network requests beyond
+loading its own static files — verified by watching the network panel
+through every interaction above. Talk is the one deliberate exception; see
+below for exactly what it sends and where.
+
+## Talk
+
+`talk.html` is a live AI conversation — a different feature from the
+companion above, and honest about that difference: it's introduced as an
+AI, not pretended to be a real animal or a real person. It exists because
+sometimes a pre-written line isn't what someone needs; they need to
+actually say something and have a response land. It's the one part of this
+project that isn't a static site under the hood, and the one place real
+API cost and real safety questions apply, so it gets its own section.
+
+**How it works.** The page (`talk.html` + `assets/js/talk.js`) keeps the
+conversation in `sessionStorage` only — gone when the tab closes, or the
+moment someone clicks "New conversation." Every send POSTs the *whole*
+message list so far to `/api/chat`, a small serverless function
+(`api/chat.js`) that adds a system prompt server-side, forwards it to the
+Claude API with the site owner's own key, and returns just the reply. The
+function is stateless: it logs nothing, stores nothing, and the API key
+never appears in any file that ships to the browser.
+
+**The system prompt holds three lines that don't move, regardless of what
+a visitor asks for:**
+1. It never runs an actual trauma-processing or reprocessing technique
+   (no imitation EMDR, no "let's revisit that memory," no exposure
+   scripts) — that specific kind of work needs a trained person in the
+   room, not an unsupervised model. It's instructed to say so warmly if
+   someone asks for it, not to attempt it.
+2. It never diagnoses, never names a condition, never suggests medication
+   or a specific treatment.
+3. On any sign of acute risk, it's instructed to stay present and guide
+   the person toward Support rather than trying to handle it alone.
+
+Rule 3 is backed by code, not just the model's judgment: every message a
+visitor sends is checked against `CRISIS_PATTERNS` in `content.js` (a
+plain, deterministic keyword/phrase list, English and Russian) *before* it
+reaches the AI at all. A match pins the same Support resources from below
+directly onto the Talk page — visibly, and for the rest of that session —
+whether or not the model itself brings it up. This is a blunt instrument
+(explicit phrases only, so it won't catch everything, and can occasionally
+false-trigger on an unrelated sentence that happens to contain one) but a
+predictable one, which matters more here than cleverness would.
+
+Beyond that: replies are capped short by `max_tokens` (this is meant to be
+a conversation, not an essay generator); after every 20 messages a gentle,
+skippable "no rush to finish" note appears rather than nothing (no
+engagement-maximizing design, same rule the rest of the site holds to);
+and there's no rate limiting on the function itself, so keep an eye on
+usage in the Anthropic console — a slow week costs little, a link that
+goes viral could cost real money.
+
+**To actually turn it on**, you need your own Anthropic API key — nothing
+here can provision or pay for one on your behalf:
+1. Create a key at [console.anthropic.com](https://console.anthropic.com).
+2. Deploy this repo to Vercel (or any host that runs Node serverless
+   functions from an `api/` folder the same way).
+3. In the Vercel project's environment variables, add `ANTHROPIC_API_KEY`
+   with that key. Optionally add `HAVN_TALK_MODEL` to pin a specific model
+   id instead of the `claude-sonnet-5` default — model ids change over
+   time, so check the current ones before deploying.
+4. Redeploy. Until step 3 is done, the Talk page still loads and reads
+   fine — sending a message just shows a plain "not connected yet" note
+   instead of failing silently.
+
+**If you fork this for real-world use beyond a portfolio/demo**, Talk is
+the piece that most needs a second, qualified pair of eyes before real
+strangers use it — more than the static Topics text, because it responds
+live instead of showing fixed, already-reviewed words. Have someone with
+real clinical judgment review the system prompt in `api/chat.js` and the
+`CRISIS_PATTERNS` list in `content.js`, and go in expecting to keep tuning
+both.
 
 ## Support resources
 
@@ -309,6 +405,13 @@ does — `makeDraggable()` in `main.js` wires pointer and keyboard handling
 side by side rather than faking keyboard support on top of a mouse-only
 gesture.
 
+Talk's chat is a real `<form>` — `Enter` sends, `Tab` order is untouched,
+the message list and error/pause notes are `aria-live="polite"` so a screen
+reader announces new replies without needing focus moved there, and the
+crisis panel is `aria-live="assertive"` specifically so it interrupts and
+gets announced immediately when it appears, rather than waiting to be
+discovered.
+
 One general-purpose fix worth noting: `[hidden]{display:none !important}`
 was added to the reset, because the grounding tool's "Start over" button —
 `hidden` by default, `class="btn ..."` — stayed visible despite the
@@ -338,7 +441,10 @@ avoid blurring huge painted layers.
 | `assets/js/content.js` — `TOPICS` | the eight topic cards, both languages |
 | `assets/js/content.js` — `HELP_RESOURCES` | crisis/support resources — **re-verify before reuse** |
 | `assets/js/content.js` — `PET_MESSAGES`, `MOOD_OPTIONS` | companion affirmations, mood check-in options |
+| `assets/js/content.js` — `CRISIS_PATTERNS` | Talk's keyword safety net — **have someone qualified review before reuse** |
 | `assets/js/content.js` — `UI` | every other translated string on the page |
+| `api/chat.js` — `buildSystemPrompt()` | Talk's AI persona and hard safety rules |
+| `api/chat.js` — `DEFAULT_MODEL`, `MAX_OUTPUT_TOKENS` | which model Talk calls, and its reply-length cap |
 | `assets/css/style.css` — `:root` | palette, spacing, easing |
 | `assets/js/main.js` — `initSound()` | the chord/voicing used for ambient sound |
 | `index.html` — footer `mailto:` | contact address |

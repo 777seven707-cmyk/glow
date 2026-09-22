@@ -1088,9 +1088,36 @@
     { id: "calm", emoji: "😌", label: { en: "Calm", ru: "Спокойно" }, reflection: { en: "That's a nice place to rest for a while.", ru: "Хорошее место, чтобы немного здесь отдохнуть." } }
   ];
 
+  /* Deterministic, non-AI safety net for the Talk feature: if any of these
+     match, the crisis-resources panel is shown regardless of what the model
+     says. Deliberately explicit phrases, not single common words, to avoid
+     false-triggering on ordinary conversation. */
+  var CRISIS_PATTERNS = {
+    en: [
+      "kill myself", "killing myself", "end my life", "ending my life",
+      "want to die", "wish i was dead", "wish i were dead", "suicide",
+      "suicidal", "self-harm", "self harm", "hurt myself", "hurting myself",
+      "cut myself", "cutting myself", "reason to live", "better off dead",
+      "better off without me", "burden to everyone", "burden on everyone",
+      "not worth living", "point in living", "tired of living",
+      "give up on life", "can't go on", "cant go on",
+      "don't want to be here anymore", "dont want to be here anymore",
+      "end it all"
+    ],
+    ru: [
+      "покончить с собой", "покончить жизнь", "не хочу жить", "хочу умереть",
+      "убить себя", "себя убить", "суицид", "самоубийство",
+      "причинить себе вред", "навредить себе", "порезать себя",
+      "порезаться", "больше не могу", "смысла жить", "лучше бы умереть",
+      "не хочу больше жить", "свести счёты с жизнью",
+      "без меня всем будет лучше", "всем будет лучше без меня",
+      "всем будет легче без меня", "в тягость", "устал жить", "устала жить"
+    ]
+  };
+
   var UI = {
     en: {
-      nav: { topics: "Topics", tools: "Tools", companion: "Companion", moments: "Moments", support: "Support" },
+      nav: { topics: "Topics", tools: "Tools", companion: "Companion", talk: "Talk", moments: "Moments", support: "Support" },
       lang: { label: "EN" },
       sound: { label: "Toggle ambient sound" },
 
@@ -1155,6 +1182,27 @@
         foodItem: "Food", toyItem: "Toy", petAction: "Pet",
         catName: "Momo", dogName: "Biscuit"
       },
+      talk: {
+        eyebrow: "A place to talk",
+        title1: "Say what's on",
+        title2: "your mind.",
+        desc: "An AI companion to talk things through with — warm, patient, and honest about what it is and isn't.",
+        disclaimer: "This is an AI, styled as your companion — not a real animal, not a therapist, and not a crisis service. It can't diagnose or treat anything. If you're in immediate danger, please contact local emergency services.",
+        greeting: "{name} is here, and listening. Start wherever feels right — there's no wrong way in.",
+        placeholder: "Type here…",
+        send: "Send",
+        sending: "…",
+        reset: "New conversation",
+        resetConfirm: "Start a new conversation? This clears what you've written so far — nothing was ever saved anywhere but this tab.",
+        privacyNote: "Nothing here is saved on a server. This conversation lives only in this browser tab and clears when you close it, or when you start a new one.",
+        crisisTitle: "Before anything else",
+        crisisBody: "What you're describing sounds like it might be more than this page can hold safely. These are real, free places to talk to a person right now:",
+        pauseNudge: "You've been at this a while. There's no rush to finish anything — a short break, or one of the tools below, might help too.",
+        errorGeneric: "Something went wrong reaching the AI. Please try again in a moment.",
+        errorNoKey: "This feature isn't connected yet — the site owner needs to add an API key for it to work.",
+        toolsLink: "Try a tool instead →",
+        supportLink: "Go to Support →"
+      },
       statement: { text: "Stillness is a place you can visit." },
       ritual: {
         eyebrow: "A quiet ritual", title: "How to be here.",
@@ -1193,14 +1241,14 @@
         tagline: "A digital sanctuary for a noisy world.",
         explore: "Explore", support: "Get support", connect: "Connect",
         philosophy: "Philosophy", spacesLink: "Spaces", ritual: "Ritual", presence: "Presence", moments: "Moments",
-        topicsLink: "Topics", toolsLink: "Tools", companionLink: "Companion", helpLink: "Support",
+        topicsLink: "Topics", toolsLink: "Tools", companionLink: "Companion", talkLink: "Talk", helpLink: "Support",
         copyright: "HAVN. A digital sanctuary.", toTop: "Back to top ↑"
       },
       loader: { word: "Arriving, quietly" }
     },
 
     ru: {
-      nav: { topics: "Темы", tools: "Инструменты", companion: "Питомец", moments: "Моменты", support: "Поддержка" },
+      nav: { topics: "Темы", tools: "Инструменты", companion: "Питомец", talk: "Поговорить", moments: "Моменты", support: "Поддержка" },
       lang: { label: "RU" },
       sound: { label: "Включить фоновый звук" },
 
@@ -1265,6 +1313,27 @@
         foodItem: "Корм", toyItem: "Игрушка", petAction: "Погладить",
         catName: "Мурзик", dogName: "Бублик"
       },
+      talk: {
+        eyebrow: "Место, где можно поговорить",
+        title1: "Скажите то,",
+        title2: "что на душе.",
+        desc: "ИИ-собеседник, с которым можно проговорить всё — тёплый, терпеливый и честный о том, чем он является, а чем нет.",
+        disclaimer: "Это ИИ в образе вашего питомца — не настоящее животное, не терапевт и не кризисная линия. Он не ставит диагнозы и не лечит. Если вам угрожает непосредственная опасность, пожалуйста, обратитесь в экстренные службы.",
+        greeting: "{name} здесь и слушает. Начните с чего угодно — неправильного входа здесь нет.",
+        placeholder: "Напишите здесь…",
+        send: "Отправить",
+        sending: "…",
+        reset: "Новый разговор",
+        resetConfirm: "Начать новый разговор? Это очистит написанное — оно нигде и не сохранялось, кроме этой вкладки.",
+        privacyNote: "Ничего из этого не сохраняется на сервере. Разговор существует только в этой вкладке браузера и исчезает при закрытии — или когда вы начнёте новый.",
+        crisisTitle: "Прежде всего",
+        crisisBody: "То, что вы описываете, звучит как то, что этой странице одной не удержать безопасно. Вот реальные бесплатные места, где можно поговорить с человеком прямо сейчас:",
+        pauseNudge: "Вы здесь уже какое-то время. Спешить закончить что-то не нужно — короткая пауза или один из инструментов ниже тоже может помочь.",
+        errorGeneric: "Не получилось связаться с ИИ. Пожалуйста, попробуйте ещё раз через момент.",
+        errorNoKey: "Эта функция пока не подключена — владельцу сайта нужно добавить API-ключ, чтобы она заработала.",
+        toolsLink: "Попробовать инструмент →",
+        supportLink: "К разделу «Поддержка» →"
+      },
       statement: { text: "Тишина — это место, которое можно посетить." },
       ritual: {
         eyebrow: "Тихий ритуал", title: "Как здесь находиться.",
@@ -1303,7 +1372,7 @@
         tagline: "Цифровое убежище для шумного мира.",
         explore: "Разделы", support: "Поддержка", connect: "Связь",
         philosophy: "Философия", spacesLink: "Пространства", ritual: "Ритуал", presence: "Присутствие", moments: "Моменты",
-        topicsLink: "Темы", toolsLink: "Инструменты", companionLink: "Питомец", helpLink: "Поддержка",
+        topicsLink: "Темы", toolsLink: "Инструменты", companionLink: "Питомец", talkLink: "Поговорить", helpLink: "Поддержка",
         copyright: "HAVN. Цифровое убежище.", toTop: "Наверх ↑"
       },
       loader: { word: "Тихо загружаемся" }
@@ -1315,6 +1384,7 @@
     TOPICS: TOPICS,
     HELP_RESOURCES: HELP_RESOURCES,
     PET_MESSAGES: PET_MESSAGES,
-    MOOD_OPTIONS: MOOD_OPTIONS
+    MOOD_OPTIONS: MOOD_OPTIONS,
+    CRISIS_PATTERNS: CRISIS_PATTERNS
   };
 })(window);

@@ -719,6 +719,76 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
 }
 
 /* ==========================================================================
+   Talk (AI companion chat)
+   ========================================================================== */
+
+.talk-disclaimer{
+  font-size:.85rem;color:var(--ink-2);font-weight:300;line-height:1.55;
+  background:var(--glass-soft);border:1px solid var(--glass-border);border-radius:16px;
+  padding:1rem 1.25rem;margin-bottom:1.75rem;
+}
+
+.talk-crisis{
+  background:var(--glass);border:2px solid var(--azure-deep);border-radius:22px;
+  padding:1.5rem 1.75rem;box-shadow:var(--glass-shadow);margin-bottom:1.75rem;
+}
+.talk-crisis__title{font-size:1.25rem;font-weight:600;color:var(--ink);margin-bottom:.6rem}
+.talk-crisis__body{color:var(--ink-2);font-weight:300;margin-bottom:1.25rem;line-height:1.55}
+.talk-crisis__grid.help__grid{margin-bottom:0}
+
+.talk-chat{
+  background:var(--glass-soft);border:1px solid var(--glass-border);border-radius:28px;
+  padding:clamp(1.25rem,3vw,1.75rem);
+  backdrop-filter:blur(18px) saturate(130%);-webkit-backdrop-filter:blur(18px) saturate(130%);
+}
+
+.talk-chat__messages{
+  display:flex;flex-direction:column;gap:.9rem;
+  max-height:52vh;overflow-y:auto;padding-right:.25rem;margin-bottom:1rem;
+  scroll-behavior:smooth;
+}
+.talk-msg{
+  max-width:84%;padding:.85rem 1.1rem;border-radius:18px;
+  font-size:.92rem;line-height:1.55;font-weight:300;color:var(--ink);
+  white-space:pre-wrap;word-break:break-word;
+}
+.talk-msg--assistant{align-self:flex-start;background:var(--glass-soft);border:1px solid var(--glass-border);border-bottom-left-radius:6px}
+.talk-msg--user{align-self:flex-end;background:var(--glass-strong);border:1px solid var(--glass-border);border-bottom-right-radius:6px}
+.talk-msg--pending{opacity:.55}
+.talk-msg--pending .talk-msg__dots i{
+  display:inline-block;width:5px;height:5px;margin-right:3px;border-radius:50%;
+  background:var(--ink-3);animation:talkDot 1.2s ease-in-out infinite;
+}
+.talk-msg--pending .talk-msg__dots i:nth-child(2){animation-delay:.15s}
+.talk-msg--pending .talk-msg__dots i:nth-child(3){animation-delay:.3s}
+@keyframes talkDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+
+.talk-chat__pause{font-size:.82rem;color:var(--ink-2);font-style:italic;margin-bottom:.85rem}
+.talk-chat__error{
+  font-size:.85rem;color:var(--ink-2);background:var(--glass-soft);
+  border:1px solid rgba(242,169,184,.7);border-radius:14px;padding:.75rem 1rem;margin-bottom:.85rem;
+}
+
+.talk-chat__form{display:flex;gap:.6rem;align-items:flex-end}
+.talk-chat__input{
+  flex:1;resize:none;max-height:9.5rem;
+  background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;
+  padding:.85rem 1.1rem;font-size:.92rem;line-height:1.5;color:var(--ink);
+  transition:background .3s,border-color .3s;
+}
+.talk-chat__input:focus{background:var(--glass-strong);border-color:var(--azure)}
+.talk-chat__input::placeholder{color:var(--ink-3)}
+.talk-chat__form .btn{flex-shrink:0}
+
+.talk-chat__meta{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  margin-top:1rem;flex-wrap:wrap;
+}
+.talk-chat__reset{font-size:.76rem;color:var(--ink-3);text-decoration:underline;text-underline-offset:2px}
+.talk-chat__reset:hover{color:var(--azure-deep)}
+.talk-chat__privacy{font-size:.72rem;color:var(--ink-3);max-width:26rem;text-align:right}
+
+/* ==========================================================================
    Big statement
    ========================================================================== */
 
@@ -948,6 +1018,9 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
   .topic-page__icon{width:36px;height:36px}
   .pet{width:150px}
   .companion__pick{padding:.5rem 1.1rem;font-size:.8rem}
+  .talk-msg{max-width:92%}
+  .talk-chat__meta{flex-direction:column;align-items:flex-start}
+  .talk-chat__privacy{text-align:left;max-width:none}
 }
 
 /* ==========================================================================

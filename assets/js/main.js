@@ -145,6 +145,11 @@
       if (typeof val === "string") el.textContent = val;
     });
 
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
+      var val = getPath(ui, el.getAttribute("data-i18n-placeholder"));
+      if (typeof val === "string") el.placeholder = val;
+    });
+
     document.querySelectorAll("[data-split='words'][data-i18n]").forEach(function (el) {
       var val = getPath(ui, el.getAttribute("data-i18n"));
       if (typeof val !== "string") return;
