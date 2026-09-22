@@ -4,6 +4,10 @@
   var C = window.HAVN_CONTENT;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var SITE_ROOT = (function () {
+    var el = document.currentScript;
+    return el ? el.src.replace(/assets\/js\/main\.js(\?.*)?$/, "") : "";
+  })();
 
   var STATE = {
     lang: "en",
@@ -901,13 +905,11 @@
   }
 
   /* ---- Ambient sound ----
-     Generative, not a recording: no licensed track could be fetched from
-     this environment (outbound access is restricted to a small allowlist
-     that excludes every audio host tried — see README "Sound"), so this
-     synthesizes a slow-evolving ambient pad instead: a four-chord diatonic
-     progression, crossfaded between two oscillator banks so retuning is
-     always silent, a sparse generative pentatonic melody, and a procedural
-     convolution-reverb impulse (a decaying noise buffer, not a sample). */
+     A real track (assets/audio/ambient.mp3), looped gapless through the Web
+     Audio API rather than a plain <audio loop> element: decoding it once
+     into an AudioBuffer and looping that buffer avoids the small seam MP3s
+     can get at their loop point with a media element. Fetched and decoded
+     lazily on first click, not on page load. */
   function initSound() {
     var buttons = [
       document.getElementById("soundToggle"),
@@ -918,169 +920,45 @@
     var AudioCtx = window.AudioContext || window.webkitAudioContext;
     var ctx = null,
       master = null,
-      dryBus = null,
-      reverbBus = null,
+      source = null,
+      buffer = null,
+      loadPromise = null,
       playing = false,
-      fadeTimer = null,
-      chordTimer = null,
-      melodyTimer = null;
+      failed = false,
+      fadeTimer = null;
 
-    var banks = [null, null];
-    var activeBank = 0;
-    var chordIdx = 0;
-    var PROGRESSION = [
-      [130.81, 164.81, 196.0, 246.94], // C major 7
-      [110.0, 130.81, 164.81, 196.0], // A minor 7
-      [87.31, 110.0, 130.81, 164.81], // F major 7
-      [98.0, 130.81, 146.83, 196.0], // G suspended 4
-    ];
-    var PENTATONIC = [261.63, 293.66, 329.63, 392.0, 440.0];
-
-    function makeImpulse() {
-      var duration = 2.6,
-        decay = 2.4,
-        rate = ctx.sampleRate,
-        length = Math.floor(rate * duration);
-      var buf = ctx.createBuffer(2, length, rate);
-      for (var c = 0; c < 2; c++) {
-        var data = buf.getChannelData(c);
-        for (var i = 0; i < length; i++) {
-          data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
-        }
-      }
-      return buf;
-    }
-
-    function makeBank(freqs) {
-      var bankGain = ctx.createGain();
-      bankGain.gain.value = 0;
-      var oscs = freqs.map(function (f) {
-        var osc = ctx.createOscillator();
-        osc.type = "sine";
-        osc.frequency.value = f;
-        var voiceGain = ctx.createGain();
-        voiceGain.gain.value = 0.12;
-        osc.connect(voiceGain);
-        if (ctx.createStereoPanner) {
-          var pan = ctx.createStereoPanner();
-          pan.pan.value = Math.random() * 1.2 - 0.6;
-          voiceGain.connect(pan);
-          pan.connect(bankGain);
-        } else {
-          voiceGain.connect(bankGain);
-        }
-        osc.start();
-        return osc;
-      });
-      return { gain: bankGain, oscs: oscs };
-    }
-
-    function crossfadeToChord() {
-      var next = (chordIdx + 1) % PROGRESSION.length;
-      var incoming = activeBank === 0 ? 1 : 0;
-      banks[incoming].oscs.forEach(function (osc, i) {
-        osc.frequency.setValueAtTime(PROGRESSION[next][i], ctx.currentTime);
-      });
-      var now = ctx.currentTime,
-        dur = 6;
-      [banks[activeBank].gain, banks[incoming].gain].forEach(function (g, idx) {
-        var target = idx === 0 ? 0 : 1;
-        g.gain.cancelScheduledValues(now);
-        g.gain.setValueAtTime(g.gain.value, now);
-        g.gain.linearRampToValueAtTime(target, now + dur);
-      });
-      activeBank = incoming;
-      chordIdx = next;
-    }
-
-    function scheduleMelody() {
-      var delay = 6000 + Math.random() * 9000;
-      melodyTimer = setTimeout(function () {
-        if (!playing) return;
-        var freq = PENTATONIC[Math.floor(Math.random() * PENTATONIC.length)];
-        var osc = ctx.createOscillator();
-        osc.type = "sine";
-        osc.frequency.value = freq;
-        var g = ctx.createGain();
-        g.gain.value = 0;
-        osc.connect(g);
-        g.connect(dryBus);
-        g.connect(reverbBus);
-        var now = ctx.currentTime;
-        g.gain.linearRampToValueAtTime(0.045, now + 1.4);
-        g.gain.linearRampToValueAtTime(0, now + 5.5);
-        osc.start(now);
-        osc.stop(now + 6);
-        setTimeout(function () {
-          try {
-            osc.disconnect();
-            g.disconnect();
-          } catch (e) {}
-        }, 6200);
-        scheduleMelody();
-      }, delay);
-    }
-
-    function startSchedulers() {
-      clearInterval(chordTimer);
-      clearTimeout(melodyTimer);
-      chordTimer = setInterval(crossfadeToChord, 24000);
-      scheduleMelody();
-    }
-    function stopSchedulers() {
-      clearInterval(chordTimer);
-      clearTimeout(melodyTimer);
-    }
-
-    function build() {
-      if (!AudioCtx) return false;
+    function ensureContext() {
+      if (ctx) return ctx;
+      if (!AudioCtx) return null;
       ctx = new AudioCtx();
-      if (ctx.state === "suspended") ctx.resume();
-
       master = ctx.createGain();
       master.gain.value = 0;
       master.connect(ctx.destination);
+      return ctx;
+    }
 
-      dryBus = ctx.createGain();
-      dryBus.gain.value = 0.7;
-      reverbBus = ctx.createGain();
-      reverbBus.gain.value = 0.45;
-      var convolver = ctx.createConvolver();
-      convolver.buffer = makeImpulse();
-      var wetGain = ctx.createGain();
-      wetGain.gain.value = 0.32;
+    function loadBuffer() {
+      if (loadPromise) return loadPromise;
+      loadPromise = fetch(SITE_ROOT + "assets/audio/ambient.mp3")
+        .then(function (res) {
+          if (!res.ok) throw new Error("ambient audio request failed");
+          return res.arrayBuffer();
+        })
+        .then(function (data) {
+          return ctx.decodeAudioData(data);
+        })
+        .then(function (decoded) {
+          buffer = decoded;
+        });
+      return loadPromise;
+    }
 
-      var padFilter = ctx.createBiquadFilter();
-      padFilter.type = "lowpass";
-      padFilter.frequency.value = 900;
-      padFilter.Q.value = 0.3;
-
-      padFilter.connect(dryBus);
-      padFilter.connect(reverbBus);
-      reverbBus.connect(convolver);
-      convolver.connect(wetGain);
-      dryBus.connect(master);
-      wetGain.connect(master);
-
-      banks[0] = makeBank(PROGRESSION[0]);
-      banks[1] = makeBank(PROGRESSION[1]);
-      banks[0].gain.connect(padFilter);
-      banks[1].gain.connect(padFilter);
-      banks[0].gain.gain.value = 1;
-      banks[1].gain.gain.value = 0;
-      activeBank = 0;
-      chordIdx = 0;
-
-      var lfo = ctx.createOscillator();
-      lfo.frequency.value = 0.05;
-      var lfoGain = ctx.createGain();
-      lfoGain.gain.value = 140;
-      lfo.connect(lfoGain);
-      lfoGain.connect(padFilter.frequency);
-      lfo.start();
-
-      startSchedulers();
-      return true;
+    function startSource() {
+      source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.loop = true;
+      source.connect(master);
+      source.start(0);
     }
 
     function setPressed(state) {
@@ -1090,28 +968,42 @@
       });
     }
 
-    function enable() {
-      if (!ctx && !build()) return;
-      if (ctx.state === "suspended") ctx.resume();
-      startSchedulers();
-      clearTimeout(fadeTimer);
+    function fadeTo(target, duration) {
       var now = ctx.currentTime;
       master.gain.cancelScheduledValues(now);
       master.gain.setValueAtTime(master.gain.value, now);
-      master.gain.linearRampToValueAtTime(0.5, now + 2.5);
-      playing = true;
+      master.gain.linearRampToValueAtTime(target, now + duration);
+    }
+
+    function enable() {
+      if (!ensureContext() || failed) return;
       setPressed(true);
+      playing = true;
+      clearTimeout(fadeTimer);
+
+      var go = function () {
+        if (!playing) return;
+        if (ctx.state === "suspended") ctx.resume();
+        if (!source) startSource();
+        fadeTo(0.55, 2.5);
+      };
+
+      if (buffer) {
+        go();
+      } else {
+        loadBuffer().then(go).catch(function () {
+          failed = true;
+          playing = false;
+          setPressed(false);
+        });
+      }
     }
 
     function disable() {
       setPressed(false);
       playing = false;
-      if (!ctx) return;
-      var now = ctx.currentTime;
-      master.gain.cancelScheduledValues(now);
-      master.gain.setValueAtTime(master.gain.value, now);
-      master.gain.linearRampToValueAtTime(0, now + 1.4);
-      stopSchedulers();
+      if (!ctx || !source) return;
+      fadeTo(0, 1.4);
       clearTimeout(fadeTimer);
       fadeTimer = setTimeout(function () {
         if (ctx && !playing) ctx.suspend();

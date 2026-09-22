@@ -47,6 +47,7 @@ api/chat.js                serverless function (Vercel) that calls the Claude
                             API server-side — the only non-static piece; see "Talk"
 assets/img/favicon.svg     the HAVN mark (orb + horizon)
 assets/img/og-cover.png    1200×630 share preview, rendered from the same mark
+assets/audio/ambient.mp3   the looped ambient track behind the sound toggle
 scripts/build-topic-pages.js  one-off Node generator for topics/*.html (below)
 package.json                just an "engines" pin for api/chat.js — nothing to install
 components/ui/             React/shadcn reference components (not used by the
@@ -158,30 +159,31 @@ blue. One `IntersectionObserver` in `main.js` drives all of it.
 ## Sound
 
 Off by default, everywhere. The glass toggle in the navbar (and its twin in
-the mobile menu) doesn't play a file — it **generates** the music live with
-the Web Audio API. This wasn't the first choice; a real recorded ambient
-track was — but this build environment's outbound network is restricted to
-a small allowlist (package registries, the configured GitHub repo) and every
-audio host tried (Wikimedia Commons, Internet Archive, Pixabay, incompetech,
-Free Music Archive, freepd) came back blocked at the network layer, not a
-licensing problem. If you'd rather ship a real track, drop a file at
-`assets/audio/ambient.mp3` (a CC0/CC-BY loop from any of the sites above
-works well) and point the toggle at an `<audio>` element instead — the
-generative engine below is a genuine fallback, not a placeholder.
+the mobile menu) plays `assets/audio/ambient.mp3`, a real track, looped.
 
-What it actually does: two oscillator banks (four sine voices each) crossfade
-between four diatonic chords — Cmaj7 → Am7 → Fmaj7 → Gsus4, chosen so
-neighboring chords share tones — over a 24s cycle, always retuning the
-*silent* bank so nothing audibly snaps. A sparse generative melody
-(one soft pentatonic note every 6-15s, picked at random) plays over it.
-Both run through a shared lowpass filter with a slow breathing LFO, and
-through a procedural reverb — a `ConvolverNode` fed a synthesized decaying-
-noise impulse response, not a recorded impulse sample — for a sense of space
-without a single shipped byte of audio. Gain ramps over ~2.5s on enable and
-~1.4s on disable (no clicks); the `AudioContext` is created lazily on first
-click (autoplay policy), and both the oscillator graph and the JS chord/
-melody schedulers pause when the context suspends after fade-out, so a
-muted tab costs nothing.
+It's decoded once into an `AudioBuffer` and played through an
+`AudioBufferSourceNode` with `loop = true`, rather than a plain
+`<audio loop>` element — MP3s can pick up a small audible seam at the loop
+point through a media element (encoder padding at the file's edges), and
+looping the decoded buffer directly avoids that. The buffer is fetched and
+decoded lazily on first click (not on page load — nothing about a ~6MB file
+should cost a visitor who never touches the toggle anything), then cached,
+so toggling off and back on never re-fetches it. Gain ramps over ~2.5s on
+enable and ~1.4s on disable (no clicks); the source itself just keeps
+running while `AudioContext.suspend()` freezes it silently in between, so a
+muted tab costs nothing and toggling resumes mid-loop rather than
+restarting the track from zero. `main.js` resolves the fetch URL from its
+own `<script>` tag's resolved `src` rather than a hardcoded relative path,
+since the same `main.js` runs from `index.html`, `talk.html`, and every
+`topics/*.html` file at a different folder depth.
+
+An earlier version of this synthesized the pad live with oscillators and a
+procedural reverb, before a real track existed to loop — see git history if
+that's ever useful again. If you swap in your own track, same path,
+`assets/audio/ambient.mp3`, same loop-friendly approach applies: something
+without a hard cut at either end loops far more gracefully than something
+that ends abruptly, since the tail flows straight into the head with no
+crossfade of its own.
 
 ## Topics, Tools & Companion
 
@@ -446,7 +448,7 @@ avoid blurring huge painted layers.
 | `api/chat.js` — `buildSystemPrompt()` | Talk's AI persona and hard safety rules |
 | `api/chat.js` — `DEFAULT_MODEL`, `MAX_OUTPUT_TOKENS` | which model Talk calls, and its reply-length cap |
 | `assets/css/style.css` — `:root` | palette, spacing, easing |
-| `assets/js/main.js` — `initSound()` | the chord/voicing used for ambient sound |
+| `assets/audio/ambient.mp3` | the looped ambient track itself — swap the file to change the sound |
 | `index.html` — footer `mailto:` | contact address |
 
 ## Moving to React
