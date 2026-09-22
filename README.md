@@ -354,6 +354,19 @@ someone qualified before you rely on it. Nothing here was written to
 diagnose, treat, or replace care; it was written to be a decent first step
 and a nudge toward real help.
 
+`#charity`, right below it, is HAVN asking something small back — three
+honest, no-backend-required actions: **Share it** copies the current page's
+own URL via `navigator.share()` where it's available, `navigator.clipboard`
+otherwise (never a hardcoded domain, since this project doesn't assume
+where it's deployed); **Write to us** is the same `hello@havn.studio`
+`mailto:` link already in the footer; **Support who helps** just points
+back up at `#help`. Deliberately no payment/donation button — that would
+mean either a fabricated link or a real payment integration this project
+doesn't have, and a fake "Donate" button on a mental-health site is exactly
+the kind of thing this README elsewhere asks you not to ship. If you want a
+real one, wire your own Ko-fi/Boosty/PayPal.me link into a fourth
+`.charity__card` in `index.html`.
+
 ## Language
 
 Two full languages ship today — English (default for most visitors) and

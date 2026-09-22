@@ -29,6 +29,7 @@
     wireGrounding();
     wireReframe();
     wireCompanion();
+    wireCharityShare();
     initI18n();
     initReveal();
     initAtmosphereMood();
@@ -902,6 +903,33 @@
         }
       });
     }
+  }
+
+  /* ---- Charity: share button ---- */
+  function wireCharityShare() {
+    var btn = document.getElementById("charityShare");
+    var note = document.getElementById("charityShareNote");
+    if (!btn) return;
+    var clearTimer = null;
+    btn.addEventListener("click", function () {
+      var url = window.location.href;
+      if (navigator.share) {
+        navigator.share({ title: document.title, url: url }).catch(function () {});
+        return;
+      }
+      if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+      navigator.clipboard
+        .writeText(url)
+        .then(function () {
+          if (!note) return;
+          note.textContent = C.UI[STATE.lang].charity.shareCopied;
+          clearTimeout(clearTimer);
+          clearTimer = setTimeout(function () {
+            note.textContent = "";
+          }, 2400);
+        })
+        .catch(function () {});
+    });
   }
 
   /* ---- Ambient sound ----

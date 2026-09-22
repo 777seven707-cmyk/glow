@@ -263,6 +263,7 @@ function pageHTML(topic, allTopics) {
     '          <a href="../index.html#tools" data-i18n="footer.toolsLink">Tools</a>\n' +
     '          <a href="../index.html#companion" data-i18n="footer.companionLink">Companion</a>\n' +
     '          <a href="../index.html#help" data-i18n="footer.helpLink">Support</a>\n' +
+    '          <a href="../index.html#charity" data-i18n="footer.charityLink">Charity</a>\n' +
     "        </div>\n" +
     '        <div class="footer__col">\n' +
     '          <b data-i18n="footer.connect">Connect</b>\n' +

@@ -1237,11 +1237,20 @@
         sub: "Come back whenever the noise outside gets loud. HAVN will still be here, moving slowly.",
         button: "Return to the surface"
       },
+      charity: {
+        eyebrow: "Charity",
+        title: "Help us get better, and help make the world a little brighter.",
+        desc: "HAVN is a small, independent project. If it's helped you even a little, here are a few real ways to help back — no pressure, no obligation.",
+        c1t: "Share it", c1d: "Tell someone who might need a little quiet right now.",
+        shareCopied: "Link copied.",
+        c2t: "Write to us", c2d: "If something's missing, or could be better — we actually read it.",
+        c3t: "Support who helps", c3d: "The organizations in Support, below, do the real work — they need it more than we do."
+      },
       footer: {
         tagline: "A digital sanctuary for a noisy world.",
         explore: "Explore", support: "Get support", connect: "Connect",
         philosophy: "Philosophy", spacesLink: "Spaces", ritual: "Ritual", presence: "Presence", moments: "Moments",
-        topicsLink: "Topics", toolsLink: "Tools", companionLink: "Companion", talkLink: "Talk", helpLink: "Support",
+        topicsLink: "Topics", toolsLink: "Tools", companionLink: "Companion", talkLink: "Talk", helpLink: "Support", charityLink: "Charity",
         copyright: "HAVN. A digital sanctuary.", toTop: "Back to top ↑"
       },
       loader: { word: "Arriving, quietly" }
@@ -1368,11 +1377,20 @@
         sub: "Возвращайтесь, когда шум снаружи станет слишком громким. HAVN всё ещё будет здесь, двигаясь медленно.",
         button: "Вернуться на поверхность"
       },
+      charity: {
+        eyebrow: "Благотворительность",
+        title: "Помогите нам стать лучше и делать мир ярче.",
+        desc: "HAVN — небольшой независимый проект. Если он хоть немного вам помог, вот несколько настоящих способов помочь в ответ — без давления и обязательств.",
+        c1t: "Поделиться", c1d: "Расскажите о HAVN тому, кому сейчас, возможно, нужно немного тишины.",
+        shareCopied: "Ссылка скопирована.",
+        c2t: "Написать нам", c2d: "Если чего-то не хватает или что-то можно сделать лучше — мы правда читаем.",
+        c3t: "Поддержать тех, кто помогает", c3d: "Организации из раздела «Поддержка» ниже делают настоящую работу — им это нужнее, чем нам."
+      },
       footer: {
         tagline: "Цифровое убежище для шумного мира.",
         explore: "Разделы", support: "Поддержка", connect: "Связь",
         philosophy: "Философия", spacesLink: "Пространства", ritual: "Ритуал", presence: "Присутствие", moments: "Моменты",
-        topicsLink: "Темы", toolsLink: "Инструменты", companionLink: "Питомец", talkLink: "Поговорить", helpLink: "Поддержка",
+        topicsLink: "Темы", toolsLink: "Инструменты", companionLink: "Питомец", talkLink: "Поговорить", helpLink: "Поддержка", charityLink: "Благотворительность",
         copyright: "HAVN. Цифровое убежище.", toTop: "Наверх ↑"
       },
       loader: { word: "Тихо загружаемся" }

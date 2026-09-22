@@ -949,6 +949,25 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
 .cta__sub{margin:1.5rem auto 2.5rem;max-width:28rem;color:var(--ink-2);font-weight:300}
 
 /* ==========================================================================
+   Charity
+   ========================================================================== */
+
+.charity__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.charity__card{
+  display:flex;flex-direction:column;align-items:flex-start;gap:.75rem;
+  width:100%;padding:1.75rem 1.6rem;border-radius:22px;text-align:left;
+  background:var(--glass-soft);border:1px solid var(--glass-border);
+  backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%);
+  transition:transform .5s var(--ease-out),background .5s var(--ease-out),box-shadow .5s var(--ease-out);
+  cursor:pointer;
+}
+.charity__card:hover{transform:translateY(-4px);background:var(--glass);box-shadow:var(--glass-shadow)}
+.charity__icon{width:34px;height:34px;color:var(--azure-deep)}
+.charity__card h3{font-size:1.05rem;font-weight:500;color:var(--ink)}
+.charity__card p{font-size:.86rem;color:var(--ink-2);font-weight:300;line-height:1.5}
+.charity__note{font-size:.78rem;color:var(--azure-deep);font-weight:500;min-height:1.1em}
+
+/* ==========================================================================
    Footer
    ========================================================================== */
 
@@ -979,6 +998,7 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
   .presence__grid{grid-template-columns:1fr 1fr}
   .space__desc{display:none !important}
   .topics__grid{grid-template-columns:1fr 1fr}
+  .charity__grid{grid-template-columns:1fr 1fr}
   .gallery__grid{
     grid-template-columns:repeat(2,1fr);
     grid-template-rows:clamp(160px,30vw,220px) repeat(2,clamp(150px,26vw,200px));
@@ -1001,6 +1021,7 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
   .topics__grid{grid-template-columns:1fr 1fr}
   .tools__grid{grid-template-columns:1fr}
   .help__grid{grid-template-columns:1fr}
+  .charity__grid{grid-template-columns:1fr}
 }
 
 @media (max-width:640px){
