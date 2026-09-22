@@ -40,15 +40,26 @@ function buildSystemPrompt(name, species, lang) {
 
 function sanitizeMessages(input) {
   if (!Array.isArray(input)) return [];
-  var cleaned = [];
+  // The Messages API requires strictly alternating roles starting with "user" —
+  // merge consecutive same-role entries (e.g. two user messages in a row after
+  // a failed reply left no assistant turn between them) rather than letting
+  // the upstream call 400 on a malformed sequence.
+  var merged = [];
   for (var i = 0; i < input.length; i++) {
     var m = input[i];
     if (!m || (m.role !== "user" && m.role !== "assistant")) continue;
     var content = typeof m.content === "string" ? m.content.slice(0, MAX_MESSAGE_CHARS) : "";
     if (!content.trim()) continue;
-    cleaned.push({ role: m.role, content: content });
+    var last = merged[merged.length - 1];
+    if (last && last.role === m.role) {
+      last.content += "\n\n" + content;
+    } else {
+      merged.push({ role: m.role, content: content });
+    }
   }
-  return cleaned.slice(-MAX_TURNS);
+  var cleaned = merged.slice(-MAX_TURNS);
+  while (cleaned.length && cleaned[0].role !== "user") cleaned.shift();
+  return cleaned;
 }
 
 module.exports = async function handler(req, res) {

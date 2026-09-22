@@ -46,7 +46,7 @@ assets/js/talk.js          Talk page only: chat UI, crisis-keyword scan,
 api/chat.js                serverless function (Vercel) that calls the Claude
                             API server-side — the only non-static piece; see "Talk"
 assets/img/favicon.svg     the HAVN mark (orb + horizon)
-assets/img/og-cover.png    1200×630 share preview, rendered from the same mark
+assets/img/og-cover.jpg    1200×630 share preview, rendered from the same mark
 assets/audio/ambient.mp3   the looped ambient track behind the sound toggle
 scripts/build-topic-pages.js  one-off Node generator for topics/*.html (below)
 package.json                just an "engines" pin for api/chat.js — nothing to install
@@ -397,7 +397,12 @@ rings, 44px-tall nav/footer links, `aria-pressed` on the sound toggle,
 contrast (every text token clears 4.5:1 against every background it's
 actually used on — re-verified with a contrast script after adding the
 Topics/Support/Gallery-caption text, which pushed two labels from a
-lighter "muted" tier up to the AA-safe one). All motion — parallax, cursor,
+lighter "muted" tier up to the AA-safe one; re-verified again later when
+`--azure-deep` itself turned out to fail 4.5:1 as small text — `.help-card__link`
+and, once it existed, `.charity__note` — even though it read fine as an
+icon color or in large headings; `#0a84c4` → `#086a99` fixed every use at
+once rather than special-casing the two small-text spots). All motion —
+parallax, cursor,
 blob/cloud/bird drift, breathing ring, reveal transitions — is disabled or
 collapsed to instant/static under `prefers-reduced-motion: reduce`. Content
 is fully present and readable without JavaScript (`<noscript>` hides the
@@ -444,6 +449,20 @@ pointers and under reduced motion). Everything animated uses `transform`/
 `opacity`/`filter` only. Scroll/mousemove handlers are rAF-throttled. Large
 blobs get their softness from gradient stops, not `filter: blur()`, to
 avoid blurring huge painted layers.
+
+**What an ordinary page load actually downloads** is small: `content.js` +
+`main.js` + `style.css` (a few hundred KB combined, uncompressed — any
+static host gzips/brotlis these automatically) plus Google-hosted fonts.
+Two heavier files exist but neither one hits a normal visit:
+`assets/audio/ambient.mp3` is fetched only on the first click of the sound
+toggle (2.9MB, MP3 at 128kbps — halved from an initial 256kbps encode,
+since ambient background audio doesn't need or benefit from a higher
+bitrate), and `assets/img/og-cover.jpg` is only ever requested by social
+link-preview crawlers, never by a visitor's browser (36KB — it was a 415KB
+PNG; that same grain-textured image compresses far better as a JPEG than
+as lossless PNG, since PNG's DEFLATE compression struggles with the kind
+of per-pixel noise that image has, while JPEG is built for exactly that).
+Together those two changes take the whole project from ~6.7MB to ~3.5MB.
 
 ## Customize
 

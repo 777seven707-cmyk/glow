@@ -69,12 +69,12 @@ function pageHTML(topic, allTopics) {
     '<meta property="og:title" content="' + title + '">\n' +
     '<meta property="og:description" content="' + desc + '">\n' +
     '<meta property="og:locale" content="en_US">\n' +
-    '<meta property="og:image" content="../assets/img/og-cover.png">\n' +
+    '<meta property="og:image" content="../assets/img/og-cover.jpg">\n' +
     '<meta property="og:image:width" content="1200">\n' +
     '<meta property="og:image:height" content="630">\n' +
     '<meta property="og:image:alt" content="HAVN — a digital sanctuary, an orb resting on a soft horizon">\n' +
     '<meta name="twitter:card" content="summary_large_image">\n' +
-    '<meta name="twitter:image" content="../assets/img/og-cover.png">\n' +
+    '<meta name="twitter:image" content="../assets/img/og-cover.jpg">\n' +
     "\n" +
     '<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">\n' +
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
