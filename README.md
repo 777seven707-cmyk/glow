@@ -87,6 +87,21 @@ own instruction not to feel like "a technological interface." Layered CSS
 gradients are also cheaper, need no shader tuning, and degrade to a static
 frame for free under `prefers-reduced-motion`.
 
+A `.clouds` layer adds five soft SVG cloud shapes (one `<symbol>`, reused via
+`<use>`, tinted and blurred differently per instance) drifting a few `vw`
+back and forth on 150–230s loops — slow enough to read as weather, not UI.
+
+## Moments (gallery)
+
+`#gallery`, near the bottom of the page, is the one section that isn't pure
+typography: five tiles in an asymmetric grid, each a layered CSS gradient
+standing in for a photo (no stock imagery, to keep the abstract/generative
+language consistent with the rest of the site). One tile ("Passing") animates
+its `background-position` slowly, the closest thing on the page to a looping
+video, flagged with a small pulsing "Live" badge. Captions sit on a
+gradient scrim dark enough to keep white caption text at ≥4.5:1 contrast
+against any of the tile backgrounds, not just the darkest one.
+
 ## Motion system
 
 Three reveal variants, applied with `data-reveal`, so the page doesn't use

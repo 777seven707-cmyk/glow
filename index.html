@@ -58,6 +58,15 @@
       <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise"/>
       <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="18" xChannelSelector="R" yChannelSelector="B"/>
     </filter>
+    <symbol id="cloud-shape" viewBox="0 0 200 100">
+      <g fill="currentColor">
+        <ellipse cx="60" cy="66" rx="46" ry="27"/>
+        <ellipse cx="102" cy="48" rx="44" ry="35"/>
+        <ellipse cx="142" cy="62" rx="40" ry="26"/>
+        <ellipse cx="86" cy="72" rx="58" ry="21"/>
+        <ellipse cx="132" cy="74" rx="40" ry="19"/>
+      </g>
+    </symbol>
   </defs>
 </svg>
 
@@ -73,6 +82,13 @@
   <span class="blob blob--4"></span>
   <span class="ray ray--1"></span>
   <span class="ray ray--2"></span>
+  <div class="clouds">
+    <svg class="cloud cloud--1" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+    <svg class="cloud cloud--2" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+    <svg class="cloud cloud--3" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+    <svg class="cloud cloud--4" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+    <svg class="cloud cloud--5" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+  </div>
 </div>
 <div class="grain" aria-hidden="true"></div>
 
@@ -100,6 +116,7 @@
       <a href="#philosophy" class="nav__link"><span>Philosophy</span></a>
       <a href="#spaces" class="nav__link"><span>Spaces</span></a>
       <a href="#presence" class="nav__link"><span>Presence</span></a>
+      <a href="#gallery" class="nav__link"><span>Moments</span></a>
     </div>
 
     <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
@@ -119,6 +136,7 @@
   <a href="#spaces">Spaces</a>
   <a href="#ritual">Ritual</a>
   <a href="#presence">Presence</a>
+  <a href="#gallery">Moments</a>
   <button class="sound-toggle mmenu__sound" id="soundToggleMobile" type="button" aria-pressed="false">
     <span class="sound-toggle__bars" aria-hidden="true"><i></i><i></i><i></i></span>
     <span class="sr-only">Toggle ambient sound</span>
@@ -296,6 +314,41 @@
   </div>
 </section>
 
+<!-- ============ GALLERY ============ -->
+<section class="section gallery" id="gallery" data-mood="glow">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-eyebrow" data-reveal>Moments</span>
+      <h2 class="sec-title" data-reveal>A few things<br>we noticed.</h2>
+      <p class="sec-desc" data-reveal>Nothing staged — just what stillness tends to look like, held for a moment.</p>
+    </div>
+
+    <div class="gallery__grid">
+      <figure class="tile tile--1" data-reveal="scale">
+        <span class="tile__img tile__img--morning" aria-hidden="true"></span>
+        <figcaption><b>Morning</b><span>Light, arriving slowly.</span></figcaption>
+      </figure>
+      <figure class="tile tile--2" data-reveal="scale">
+        <span class="tile__img tile__img--depth" aria-hidden="true"></span>
+        <figcaption><b>Depth</b><span>Water holds no rush.</span></figcaption>
+      </figure>
+      <figure class="tile tile--3" data-reveal="scale">
+        <span class="tile__img tile__img--passing" aria-hidden="true"></span>
+        <span class="tile__badge">Live</span>
+        <figcaption><b>Passing</b><span>Clouds pass. HAVN stays.</span></figcaption>
+      </figure>
+      <figure class="tile tile--4" data-reveal="scale">
+        <span class="tile__img tile__img--glass" aria-hidden="true"></span>
+        <figcaption><b>Glass</b><span>Even reflections can rest.</span></figcaption>
+      </figure>
+      <figure class="tile tile--5" data-reveal="scale">
+        <span class="tile__img tile__img--horizon" aria-hidden="true"></span>
+        <figcaption><b>Horizon</b><span>Enough space to think.</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
 <!-- ============ CTA ============ -->
 <section class="section cta" id="cta" data-mood="glow">
   <div class="container">
@@ -332,6 +385,7 @@
           <a href="#spaces">Spaces</a>
           <a href="#ritual">Ritual</a>
           <a href="#presence">Presence</a>
+          <a href="#gallery">Moments</a>
         </div>
         <div class="footer__col">
           <b>Connect</b>
