@@ -1,23 +1,36 @@
 # HAVN — a digital sanctuary
 
-A one-page, single-scroll experience built around calm instead of conversion.
-No pricing, no portfolio, no "start a project" funnel — just a slow, quiet
-digital space made of light, glass and soft motion. Pure HTML/CSS/JS,
-no build step, no dependencies.
+A one-page, single-scroll experience built around calm instead of conversion —
+and, since this update, real support for anyone having a hard time. No
+pricing, no portfolio, no "start a project" funnel. Pure HTML/CSS/JS, no
+build step, no framework dependencies.
 
 ## Concept
 
 HAVN isn't a studio site. It's a place a visitor arrives at, slows down in,
-and leaves a little calmer. The whole page is written as one continuous
-arc — dawn → clarity → depth → glow — and the background mood shifts
-gently underneath the content to match.
+and — if they need it — finds something that actually helps: a catalog of
+what hard feelings tend to look like, a breathing and grounding exercise, a
+private mood check-in, a small animal companion, and a list of real, verified
+crisis resources. The atmospheric sections (Philosophy, Spaces, Ritual,
+Presence, Moments) are still here — they're the "sanctuary" half. Topics,
+Tools, Companion and Support are the "help" half. Neither is a demo of the
+other; they're meant to work together.
+
+**This is not a substitute for professional care.** The Support section says
+so explicitly, in both languages, next to real crisis-line contacts. See
+"On the support content" below before repurposing this for anything beyond
+a portfolio/demo project.
 
 ## Structure
 
 ```
-index.html                 all sections, SVG defs (glass filter, mark gradient)
+index.html                 all sections, SVG defs (glass filter, mark/cloud/bird symbols)
 assets/css/style.css       design tokens, atmosphere, glass, motion, responsive
-assets/js/main.js          loader, reveals, mood/parallax, cursor, sound, nav
+assets/js/content.js       bilingual (en/ru) copy: topics, tool labels, pet
+                            affirmations, crisis resources, every UI string
+assets/js/main.js          i18n engine, loader, reveals, mood/parallax, cursor,
+                            sound, topic modal, breathing/grounding/mood tools,
+                            pet companion, nav
 assets/img/favicon.svg     the HAVN mark (orb + horizon)
 assets/img/og-cover.png    1200×630 share preview, rendered from the same mark
 components/ui/             React/shadcn reference components (not used by the
@@ -128,17 +141,109 @@ Gain ramps over ~2s on enable and ~1.2s on disable (no clicks), and the
 `AudioContext` is created lazily on the first click (autoplay policy) and
 suspended after fade-out so a muted tab costs nothing.
 
+## Topics, Tools & Companion
+
+**Topics** (`#topics`) is a catalog of eight things that are hard to carry —
+anxiety, depression, loneliness, grief, bullying, disability/chronic illness,
+burnout, low self-esteem. Each opens (in an accessible modal — focus-trapped,
+closes on Escape/backdrop/close button, returns focus on close) to a short
+validating intro, a "you might be feeling" list, and one small, concrete,
+non-prescriptive practice. Deliberately not diagnostic and not clinical —
+each card ends by pointing at Support.
+
+**Tools** (`#tools`) are three small, real exercises, not gamified in any
+way that would reward staying longer than needed:
+- *Breathe with me* — one minute of box breathing (4-4-4-4), a CSS
+  `animation` on the ring synced to a `setInterval` label ("Breathe in" /
+  "Hold" / "Breathe out"). Starts/stops cleanly, no auto-loop beyond what
+  the visitor asks for.
+- *Come back to the room* — the 5-4-3-2-1 grounding technique, stepped
+  through one prompt at a time.
+- *Mood check-in* — five options, once per calendar day. Saved to
+  `localStorage` only, keyed by today's date; nothing is sent anywhere,
+  ever. There is deliberately no history/streak/chart — the goal is a
+  moment of noticing, not a habit-tracking product to keep opening.
+
+**Companion** (`#companion`) is a small SVG cat or dog (visitor's choice,
+persisted locally) that reacts to a click with a gentle animation and one
+of eight rotating affirmations, and can be renamed. It exists to be a soft,
+low-stakes, always-available presence — not a chatbot, not a game with a
+score.
+
+All of the above's state (`havn_pet_species`, `havn_pet_name`,
+`havn_mood_<date>`, `havn_lang`) lives only in the visitor's own
+`localStorage`. The site makes zero network requests beyond loading its own
+static files — verified by watching the network panel through every
+interaction above.
+
+## Support resources
+
+`#help` lists real, verified places to get real help, each checked against
+its own organization's site before being included: a national crisis line
+for Russia (the long-established, official Детский телефон доверия,
+8-800-2000-122), the US 988 Suicide & Crisis Lifeline, and two international
+directories (Find A Helpline, Befrienders Worldwide) for everywhere else.
+The section opens with an explicit, two-language statement that HAVN is not
+a person, a doctor, or a crisis line, and that immediate danger means
+contacting local emergency services — not this website.
+
+**If you fork this for real-world use beyond a portfolio/demo:** re-verify
+every number and link in `assets/js/content.js` (`HELP_RESOURCES`) before
+publishing, add resources for whatever countries your actual audience is
+in, and — because this touches mental health — have the Topics copy read by
+someone qualified before you rely on it. Nothing here was written to
+diagnose, treat, or replace care; it was written to be a decent first step
+and a nudge toward real help.
+
+## Language
+
+Two full languages ship today — English (default for most visitors) and
+Russian (default when the browser reports a `ru*` locale, or after a manual
+switch) — toggled from the pill button in the nav (and mobile menu), and
+remembered in `localStorage`. Every string on the page, including the eight
+Topics, the four Support resources, and all eight pet affirmations, is
+translated, not just the UI chrome.
+
+Architecture: `assets/js/content.js` exports one `HAVN_CONTENT` object —
+`UI` (nested per-section strings, looked up by dot-path, e.g.
+`"topics.eyebrow"`), `TOPICS`, `HELP_RESOURCES`, `PET_MESSAGES`,
+`MOOD_OPTIONS`, each keyed `{ en, ru }`. `main.js`'s `applyLanguage(lang)`
+walks every `[data-i18n]` element and swaps its text; elements that also
+carry `data-split="words"` (the kinetic-typography lines) get re-split into
+`.word` spans rather than just re-texted, preserving the reveal animation —
+and preserving Unicode correctly (`\p{L}`, not `\w`, so Cyrillic isn't
+silently stripped when matching the tinted word in "Тишина"). Adding a third
+language means adding one more key to each object in `content.js` — no
+template changes required.
+
 ## Accessibility
 
-Semantic sections/headings (one `h1`, `h2` per section, `h3` for sub-items),
-a skip link, visible `:focus-visible` rings, 44px-tall nav/footer links,
-`aria-pressed` on the sound toggle, `aria-expanded`/`aria-controls` on the
-mobile menu trigger, and AA-safe contrast (ink tokens sit well above 4.5:1
-on every background in the palette). All motion — parallax, cursor,
-blob drift, reveal transitions — is disabled or collapsed to instant/static
-under `prefers-reduced-motion: reduce`. Content is fully present and
-readable without JavaScript (`<noscript>` hides the loader; reveal states
-only apply once an `html.js` class is set).
+Semantic sections/headings (one `h1`, correctly-nested `h2`/`h3` throughout,
+even after adding four new sections), a skip link, visible `:focus-visible`
+rings, 44px-tall nav/footer links, `aria-pressed` on the sound toggle,
+`aria-expanded`/`aria-controls` on the mobile menu trigger, and AA-safe
+contrast (every text token clears 4.5:1 against every background it's
+actually used on — re-verified with a contrast script after adding the
+Topics/Support/Gallery-caption text, which pushed two labels from a
+lighter "muted" tier up to the AA-safe one). All motion — parallax, cursor,
+blob/cloud/bird drift, breathing ring, reveal transitions — is disabled or
+collapsed to instant/static under `prefers-reduced-motion: reduce`. Content
+is fully present and readable without JavaScript (`<noscript>` hides the
+loader; reveal states only apply once an `html.js` class is set; the Topics/
+Support/Tools/Companion sections do need JS to render their content, same
+as any data-driven part of a JS-free-by-default page).
+
+The topic modal is a real dialog: `role="dialog"` + `aria-modal`, opening
+moves focus into the panel, `Tab`/`Shift+Tab` are trapped inside it, `Escape`
+or the backdrop closes it, and focus returns to whatever opened it.
+
+One general-purpose fix worth noting: `[hidden]{display:none !important}`
+was added to the reset, because the grounding tool's "Start over" button —
+`hidden` by default, `class="btn ..."` — stayed visible despite the
+attribute, since `.btn`'s own `display: inline-flex` (equal specificity,
+later in the cascade) was beating the UA stylesheet's `[hidden]` rule. Any
+future `hidden`-toggled element with an explicit `display` class would have
+hit the same bug.
 
 ## Performance
 
@@ -158,6 +263,10 @@ avoid blurring huge painted layers.
 | `index.html` — `<!-- SPACES -->` | the five room names/descriptions/swatch colors |
 | `index.html` — `<!-- RITUAL -->` | the four "how to be here" steps |
 | `index.html` — `<!-- PRESENCE -->` | the three quotes |
+| `assets/js/content.js` — `TOPICS` | the eight topic cards, both languages |
+| `assets/js/content.js` — `HELP_RESOURCES` | crisis/support resources — **re-verify before reuse** |
+| `assets/js/content.js` — `PET_MESSAGES`, `MOOD_OPTIONS` | companion affirmations, mood check-in options |
+| `assets/js/content.js` — `UI` | every other translated string on the page |
 | `assets/css/style.css` — `:root` | palette, spacing, easing |
 | `assets/js/main.js` — `initSound()` | the chord/voicing used for ambient sound |
 | `index.html` — footer `mailto:` | contact address |

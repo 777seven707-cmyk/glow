@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HAVN — A Digital Sanctuary</title>
-<meta name="description" content="HAVN is a digital sanctuary — a slow, quiet space built from light, glass and soft motion. No noise, no rush. Just a quieter place to be for a few minutes.">
+<meta name="description" content="HAVN is a digital sanctuary — a quiet space to breathe, and real support for anxiety, depression, loneliness, grief, bullying, disability and burnout.">
 <meta name="theme-color" content="#eef7fd">
 <meta name="author" content="HAVN">
 <meta name="color-scheme" content="light">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="HAVN — A Digital Sanctuary">
-<meta property="og:description" content="A slow, quiet digital space built from light, glass and soft motion.">
+<meta property="og:description" content="A slow, quiet digital space — and real support if you need it.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="assets/img/og-cover.png">
 <meta property="og:image:width" content="1200">
@@ -40,7 +40,7 @@
       <line x1="4" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
       <line x1="12" y1="33" x2="36" y2="33" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".4"/>
     </svg>
-    <span class="loader__word">Arriving, quietly</span>
+    <span class="loader__word" data-i18n="loader.word">Arriving, quietly</span>
     <div class="loader__bar"><i id="loaderBar"></i></div>
   </div>
 </div>
@@ -67,6 +67,9 @@
         <ellipse cx="132" cy="74" rx="40" ry="19"/>
       </g>
     </symbol>
+    <symbol id="bird-shape" viewBox="0 0 24 12">
+      <path d="M0 7 Q6 -1 12 7 Q18 -1 24 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -88,6 +91,11 @@
     <svg class="cloud cloud--3" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
     <svg class="cloud cloud--4" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
     <svg class="cloud cloud--5" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+  </div>
+  <div class="birds">
+    <div class="bird bird--1"><svg class="bird__glyph" viewBox="0 0 24 12"><use href="#bird-shape"/></svg></div>
+    <div class="bird bird--2"><svg class="bird__glyph" viewBox="0 0 24 12"><use href="#bird-shape"/></svg></div>
+    <div class="bird bird--3"><svg class="bird__glyph" viewBox="0 0 24 12"><use href="#bird-shape"/></svg></div>
   </div>
 </div>
 <div class="grain" aria-hidden="true"></div>
@@ -113,15 +121,20 @@
     </a>
 
     <div class="nav__links">
-      <a href="#philosophy" class="nav__link"><span>Philosophy</span></a>
-      <a href="#spaces" class="nav__link"><span>Spaces</span></a>
-      <a href="#presence" class="nav__link"><span>Presence</span></a>
-      <a href="#gallery" class="nav__link"><span>Moments</span></a>
+      <a href="#topics" class="nav__link"><span data-i18n="nav.topics">Topics</span></a>
+      <a href="#tools" class="nav__link"><span data-i18n="nav.tools">Tools</span></a>
+      <a href="#companion" class="nav__link"><span data-i18n="nav.companion">Companion</span></a>
+      <a href="#gallery" class="nav__link"><span data-i18n="nav.moments">Moments</span></a>
+      <a href="#help" class="nav__link nav__link--help"><span data-i18n="nav.support">Support</span></a>
     </div>
+
+    <button class="lang-toggle" id="langToggle" type="button">
+      <span id="langToggleLabel">EN</span>
+    </button>
 
     <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
       <span class="sound-toggle__bars" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="sr-only">Toggle ambient sound</span>
+      <span class="sr-only" data-i18n="sound.label">Toggle ambient sound</span>
     </button>
 
     <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
@@ -132,15 +145,18 @@
 
 <!-- ============ MOBILE MENU ============ -->
 <div class="mmenu" id="mobileMenu" aria-hidden="true">
-  <a href="#philosophy">Philosophy</a>
-  <a href="#spaces">Spaces</a>
-  <a href="#ritual">Ritual</a>
-  <a href="#presence">Presence</a>
-  <a href="#gallery">Moments</a>
-  <button class="sound-toggle mmenu__sound" id="soundToggleMobile" type="button" aria-pressed="false">
-    <span class="sound-toggle__bars" aria-hidden="true"><i></i><i></i><i></i></span>
-    <span class="sr-only">Toggle ambient sound</span>
-  </button>
+  <a href="#topics" data-i18n="nav.topics">Topics</a>
+  <a href="#tools" data-i18n="nav.tools">Tools</a>
+  <a href="#companion" data-i18n="nav.companion">Companion</a>
+  <a href="#gallery" data-i18n="nav.moments">Moments</a>
+  <a href="#help" data-i18n="nav.support">Support</a>
+  <div class="mmenu__row">
+    <button class="lang-toggle" id="langToggleMobile" type="button"><span id="langToggleMobileLabel">EN</span></button>
+    <button class="sound-toggle mmenu__sound" id="soundToggleMobile" type="button" aria-pressed="false">
+      <span class="sound-toggle__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="sr-only" data-i18n="sound.label">Toggle ambient sound</span>
+    </button>
+  </div>
 </div>
 
 <main id="main">
@@ -153,94 +169,130 @@
     <line x1="12" y1="33" x2="36" y2="33" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".4"/>
   </svg>
 
-  <span class="badge" data-reveal><i></i> Take a breath</span>
+  <span class="badge" data-reveal><i></i> <span data-i18n="hero.badge">Take a breath</span></span>
 
   <h1 class="hero__title" data-reveal="line">
-    <span class="line-in">Find the</span><br>
-    <span class="line-in accent">quiet</span><br>
-    <span class="line-in">inside you.</span>
+    <span class="line-in" data-i18n="hero.title1">Find the</span><br>
+    <span class="line-in accent" data-i18n="hero.titleAccent">quiet</span><br>
+    <span class="line-in" data-i18n="hero.title3">inside you.</span>
   </h1>
 
-  <p class="hero__lead" data-reveal>
-    HAVN is a digital space built for stillness — where light moves slower,
-    and thought finally has room to breathe.
+  <p class="hero__lead" data-reveal data-i18n="hero.lead">
+    HAVN is a digital space built for stillness — and, if you need it, a quiet place to start feeling a little better.
   </p>
 
   <div class="hero__actions" data-reveal>
-    <a href="#philosophy" class="btn" data-magnetic><span>Enter</span><svg class="btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    <a href="#ritual" class="btn btn--ghost" data-magnetic><span>How to be here</span></a>
+    <a href="#philosophy" class="btn" data-magnetic><span data-i18n="hero.cta1">Enter</span><svg class="btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a href="#ritual" class="btn btn--ghost" data-magnetic><span data-i18n="hero.cta2">How to be here</span></a>
   </div>
 
-  <div class="hero__scroll" aria-hidden="true"><span>Scroll</span><i></i></div>
+  <div class="hero__scroll" aria-hidden="true"><span data-i18n="hero.scroll">Scroll</span><i></i></div>
 </section>
 
 <!-- ============ PHILOSOPHY ============ -->
 <section class="section philosophy" id="philosophy" data-mood="clarity">
   <div class="container">
-    <h2 class="philosophy__text" data-split="words" data-reveal>
+    <h2 class="philosophy__text" data-split="words" data-i18n="philosophy.text" data-reveal>
       In a world that never stops moving, HAVN is the place that stands still —
       a quiet interval between everything you have to do, and everything you are.
     </h2>
 
     <aside class="elements" data-reveal="scale">
-      <span class="elements__label">The elements</span>
+      <span class="elements__label" data-i18n="philosophy.elementsLabel">The elements</span>
       <ul>
-        <li><i></i> Light</li>
-        <li><i></i> Air</li>
-        <li><i></i> Water</li>
-        <li><i></i> Silence</li>
+        <li><i></i> <span data-i18n="philosophy.el1">Light</span></li>
+        <li><i></i> <span data-i18n="philosophy.el2">Air</span></li>
+        <li><i></i> <span data-i18n="philosophy.el3">Water</span></li>
+        <li><i></i> <span data-i18n="philosophy.el4">Silence</span></li>
       </ul>
     </aside>
   </div>
 </section>
 
+<!-- ============ TOPICS ============ -->
+<section class="section topics" id="topics" data-mood="clarity">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-eyebrow" data-reveal data-i18n="topics.eyebrow">You're not alone</span>
+      <h2 class="sec-title" data-reveal><span data-i18n="topics.title1">Whatever you're</span><br><span data-i18n="topics.title2">carrying right now.</span></h2>
+      <p class="sec-desc" data-reveal data-i18n="topics.desc">Pick whatever feels closest. There's no quiz and no diagnosis here — just a place to start.</p>
+    </div>
+
+    <div class="topics__grid" id="topicsGrid" data-reveal="scale"></div>
+  </div>
+</section>
+
+<!-- ============ TOPIC MODAL ============ -->
+<div class="topic-modal" id="topicModal" aria-hidden="true">
+  <div class="topic-modal__backdrop" data-modal-close></div>
+  <div class="topic-modal__panel" role="dialog" aria-modal="true" aria-labelledby="topicModalTitle" tabindex="-1">
+    <button class="topic-modal__close" id="topicModalClose" type="button">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <span class="sr-only" data-i18n="topics.close">Close</span>
+    </button>
+    <div class="topic-modal__icon" id="topicModalIcon" aria-hidden="true"></div>
+    <h3 class="topic-modal__title" id="topicModalTitle"></h3>
+    <p class="topic-modal__intro" id="topicModalIntro"></p>
+    <div class="topic-modal__block">
+      <span class="topic-modal__label" id="topicModalFeelingsLabel" data-i18n="topics.feelingsLabel">You might be feeling</span>
+      <ul class="topic-modal__feelings" id="topicModalFeelings"></ul>
+    </div>
+    <div class="topic-modal__block">
+      <span class="topic-modal__label" id="topicModalPracticeLabel" data-i18n="topics.practiceLabel">A small thing that might help</span>
+      <p class="topic-modal__practice" id="topicModalPractice"></p>
+    </div>
+    <p class="topic-modal__closing" id="topicModalClosing" data-i18n="topics.closing"></p>
+    <a href="#help" class="btn btn--sm" id="topicModalHelpLink" data-modal-close><span data-i18n="topics.openSupport">Go to Support →</span></a>
+  </div>
+</div>
+
 <!-- ============ SPACES ============ -->
 <section class="section spaces" id="spaces" data-mood="clarity">
   <div class="container">
     <div class="sec-head">
-      <span class="sec-eyebrow" data-reveal>Spaces</span>
-      <h2 class="sec-title" data-reveal>Five rooms,<br>one quiet.</h2>
-      <p class="sec-desc" data-reveal>Each part of HAVN holds a different kind of calm. Move through them slowly — there's nowhere else you need to be.</p>
+      <span class="sec-eyebrow" data-reveal data-i18n="spaces.eyebrow">Spaces</span>
+      <h2 class="sec-title" data-reveal><span data-i18n="spaces.title1">Five rooms,</span><br><span data-i18n="spaces.title2">one quiet.</span></h2>
+      <p class="sec-desc" data-reveal data-i18n="spaces.desc">Each part of HAVN holds a different kind of calm. Move through them slowly — there's nowhere else you need to be.</p>
     </div>
 
     <div class="spaces__list">
       <div class="space" data-reveal data-spotlight>
         <span class="space__glow" aria-hidden="true"></span>
         <span class="space__num">01</span>
-        <h3 class="space__name">Stillness</h3>
-        <p class="space__desc">A pause built into the interface.</p>
+        <h3 class="space__name" data-i18n="spaces.s1n">Stillness</h3>
+        <p class="space__desc" data-i18n="spaces.s1d">A pause built into the interface.</p>
         <span class="space__swatch" style="background:radial-gradient(circle at 30% 30%,#ffffff,#cfe9fb)" aria-hidden="true"></span>
         <svg class="space__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="space" data-reveal data-spotlight>
         <span class="space__glow" aria-hidden="true"></span>
         <span class="space__num">02</span>
-        <h3 class="space__name">Light</h3>
-        <p class="space__desc">Morning glow, held in glass.</p>
+        <h3 class="space__name" data-i18n="spaces.s2n">Light</h3>
+        <p class="space__desc" data-i18n="spaces.s2d">Morning glow, held in glass.</p>
         <span class="space__swatch" style="background:radial-gradient(circle at 30% 30%,#e2f2fc,#6accf2)" aria-hidden="true"></span>
         <svg class="space__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="space" data-reveal data-spotlight>
         <span class="space__glow" aria-hidden="true"></span>
         <span class="space__num">03</span>
-        <h3 class="space__name">Breath</h3>
-        <p class="space__desc">Rhythms slow enough to feel.</p>
+        <h3 class="space__name" data-i18n="spaces.s3n">Breath</h3>
+        <p class="space__desc" data-i18n="spaces.s3d">Rhythms slow enough to feel.</p>
         <span class="space__swatch" style="background:radial-gradient(circle at 30% 30%,#cfe9fb,#38bdf8)" aria-hidden="true"></span>
         <svg class="space__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="space" data-reveal data-spotlight>
         <span class="space__glow" aria-hidden="true"></span>
         <span class="space__num">04</span>
-        <h3 class="space__name">Reflection</h3>
-        <p class="space__desc">Water for the mind to settle in.</p>
+        <h3 class="space__name" data-i18n="spaces.s4n">Reflection</h3>
+        <p class="space__desc" data-i18n="spaces.s4d">Water for the mind to settle in.</p>
         <span class="space__swatch" style="background:radial-gradient(circle at 30% 30%,#b7defa,#0ea5e9)" aria-hidden="true"></span>
         <svg class="space__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="space" data-reveal data-spotlight>
         <span class="space__glow" aria-hidden="true"></span>
         <span class="space__num">05</span>
-        <h3 class="space__name">Horizon</h3>
-        <p class="space__desc">Space enough to think clearly.</p>
+        <h3 class="space__name" data-i18n="spaces.s5n">Horizon</h3>
+        <p class="space__desc" data-i18n="spaces.s5d">Space enough to think clearly.</p>
         <span class="space__swatch" style="background:radial-gradient(circle at 30% 30%,#ffffff,#b7defa)" aria-hidden="true"></span>
         <svg class="space__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
@@ -248,18 +300,124 @@
   </div>
 </section>
 
+<!-- ============ TOOLS ============ -->
+<section class="section tools" id="tools" data-mood="deep">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-eyebrow" data-reveal data-i18n="tools.eyebrow">A few tools</span>
+      <h2 class="sec-title" data-reveal><span data-i18n="tools.title1">Small things</span><br><span data-i18n="tools.title2">that help.</span></h2>
+      <p class="sec-desc" data-reveal data-i18n="tools.desc">None of these fix everything. They're just small, real ways to feel a little steadier right now.</p>
+    </div>
+
+    <div class="tools__grid">
+      <div class="tool" data-reveal="scale">
+        <h3 data-i18n="tools.breathTitle">Breathe with me</h3>
+        <p data-i18n="tools.breathDesc">One minute of box breathing — in, hold, out, hold.</p>
+        <div class="breathe">
+          <div class="breathe__ring" id="breatheRing"><span class="breathe__label" id="breatheLabel">—</span></div>
+        </div>
+        <button class="btn btn--sm" id="breatheToggle" type="button"><span id="breatheToggleLabel" data-i18n="tools.breathStart">Begin</span></button>
+      </div>
+
+      <div class="tool" data-reveal="scale">
+        <h3 data-i18n="tools.groundTitle">Come back to the room</h3>
+        <p data-i18n="tools.groundDesc">The 5-4-3-2-1 grounding technique, for when things feel like too much.</p>
+        <div class="ground">
+          <span class="ground__count" id="groundCount">1 / 5</span>
+          <p class="ground__step" id="groundStep"></p>
+          <div class="ground__actions">
+            <button class="btn btn--sm" id="groundNext" type="button"><span data-i18n="tools.groundNext">Next</span></button>
+            <button class="btn btn--ghost btn--sm" id="groundRestart" type="button" hidden><span data-i18n="tools.groundRestart">Start over</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" data-reveal="scale">
+        <h3 data-i18n="tools.moodTitle">How are you, right now?</h3>
+        <p data-i18n="tools.moodDesc">Just for you — this stays on this device, and nowhere else.</p>
+        <div class="mood__options" id="moodOptions"></div>
+        <p class="mood__reflection" id="moodReflection" hidden aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPANION ============ -->
+<section class="section companion" id="companion" data-mood="deep">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-eyebrow" data-reveal data-i18n="companion.eyebrow">Some company</span>
+      <h2 class="sec-title" data-reveal><span data-i18n="companion.title1">You don't have to</span><br><span data-i18n="companion.title2">sit with this alone.</span></h2>
+      <p class="sec-desc" data-reveal data-i18n="companion.desc">Pick a companion. Rename it if you'd like. It'll be here whenever you come back — no feeding schedule, no pressure.</p>
+    </div>
+
+    <div class="companion__box" data-reveal="scale">
+      <div class="companion__picker" id="companionPicker">
+        <button class="companion__pick is-active" data-species="cat" type="button"><span data-i18n="companion.pickCat">Cat</span></button>
+        <button class="companion__pick" data-species="dog" type="button"><span data-i18n="companion.pickDog">Dog</span></button>
+      </div>
+
+      <div class="pet-stage">
+        <button class="pet pet--cat" id="petCat" type="button" aria-label="Pet">
+          <svg viewBox="0 0 200 200" fill="currentColor">
+            <g class="pet-ears">
+              <path d="M55 62 L28 14 L82 42 Z"/>
+              <path d="M145 62 L172 14 L118 42 Z"/>
+            </g>
+            <circle class="pet-head" cx="100" cy="112" r="66"/>
+            <g class="pet-inner-ears" fill="#fff" opacity=".55">
+              <path d="M58 56 L46 32 L72 46 Z"/>
+              <path d="M142 56 L154 32 L128 46 Z"/>
+            </g>
+            <g class="pet-face" fill="none" stroke="#0f2740" stroke-width="2.4" stroke-linecap="round">
+              <ellipse class="pet-eye pet-eye--l" cx="76" cy="104" rx="6.5" ry="8.5" fill="#0f2740" stroke="none"/>
+              <ellipse class="pet-eye pet-eye--r" cx="124" cy="104" rx="6.5" ry="8.5" fill="#0f2740" stroke="none"/>
+              <path class="pet-nose" d="M94 126 L106 126 L100 134 Z" fill="#e78a9a" stroke="none"/>
+              <path class="pet-mouth" d="M100 134 Q100 143 88 141 M100 134 Q100 143 112 141"/>
+              <path class="pet-whiskers" opacity=".65" d="M38 120 L69 125 M36 133 L68 132 M38 146 L68 138 M162 120 L131 125 M164 133 L132 132 M162 146 L132 138"/>
+            </g>
+          </svg>
+        </button>
+        <button class="pet pet--dog" id="petDog" type="button" aria-label="Pet" hidden>
+          <svg viewBox="0 0 200 200" fill="currentColor">
+            <g class="pet-ears">
+              <ellipse cx="36" cy="120" rx="19" ry="41" transform="rotate(-16 36 120)"/>
+              <ellipse cx="164" cy="120" rx="19" ry="41" transform="rotate(16 164 120)"/>
+            </g>
+            <circle class="pet-head" cx="100" cy="110" r="64"/>
+            <ellipse class="pet-muzzle" cx="100" cy="138" rx="32" ry="23" fill="#fff" opacity=".6"/>
+            <g class="pet-face" fill="none" stroke="#3a2415" stroke-width="2.4" stroke-linecap="round">
+              <ellipse class="pet-eye pet-eye--l" cx="76" cy="100" rx="6.5" ry="8.5" fill="#3a2415" stroke="none"/>
+              <ellipse class="pet-eye pet-eye--r" cx="124" cy="100" rx="6.5" ry="8.5" fill="#3a2415" stroke="none"/>
+              <ellipse class="pet-nose" cx="100" cy="130" rx="8.5" ry="6.5" fill="#3a2415" stroke="none"/>
+              <path class="pet-mouth" d="M100 137 L100 146 M100 146 Q88 152 82 144 M100 146 Q112 152 118 144"/>
+            </g>
+          </svg>
+        </button>
+
+        <div class="pet__name-row">
+          <span class="pet__name" id="petName">Momo</span>
+          <button class="pet__rename" id="petRename" type="button" data-i18n="companion.rename">rename</button>
+        </div>
+        <p class="pet__hint" id="petHint" data-i18n="companion.hint">Click to say hi</p>
+        <p class="pet__message" id="petMessage" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ STATEMENT ============ -->
 <section class="section statement" id="statement" data-mood="deep">
-  <h2 class="statement__text" data-split="words" data-tint="stillness" data-reveal>Stillness is a place you can visit.</h2>
+  <h2 class="statement__text" data-split="words" data-i18n="statement.text" data-tint="stillness" data-reveal>Stillness is a place you can visit.</h2>
 </section>
 
 <!-- ============ RITUAL ============ -->
 <section class="section ritual" id="ritual" data-mood="deep">
   <div class="container">
     <div class="sec-head">
-      <span class="sec-eyebrow" data-reveal>A quiet ritual</span>
-      <h2 class="sec-title" data-reveal>How to be here.</h2>
-      <p class="sec-desc" data-reveal>There's no wrong way to visit HAVN. But if it helps, here's how most people settle in.</p>
+      <span class="sec-eyebrow" data-reveal data-i18n="ritual.eyebrow">A quiet ritual</span>
+      <h2 class="sec-title" data-reveal data-i18n="ritual.title">How to be here.</h2>
+      <p class="sec-desc" data-reveal data-i18n="ritual.desc">There's no wrong way to visit HAVN. But if it helps, here's how most people settle in.</p>
     </div>
 
     <div class="ritual__line" id="ritualLine">
@@ -267,23 +425,23 @@
 
       <div class="ritual__step" data-reveal data-ritual-step>
         <span class="ritual__num">01</span>
-        <h3>Arrive</h3>
-        <p>Let the page load. There's no rush — nothing here is timed.</p>
+        <h3 data-i18n="ritual.r1t">Arrive</h3>
+        <p data-i18n="ritual.r1d">Let the page load. There's no rush — nothing here is timed.</p>
       </div>
       <div class="ritual__step" data-reveal data-ritual-step>
         <span class="ritual__num">02</span>
-        <h3>Breathe</h3>
-        <p>Scroll slowly. Let the light move at its own pace, not yours.</p>
+        <h3 data-i18n="ritual.r2t">Breathe</h3>
+        <p data-i18n="ritual.r2d">Scroll slowly. Let the light move at its own pace, not yours.</p>
       </div>
       <div class="ritual__step" data-reveal data-ritual-step>
         <span class="ritual__num">03</span>
-        <h3>Listen</h3>
-        <p>Turn on sound, if you'd like a little company.</p>
+        <h3 data-i18n="ritual.r3t">Listen</h3>
+        <p data-i18n="ritual.r3d">Turn on sound, if you'd like a little company.</p>
       </div>
       <div class="ritual__step" data-reveal data-ritual-step>
         <span class="ritual__num">04</span>
-        <h3>Stay</h3>
-        <p>Stay as long as you need. Leave whenever you're ready.</p>
+        <h3 data-i18n="ritual.r4t">Stay</h3>
+        <p data-i18n="ritual.r4d">Stay as long as you need. Leave whenever you're ready.</p>
       </div>
     </div>
   </div>
@@ -293,22 +451,22 @@
 <section class="section presence" id="presence" data-mood="glow">
   <div class="container">
     <div class="sec-head">
-      <span class="sec-eyebrow" data-reveal>Presence</span>
-      <h2 class="sec-title" data-reveal>Some quiet,<br>from other visitors.</h2>
+      <span class="sec-eyebrow" data-reveal data-i18n="presence.eyebrow">Presence</span>
+      <h2 class="sec-title" data-reveal><span data-i18n="presence.title1">Some quiet,</span><br><span data-i18n="presence.title2">from other visitors.</span></h2>
     </div>
 
     <div class="presence__grid">
       <blockquote class="quote" data-reveal="scale" data-spotlight>
-        <p>"For ten minutes, I forgot to check my phone."</p>
-        <span>— M.</span>
+        <p data-i18n="presence.q1">"For the first time in weeks, I didn't feel so alone with it."</p>
+        <span data-i18n="presence.q1a">— M.</span>
       </blockquote>
       <blockquote class="quote" data-reveal="scale" data-spotlight>
-        <p>"It felt like walking through fog, in the best way."</p>
-        <span>— J.</span>
+        <p data-i18n="presence.q2">"I came for the visuals and stayed for the breathing exercise. Weird, but it helped."</p>
+        <span data-i18n="presence.q2a">— J.</span>
       </blockquote>
       <blockquote class="quote" data-reveal="scale" data-spotlight>
-        <p>"The first site that made me slow down on purpose."</p>
-        <span>— A.</span>
+        <p data-i18n="presence.q3">"The topics section said things I didn't have words for yet."</p>
+        <span data-i18n="presence.q3a">— A.</span>
       </blockquote>
     </div>
   </div>
@@ -318,45 +476,60 @@
 <section class="section gallery" id="gallery" data-mood="glow">
   <div class="container">
     <div class="sec-head">
-      <span class="sec-eyebrow" data-reveal>Moments</span>
-      <h2 class="sec-title" data-reveal>A few things<br>we noticed.</h2>
-      <p class="sec-desc" data-reveal>Nothing staged — just what stillness tends to look like, held for a moment.</p>
+      <span class="sec-eyebrow" data-reveal data-i18n="gallery.eyebrow">Moments</span>
+      <h2 class="sec-title" data-reveal><span data-i18n="gallery.title1">A few things</span><br><span data-i18n="gallery.title2">we noticed.</span></h2>
+      <p class="sec-desc" data-reveal data-i18n="gallery.desc">Nothing staged — just what stillness tends to look like, held for a moment.</p>
     </div>
 
     <div class="gallery__grid">
       <figure class="tile tile--1" data-reveal="scale">
         <span class="tile__img tile__img--morning" aria-hidden="true"></span>
-        <figcaption><b>Morning</b><span>Light, arriving slowly.</span></figcaption>
+        <figcaption><b data-i18n="gallery.t1">Morning</b><span data-i18n="gallery.t1d">Light, arriving slowly.</span></figcaption>
       </figure>
       <figure class="tile tile--2" data-reveal="scale">
         <span class="tile__img tile__img--depth" aria-hidden="true"></span>
-        <figcaption><b>Depth</b><span>Water holds no rush.</span></figcaption>
+        <figcaption><b data-i18n="gallery.t2">Depth</b><span data-i18n="gallery.t2d">Water holds no rush.</span></figcaption>
       </figure>
       <figure class="tile tile--3" data-reveal="scale">
         <span class="tile__img tile__img--passing" aria-hidden="true"></span>
         <span class="tile__badge">Live</span>
-        <figcaption><b>Passing</b><span>Clouds pass. HAVN stays.</span></figcaption>
+        <figcaption><b data-i18n="gallery.t3">Passing</b><span data-i18n="gallery.t3d">Clouds pass. HAVN stays.</span></figcaption>
       </figure>
       <figure class="tile tile--4" data-reveal="scale">
         <span class="tile__img tile__img--glass" aria-hidden="true"></span>
-        <figcaption><b>Glass</b><span>Even reflections can rest.</span></figcaption>
+        <figcaption><b data-i18n="gallery.t4">Glass</b><span data-i18n="gallery.t4d">Even reflections can rest.</span></figcaption>
       </figure>
       <figure class="tile tile--5" data-reveal="scale">
         <span class="tile__img tile__img--horizon" aria-hidden="true"></span>
-        <figcaption><b>Horizon</b><span>Enough space to think.</span></figcaption>
+        <figcaption><b data-i18n="gallery.t5">Horizon</b><span data-i18n="gallery.t5d">Enough space to think.</span></figcaption>
       </figure>
     </div>
+  </div>
+</section>
+
+<!-- ============ HELP / SUPPORT ============ -->
+<section class="section help" id="help" data-mood="glow">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-eyebrow" data-reveal data-i18n="help.eyebrow">Support</span>
+      <h2 class="sec-title" data-reveal><span data-i18n="help.title1">If today is heavy,</span><br><span data-i18n="help.title2">you don't have to carry it alone.</span></h2>
+      <p class="sec-desc" data-reveal data-i18n="help.body">HAVN is a quiet place, not a substitute for a person, a doctor, or a crisis line. If you're in immediate danger, please contact your local emergency number. If you need to talk to someone right now, these are real, free places to start:</p>
+    </div>
+
+    <div class="help__grid" id="helpGrid" data-reveal="scale"></div>
+
+    <p class="help__closing" data-reveal data-i18n="help.closing">None of these replace real, ongoing care — but any one of them is a real place to start.</p>
   </div>
 </section>
 
 <!-- ============ CTA ============ -->
 <section class="section cta" id="cta" data-mood="glow">
   <div class="container">
-    <span class="sec-eyebrow" data-reveal style="display:block;text-align:center">Before you go</span>
-    <h2 class="cta__title" data-reveal>Carry this <span class="accent">quiet</span><br>with you.</h2>
-    <p class="cta__sub" data-reveal>Come back whenever the noise outside gets loud. HAVN will still be here, moving slowly.</p>
+    <span class="sec-eyebrow" data-reveal style="display:block;text-align:center" data-i18n="cta.eyebrow">Before you go</span>
+    <h2 class="cta__title" data-reveal><span data-i18n="cta.title1">Carry this</span> <span class="accent" data-i18n="cta.titleAccent">quiet</span><br><span data-i18n="cta.title3">with you.</span></h2>
+    <p class="cta__sub" data-reveal data-i18n="cta.sub">Come back whenever the noise outside gets loud. HAVN will still be here, moving slowly.</p>
     <div data-reveal style="display:flex;justify-content:center">
-      <a href="#top" class="btn btn--lg" data-magnetic><span>Return to the surface</span><svg class="btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="transform:rotate(-90deg)"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="#top" class="btn btn--lg" data-magnetic><span data-i18n="cta.button">Return to the surface</span><svg class="btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="transform:rotate(-90deg)"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
   </div>
 </section>
@@ -375,20 +548,27 @@
           </svg>
           <span class="brand__word">HAVN</span>
         </a>
-        <p>A digital sanctuary for a noisy world.</p>
+        <p data-i18n="footer.tagline">A digital sanctuary for a noisy world.</p>
       </div>
 
       <div class="footer__cols">
         <div class="footer__col">
-          <b>Explore</b>
-          <a href="#philosophy">Philosophy</a>
-          <a href="#spaces">Spaces</a>
-          <a href="#ritual">Ritual</a>
-          <a href="#presence">Presence</a>
-          <a href="#gallery">Moments</a>
+          <b data-i18n="footer.explore">Explore</b>
+          <a href="#philosophy" data-i18n="footer.philosophy">Philosophy</a>
+          <a href="#spaces" data-i18n="footer.spacesLink">Spaces</a>
+          <a href="#ritual" data-i18n="footer.ritual">Ritual</a>
+          <a href="#presence" data-i18n="footer.presence">Presence</a>
+          <a href="#gallery" data-i18n="footer.moments">Moments</a>
         </div>
         <div class="footer__col">
-          <b>Connect</b>
+          <b data-i18n="footer.support">Get support</b>
+          <a href="#topics" data-i18n="footer.topicsLink">Topics</a>
+          <a href="#tools" data-i18n="footer.toolsLink">Tools</a>
+          <a href="#companion" data-i18n="footer.companionLink">Companion</a>
+          <a href="#help" data-i18n="footer.helpLink">Support</a>
+        </div>
+        <div class="footer__col">
+          <b data-i18n="footer.connect">Connect</b>
           <a href="mailto:hello@havn.studio">hello@havn.studio</a>
         </div>
       </div>
@@ -397,12 +577,13 @@
     <div class="footer__line" aria-hidden="true"></div>
 
     <div class="footer__bottom">
-      <span>© <span id="year">2026</span> HAVN. A digital sanctuary.</span>
-      <a href="#top" class="to-top" data-magnetic><span>Back to top ↑</span></a>
+      <span>© <span id="year">2026</span> <span data-i18n="footer.copyright">HAVN. A digital sanctuary.</span></span>
+      <a href="#top" class="to-top" data-magnetic><span data-i18n="footer.toTop">Back to top ↑</span></a>
     </div>
   </div>
 </footer>
 
+<script src="assets/js/content.js"></script>
 <script src="assets/js/main.js" defer></script>
 </body>
 </html>

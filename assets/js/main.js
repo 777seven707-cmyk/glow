@@ -1,16 +1,34 @@
 (function () {
   "use strict";
 
+  var C = window.HAVN_CONTENT;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  var STATE = {
+    lang: "en",
+    groundStep: 0,
+    breathing: false,
+    petSpecies: "cat",
+    petName: "",
+    petNameCustom: false,
+    activeTopicId: null,
+  };
+  var breatheTimer = null;
+  var lastFocused = null;
 
   document.addEventListener("DOMContentLoaded", init);
 
   function init() {
     initLoader();
-    splitWords();
+    loadPersistedState();
+    wireTopicModal();
+    wireBreathing();
+    wireGrounding();
+    wireCompanion();
+    initI18n();
     initReveal();
-    initMood();
+    initAtmosphereMood();
     if (!reduceMotion) initParallax();
     if (fine && !reduceMotion) initCursor();
     initNav();
@@ -33,6 +51,12 @@
         raf = null;
       });
     };
+  }
+
+  function getPath(obj, path) {
+    return path.split(".").reduce(function (o, k) {
+      return o && o[k] !== undefined ? o[k] : null;
+    }, obj);
   }
 
   /* ---- Loader ---- */
@@ -60,27 +84,217 @@
     else window.addEventListener("load", finish);
   }
 
-  /* ---- Kinetic typography ---- */
-  function splitWords() {
-    var els = document.querySelectorAll('[data-split="words"]');
-    els.forEach(function (el) {
-      var tint = (el.getAttribute("data-tint") || "")
-        .toLowerCase()
-        .split(",")
-        .map(function (s) { return s.trim(); })
-        .filter(Boolean);
-      var words = el.textContent.trim().split(/\s+/);
-      el.textContent = "";
-      words.forEach(function (w, i) {
-        var span = document.createElement("span");
-        span.className = "word";
-        var bare = w.replace(/[^\w]/g, "").toLowerCase();
-        if (tint.indexOf(bare) !== -1) span.classList.add("is-tint");
-        span.style.transitionDelay = i * 22 + "ms";
-        span.textContent = w;
-        el.appendChild(span);
-        if (i < words.length - 1) el.appendChild(document.createTextNode(" "));
+  /* ---- Persisted state (pet only; language handled in initI18n) ---- */
+  function loadPersistedState() {
+    try {
+      STATE.petSpecies = localStorage.getItem("havn_pet_species") || "cat";
+      var customName = localStorage.getItem("havn_pet_name");
+      if (customName) {
+        STATE.petName = customName;
+        STATE.petNameCustom = true;
+      }
+    } catch (e) {}
+  }
+
+  /* ---- i18n ---- */
+  function initI18n() {
+    var saved = null;
+    try {
+      saved = localStorage.getItem("havn_lang");
+    } catch (e) {}
+    var browserRu = navigator.language && navigator.language.toLowerCase().indexOf("ru") === 0;
+    var initial = saved || (browserRu ? "ru" : "en");
+    applyLanguage(initial);
+
+    function toggle() {
+      applyLanguage(STATE.lang === "en" ? "ru" : "en");
+    }
+    [document.getElementById("langToggle"), document.getElementById("langToggleMobile")]
+      .filter(Boolean)
+      .forEach(function (b) {
+        b.addEventListener("click", toggle);
       });
+  }
+
+  function updateSplitElement(el, text, tintWord) {
+    var wasIn = el.classList.contains("is-in");
+    el.textContent = "";
+    var words = text.trim().split(/\s+/);
+    words.forEach(function (w, i) {
+      var span = document.createElement("span");
+      span.className = "word" + (wasIn ? " is-in" : "");
+      var bare = w.replace(/[^\p{L}\p{N}]/gu, "").toLowerCase();
+      if (tintWord && bare === tintWord.toLowerCase()) span.classList.add("is-tint");
+      span.style.transitionDelay = i * 22 + "ms";
+      span.textContent = w;
+      el.appendChild(span);
+      if (i < words.length - 1) el.appendChild(document.createTextNode(" "));
+    });
+  }
+
+  function applyLanguage(lang) {
+    STATE.lang = lang;
+    try {
+      localStorage.setItem("havn_lang", lang);
+    } catch (e) {}
+    document.documentElement.lang = lang;
+    var ui = C.UI[lang];
+
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      if (el.hasAttribute("data-split")) return;
+      var val = getPath(ui, el.getAttribute("data-i18n"));
+      if (typeof val === "string") el.textContent = val;
+    });
+
+    document.querySelectorAll("[data-split='words'][data-i18n]").forEach(function (el) {
+      var val = getPath(ui, el.getAttribute("data-i18n"));
+      if (typeof val !== "string") return;
+      var tintWord = null;
+      if (el.hasAttribute("data-tint")) {
+        tintWord = lang === "ru" ? "тишина" : "stillness";
+        el.setAttribute("data-tint", tintWord);
+      }
+      updateSplitElement(el, val, tintWord);
+    });
+
+    renderTopics(lang);
+    if (STATE.activeTopicId) renderTopicModal();
+    renderHelp(lang);
+    renderMoodOptions(lang);
+    updateCompanionVisual();
+    refreshBreatheUI();
+    renderGroundStep();
+
+    document
+      .querySelectorAll("#langToggleLabel, #langToggleMobileLabel")
+      .forEach(function (l) {
+        l.textContent = lang.toUpperCase();
+      });
+  }
+
+  /* ---- Topics ---- */
+  function renderTopics(lang) {
+    var grid = document.getElementById("topicsGrid");
+    if (!grid) return;
+    grid.innerHTML = "";
+    C.TOPICS.forEach(function (topic) {
+      var card = document.createElement("button");
+      card.type = "button";
+      card.className = "topic-card";
+      card.innerHTML =
+        '<span class="topic-card__icon">' + topic.icon + "</span>" +
+        '<span class="topic-card__title">' + topic.title[lang] + "</span>" +
+        '<span class="topic-card__teaser">' + topic.teaser[lang] + "</span>";
+      card.addEventListener("click", function () {
+        openTopicModal(topic.id);
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  function findTopic(id) {
+    for (var i = 0; i < C.TOPICS.length; i++) {
+      if (C.TOPICS[i].id === id) return C.TOPICS[i];
+    }
+    return null;
+  }
+
+  function renderTopicModal() {
+    var topic = findTopic(STATE.activeTopicId);
+    if (!topic) return;
+    var lang = STATE.lang;
+    document.getElementById("topicModalIcon").innerHTML = topic.icon;
+    document.getElementById("topicModalTitle").textContent = topic.title[lang];
+    document.getElementById("topicModalIntro").textContent = topic.intro[lang];
+    var feelingsEl = document.getElementById("topicModalFeelings");
+    feelingsEl.innerHTML = "";
+    topic.feelings[lang].forEach(function (f) {
+      var li = document.createElement("li");
+      li.textContent = f;
+      feelingsEl.appendChild(li);
+    });
+    document.getElementById("topicModalPractice").textContent = topic.practice[lang];
+  }
+
+  function openTopicModal(id) {
+    if (!findTopic(id)) return;
+    STATE.activeTopicId = id;
+    renderTopicModal();
+    var modal = document.getElementById("topicModal");
+    lastFocused = document.activeElement;
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    var panel = modal.querySelector(".topic-modal__panel");
+    if (panel) panel.focus();
+    document.addEventListener("keydown", onModalKeydown);
+  }
+
+  function closeTopicModal() {
+    var modal = document.getElementById("topicModal");
+    if (!modal) return;
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    document.removeEventListener("keydown", onModalKeydown);
+    STATE.activeTopicId = null;
+    if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+  }
+
+  function onModalKeydown(e) {
+    if (e.key === "Escape") {
+      closeTopicModal();
+      return;
+    }
+    if (e.key === "Tab") {
+      var modal = document.getElementById("topicModal");
+      var focusables = modal.querySelectorAll("button, a[href]");
+      if (!focusables.length) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  function wireTopicModal() {
+    var modal = document.getElementById("topicModal");
+    if (!modal) return;
+    modal.querySelectorAll("[data-modal-close]").forEach(function (el) {
+      el.addEventListener("click", closeTopicModal);
+    });
+    var closeBtn = document.getElementById("topicModalClose");
+    if (closeBtn) closeBtn.addEventListener("click", closeTopicModal);
+  }
+
+  /* ---- Help / Support ---- */
+  function renderHelp(lang) {
+    var grid = document.getElementById("helpGrid");
+    if (!grid) return;
+    grid.innerHTML = "";
+    C.HELP_RESOURCES.forEach(function (r) {
+      var card = document.createElement("div");
+      card.className = "help-card";
+      card.innerHTML =
+        '<div class="help-card__top"><span class="help-card__name">' +
+        r.name +
+        '</span><span class="help-card__region">' +
+        r.region[lang] +
+        "</span></div>" +
+        '<p class="help-card__desc">' +
+        r.desc[lang] +
+        "</p>" +
+        '<a class="help-card__link" href="https://' +
+        r.url +
+        '" target="_blank" rel="noopener noreferrer">' +
+        r.url +
+        " ↗</a>";
+      grid.appendChild(card);
     });
   }
 
@@ -112,11 +326,13 @@
       },
       { threshold: 0.3, rootMargin: "0px 0px -8% 0px" }
     );
-    targets.forEach(function (el) { io.observe(el); });
+    targets.forEach(function (el) {
+      io.observe(el);
+    });
   }
 
-  /* ---- Background mood ---- */
-  function initMood() {
+  /* ---- Background mood (atmosphere) ---- */
+  function initAtmosphereMood() {
     var sections = document.querySelectorAll("section[data-mood]");
     var layers = document.querySelectorAll(".mood-layer");
     if (!sections.length || !layers.length) return;
@@ -138,12 +354,16 @@
       },
       { threshold: 0, rootMargin: "-45% 0px -45% 0px" }
     );
-    sections.forEach(function (s) { io.observe(s); });
+    sections.forEach(function (s) {
+      io.observe(s);
+    });
   }
 
   /* ---- Mouse parallax on background ---- */
   function initParallax() {
-    var raf = null, lastX = 0.5, lastY = 0.5;
+    var raf = null,
+      lastX = 0.5,
+      lastY = 0.5;
     var root = document.documentElement;
     window.addEventListener(
       "mousemove",
@@ -170,8 +390,11 @@
     document.documentElement.classList.add("has-cursor");
     cursor.classList.add("is-hidden");
 
-    var mx = window.innerWidth / 2, my = window.innerHeight / 2;
-    var gx = mx, gy = my, visible = false;
+    var mx = window.innerWidth / 2,
+      my = window.innerHeight / 2,
+      gx = mx,
+      gy = my,
+      visible = false;
 
     window.addEventListener(
       "mousemove",
@@ -191,7 +414,7 @@
       cursor.classList.add("is-hidden");
     });
 
-    var hoverSelector = "a, button, .space, .quote, input, textarea";
+    var hoverSelector = "a, button, .space, .quote, .tile, input, textarea";
     document.addEventListener("mouseover", function (e) {
       if (e.target.closest(hoverSelector)) cursor.classList.add("is-active");
     });
@@ -235,7 +458,9 @@
       setOpen(!document.documentElement.classList.contains("menu-open"));
     });
     menu.querySelectorAll("a").forEach(function (a) {
-      a.addEventListener("click", function () { setOpen(false); });
+      a.addEventListener("click", function () {
+        setOpen(false);
+      });
     });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") setOpen(false);
@@ -300,6 +525,208 @@
     update();
   }
 
+  /* ---- Breathing tool ---- */
+  function refreshBreatheUI() {
+    var toggleLabel = document.getElementById("breatheToggleLabel");
+    var label = document.getElementById("breatheLabel");
+    if (!toggleLabel) return;
+    var t = C.UI[STATE.lang].tools;
+    toggleLabel.textContent = STATE.breathing ? t.breathStop : t.breathStart;
+    if (label && !STATE.breathing) label.textContent = "—";
+  }
+
+  function wireBreathing() {
+    var ring = document.getElementById("breatheRing");
+    var label = document.getElementById("breatheLabel");
+    var toggleBtn = document.getElementById("breatheToggle");
+    if (!ring || !toggleBtn) return;
+    var phaseIdx = 0;
+
+    function phaseText() {
+      var t = C.UI[STATE.lang].tools;
+      return [t.breathIn, t.breathHold, t.breathOut, t.breathHold][phaseIdx % 4];
+    }
+    function tick() {
+      label.textContent = phaseText();
+      phaseIdx++;
+    }
+    function start() {
+      STATE.breathing = true;
+      phaseIdx = 0;
+      ring.classList.remove("is-active");
+      void ring.offsetWidth;
+      ring.classList.add("is-active");
+      tick();
+      clearInterval(breatheTimer);
+      breatheTimer = setInterval(tick, 4000);
+      refreshBreatheUI();
+    }
+    function stop() {
+      STATE.breathing = false;
+      clearInterval(breatheTimer);
+      ring.classList.remove("is-active");
+      refreshBreatheUI();
+    }
+    toggleBtn.addEventListener("click", function () {
+      STATE.breathing ? stop() : start();
+    });
+  }
+
+  /* ---- Grounding tool ---- */
+  function renderGroundStep() {
+    var steps = C.UI[STATE.lang].tools.groundSteps;
+    var countEl = document.getElementById("groundCount");
+    var stepEl = document.getElementById("groundStep");
+    var nextBtn = document.getElementById("groundNext");
+    var restartBtn = document.getElementById("groundRestart");
+    if (!stepEl) return;
+    if (STATE.groundStep >= steps.length) {
+      stepEl.textContent = C.UI[STATE.lang].tools.groundDone;
+      countEl.textContent = "";
+      nextBtn.hidden = true;
+      restartBtn.hidden = false;
+    } else {
+      stepEl.textContent = steps[STATE.groundStep];
+      countEl.textContent = STATE.groundStep + 1 + " / " + steps.length;
+      nextBtn.hidden = false;
+      restartBtn.hidden = true;
+    }
+  }
+
+  function wireGrounding() {
+    var nextBtn = document.getElementById("groundNext");
+    var restartBtn = document.getElementById("groundRestart");
+    if (!nextBtn) return;
+    nextBtn.addEventListener("click", function () {
+      STATE.groundStep++;
+      renderGroundStep();
+    });
+    restartBtn.addEventListener("click", function () {
+      STATE.groundStep = 0;
+      renderGroundStep();
+    });
+  }
+
+  /* ---- Mood check-in (private: localStorage only, never sent anywhere) ---- */
+  function moodStorageKey() {
+    var d = new Date();
+    return "havn_mood_" + d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  }
+
+  function renderMoodOptions(lang) {
+    var wrap = document.getElementById("moodOptions");
+    var reflection = document.getElementById("moodReflection");
+    if (!wrap) return;
+    var saved = null;
+    try {
+      saved = localStorage.getItem(moodStorageKey());
+    } catch (e) {}
+
+    wrap.innerHTML = "";
+    C.MOOD_OPTIONS.forEach(function (m) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "mood__option" + (saved === m.id ? " is-selected" : "");
+      btn.setAttribute("aria-label", m.label[lang]);
+      btn.textContent = m.emoji;
+      btn.addEventListener("click", function () {
+        try {
+          localStorage.setItem(moodStorageKey(), m.id);
+        } catch (e) {}
+        renderMoodOptions(STATE.lang);
+      });
+      wrap.appendChild(btn);
+    });
+
+    if (saved) {
+      var moodObj = null;
+      for (var i = 0; i < C.MOOD_OPTIONS.length; i++) {
+        if (C.MOOD_OPTIONS[i].id === saved) moodObj = C.MOOD_OPTIONS[i];
+      }
+      if (moodObj) {
+        reflection.textContent = moodObj.reflection[lang];
+        reflection.hidden = false;
+      }
+    } else {
+      reflection.hidden = true;
+    }
+  }
+
+  /* ---- Companion (cat / dog) ---- */
+  function defaultPetName(species, lang) {
+    var c = C.UI[lang].companion;
+    return species === "dog" ? c.dogName : c.catName;
+  }
+
+  function updateCompanionVisual() {
+    var picker = document.getElementById("companionPicker");
+    var catBtn = document.getElementById("petCat");
+    var dogBtn = document.getElementById("petDog");
+    var nameEl = document.getElementById("petName");
+    if (!picker || !catBtn || !dogBtn || !nameEl) return;
+    catBtn.hidden = STATE.petSpecies !== "cat";
+    dogBtn.hidden = STATE.petSpecies !== "dog";
+    picker.querySelectorAll(".companion__pick").forEach(function (b) {
+      b.classList.toggle("is-active", b.getAttribute("data-species") === STATE.petSpecies);
+    });
+    nameEl.textContent = STATE.petNameCustom
+      ? STATE.petName
+      : defaultPetName(STATE.petSpecies, STATE.lang);
+    var msgEl = document.getElementById("petMessage");
+    if (msgEl) msgEl.textContent = "";
+  }
+
+  function wireCompanion() {
+    var picker = document.getElementById("companionPicker");
+    var catBtn = document.getElementById("petCat");
+    var dogBtn = document.getElementById("petDog");
+    var renameBtn = document.getElementById("petRename");
+    var msgEl = document.getElementById("petMessage");
+    if (!picker || !catBtn || !dogBtn) return;
+
+    picker.querySelectorAll(".companion__pick").forEach(function (b) {
+      b.addEventListener("click", function () {
+        STATE.petSpecies = b.getAttribute("data-species");
+        try {
+          localStorage.setItem("havn_pet_species", STATE.petSpecies);
+        } catch (e) {}
+        updateCompanionVisual();
+      });
+    });
+
+    function react(petEl) {
+      petEl.classList.remove("is-happy");
+      void petEl.offsetWidth;
+      petEl.classList.add("is-happy");
+      var msgs = C.PET_MESSAGES[STATE.lang];
+      msgEl.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+    }
+    catBtn.addEventListener("click", function () {
+      react(catBtn);
+    });
+    dogBtn.addEventListener("click", function () {
+      react(dogBtn);
+    });
+
+    if (renameBtn) {
+      renameBtn.addEventListener("click", function () {
+        var current = STATE.petNameCustom
+          ? STATE.petName
+          : defaultPetName(STATE.petSpecies, STATE.lang);
+        var promptText = STATE.lang === "ru" ? "Новое имя:" : "New name:";
+        var next = window.prompt(promptText, current);
+        if (next && next.trim()) {
+          STATE.petName = next.trim().slice(0, 24);
+          STATE.petNameCustom = true;
+          try {
+            localStorage.setItem("havn_pet_name", STATE.petName);
+          } catch (e) {}
+          updateCompanionVisual();
+        }
+      });
+    }
+  }
+
   /* ---- Ambient sound (procedural, no external assets) ---- */
   function initSound() {
     var buttons = [
@@ -309,7 +736,10 @@
     if (!buttons.length) return;
 
     var AudioCtx = window.AudioContext || window.webkitAudioContext;
-    var ctx = null, master = null, playing = false, fadeTimer = null;
+    var ctx = null,
+      master = null,
+      playing = false,
+      fadeTimer = null;
 
     function build() {
       if (!AudioCtx) return false;
