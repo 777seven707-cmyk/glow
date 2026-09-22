@@ -221,7 +221,7 @@ h1,h2,h3,h4{font-weight:500;letter-spacing:-.01em}
    Cursor
    ========================================================================== */
 
-.cursor{position:fixed;top:0;left:0;z-index:800;pointer-events:none;will-change:transform}
+.cursor{position:fixed;top:0;left:0;z-index:960;pointer-events:none;will-change:transform}
 .cursor__glow{
   position:absolute;top:0;left:0;width:46px;height:46px;margin:-23px;
   border-radius:50%;
@@ -253,7 +253,7 @@ h1,h2,h3,h4{font-weight:500;letter-spacing:-.01em}
 .cursor__ripple{
   position:fixed;top:0;left:0;width:12px;height:12px;margin:-6px;
   border-radius:50%;border:1px solid rgba(94,164,217,.6);
-  pointer-events:none;z-index:799;
+  pointer-events:none;z-index:959;
   animation:cursorRipple .7s var(--ease-out) forwards;
 }
 @keyframes cursorRipple{
@@ -526,33 +526,27 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
 .topic-card__title{font-size:1.05rem;font-weight:500;color:var(--ink)}
 .topic-card__teaser{font-size:.86rem;color:var(--ink-2);font-weight:300;line-height:1.45}
 
-.topic-modal{position:fixed;inset:0;z-index:850;display:flex;align-items:center;justify-content:center;padding:5vh 1.25rem;
-  opacity:0;visibility:hidden;transition:opacity .5s var(--ease-soft),visibility .5s;
+.container--narrow{max-width:38rem}
+
+.topic-page{padding-top:calc(var(--section-pad) + 2.5rem)}
+.topic-page__back{
+  display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:500;
+  color:var(--ink-2);margin-bottom:clamp(2rem,5vw,3rem);transition:color .35s var(--ease-out),transform .35s var(--ease-out);
 }
-.topic-modal.is-open{opacity:1;visibility:visible}
-.topic-modal__backdrop{position:absolute;inset:0;background:rgba(21,40,60,.28);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.topic-modal__panel{
-  position:relative;width:100%;max-width:34rem;max-height:88vh;overflow-y:auto;
-  padding:clamp(2rem,5vw,2.75rem);border-radius:28px;
-  background:var(--milk);border:1px solid var(--glass-border);
-  box-shadow:0 40px 100px -20px rgba(21,40,60,.35);
-  transform:translateY(18px) scale(.98);opacity:0;
-  transition:transform .5s var(--ease-out),opacity .5s var(--ease-out);
+.topic-page__back:hover{color:var(--azure-deep);transform:translateX(-3px)}
+.topic-page__icon{width:44px;height:44px;color:var(--azure-deep);margin-bottom:1.4rem}
+.topic-page__title{font-size:clamp(2rem,4.4vw,2.75rem);font-weight:300;letter-spacing:-.01em;color:var(--ink);margin-bottom:.9rem}
+.topic-page__teaser{font-size:1.1rem;font-weight:300;color:var(--ink-2);margin-bottom:clamp(2.25rem,5vw,3rem);max-width:34rem}
+.topic-page__body{color:var(--ink-2);font-weight:300;line-height:1.75;font-size:1.02rem}
+.topic-page__body p{margin-bottom:1.15em}
+.topic-page__body p:last-child{margin-bottom:0}
+.topic-page__body strong{color:var(--azure-deep);font-weight:600}
+.topic-page__closing{
+  font-size:.92rem;color:var(--ink-2);font-style:italic;
+  margin:2.5rem 0 2rem;padding-top:2rem;border-top:1px solid rgba(21,40,60,.1);
 }
-.topic-modal.is-open .topic-modal__panel{transform:translateY(0) scale(1);opacity:1}
-.topic-modal__close{
-  position:absolute;top:1.25rem;right:1.25rem;width:34px;height:34px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;color:var(--ink-2);
-  background:var(--glass-soft);border:1px solid var(--glass-border);transition:background .3s,color .3s;
-}
-.topic-modal__close:hover{color:var(--ink);background:var(--glass)}
-.topic-modal__icon{width:42px;height:42px;color:var(--azure-deep);margin-bottom:1rem}
-.topic-modal__title{font-size:1.5rem;font-weight:500;margin-bottom:.9rem}
-.topic-modal__body{color:var(--ink-2);font-weight:300;line-height:1.68;margin-bottom:1.75rem}
-.topic-modal__body p{margin-bottom:.95em}
-.topic-modal__body p:last-child{margin-bottom:0}
-.topic-modal__body strong{color:var(--azure-deep);font-weight:600}
-.topic-modal__closing{font-size:.86rem;color:var(--ink-2);font-style:italic;margin-bottom:1.5rem}
+.topic-page__more{margin-top:clamp(4.5rem,10vw,7rem)}
+.topic-page__more .sec-eyebrow{margin-bottom:1.5rem;display:block}
 
 /* ==========================================================================
    Spaces
@@ -603,7 +597,7 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
    Tools
    ========================================================================== */
 
-.tools__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.tools__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
 .tool{
   padding:clamp(1.75rem,3vw,2.25rem);border-radius:26px;text-align:center;
   background:var(--glass);border:1px solid var(--glass-border);
@@ -670,6 +664,8 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
 .pet.is-happy .pet-ears{animation:petWiggle .6s var(--ease-soft)}
 .pet.is-happy{animation:petBounce .6s var(--ease-out)}
 .pet.is-happy .pet-tail{animation:petTailWag .35s ease-in-out 3}
+.pet.is-drop-ready{transform:scale(1.08)}
+.pet.is-drop-ready svg{filter:drop-shadow(0 0 20px rgba(94,164,217,.6))}
 @keyframes petBlink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.12)}}
 @keyframes petWiggle{0%,100%{transform:rotate(0)}30%{transform:rotate(-7deg)}65%{transform:rotate(6deg)}}
 @keyframes petBounce{0%,100%{transform:translateY(0) scale(1)}35%{transform:translateY(-12px) scale(1.05)}}
@@ -680,13 +676,40 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
 .pet__name{font-size:1.1rem;font-weight:500;color:var(--ink)}
 .pet__rename{font-size:.72rem;color:var(--ink-3);text-decoration:underline;text-underline-offset:2px}
 .pet__rename:hover{color:var(--azure-deep)}
-.pet__hint{font-size:.78rem;color:var(--ink-3);margin-top:.15rem}
-.pet__actions{display:flex;gap:.6rem;margin-top:1.1rem}
+.pet__hint{font-size:.78rem;color:var(--ink-3);margin-top:.15rem;text-align:center;max-width:20rem}
+.pet__actions{display:flex;gap:1.1rem;margin-top:1.1rem;position:relative;z-index:5}
 .pet__message{margin-top:.85rem;min-height:1.4em;font-size:.95rem;color:var(--azure-deep);font-weight:500;text-align:center;max-width:22rem}
+
+.pet__item{
+  display:flex;flex-direction:column;align-items:center;gap:.35rem;
+  padding:.85rem 1.15rem .7rem;border-radius:20px;position:relative;
+  background:var(--glass-soft);border:1px solid var(--glass-border);
+  font-size:.72rem;color:var(--ink-2);font-weight:500;
+  touch-action:none;user-select:none;-webkit-user-select:none;
+  cursor:grab;
+  transition:background .3s var(--ease-out),box-shadow .3s var(--ease-out),transform .45s var(--ease-out);
+}
+.pet__item:hover{background:var(--glass)}
+.pet__item-emoji{font-size:1.6rem;line-height:1}
+.pet__item.is-dragging{
+  cursor:grabbing;background:var(--glass-strong);z-index:20;
+  box-shadow:0 24px 46px -18px rgba(21,40,60,.4);transition:none;
+}
+.pet__item.is-over-target .pet__item-emoji{transform:scale(1.15)}
 
 .pet__prop{
   position:absolute;top:10%;right:8%;font-size:2rem;line-height:1;pointer-events:none;
   animation:petPropPop 1.4s var(--ease-out) forwards;
+}
+.pet__prop.is-thrown{
+  top:auto;bottom:38%;left:50%;right:auto;margin-left:-.5em;
+  animation:petPropThrow .85s var(--ease-out) forwards;
+}
+@keyframes petPropThrow{
+  0%{opacity:0;transform:translate(var(--throw-x,0),12px) scale(.5) rotate(-30deg)}
+  18%{opacity:1}
+  55%{transform:translate(calc(var(--throw-x,0) * .6),-42px) scale(1.2) rotate(220deg)}
+  100%{opacity:0;transform:translate(calc(var(--throw-x,0) * .3),-8px) scale(.75) rotate(360deg)}
 }
 @keyframes petPropPop{
   0%{opacity:0;transform:translateY(6px) scale(.5) rotate(-8deg)}
@@ -886,8 +909,6 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
   .presence__grid{grid-template-columns:1fr 1fr}
   .space__desc{display:none !important}
   .topics__grid{grid-template-columns:1fr 1fr}
-  .tools__grid{grid-template-columns:1fr 1fr}
-  .tools__grid .tool:last-child{grid-column:1 / -1}
   .gallery__grid{
     grid-template-columns:repeat(2,1fr);
     grid-template-rows:clamp(160px,30vw,220px) repeat(2,clamp(150px,26vw,200px));
@@ -924,7 +945,7 @@ html.js .word.is-in{opacity:1;filter:blur(0)}
   .cloud--2,.cloud--5{display:none}
   .topics__grid{grid-template-columns:1fr}
   .help__grid{grid-template-columns:1fr}
-  .topic-modal__panel{padding:1.75rem 1.4rem;border-radius:22px}
+  .topic-page__icon{width:36px;height:36px}
   .pet{width:150px}
   .companion__pick{padding:.5rem 1.1rem;font-size:.8rem}
 }

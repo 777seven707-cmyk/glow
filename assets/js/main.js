@@ -8,23 +8,22 @@
   var STATE = {
     lang: "en",
     groundStep: 0,
+    reframeStep: 0,
     breathing: false,
     petSpecies: "cat",
     petName: "",
     petNameCustom: false,
-    activeTopicId: null,
   };
   var breatheTimer = null;
-  var lastFocused = null;
 
   document.addEventListener("DOMContentLoaded", init);
 
   function init() {
     initLoader();
     loadPersistedState();
-    wireTopicModal();
     wireBreathing();
     wireGrounding();
+    wireReframe();
     wireCompanion();
     initI18n();
     initReveal();
@@ -158,12 +157,13 @@
     });
 
     renderTopics(lang);
-    if (STATE.activeTopicId) renderTopicModal();
+    renderTopicPage(lang);
     renderHelp(lang);
     renderMoodOptions(lang);
     updateCompanionVisual();
     refreshBreatheUI();
     renderGroundStep();
+    renderReframeStep();
 
     document
       .querySelectorAll("#langToggleLabel, #langToggleMobileLabel")
@@ -173,21 +173,23 @@
   }
 
   /* ---- Topics ---- */
+  function topicCardMarkup(topic, lang) {
+    return (
+      '<span class="topic-card__icon">' + topic.icon + "</span>" +
+      '<span class="topic-card__title">' + topic.title[lang] + "</span>" +
+      '<span class="topic-card__teaser">' + topic.teaser[lang] + "</span>"
+    );
+  }
+
   function renderTopics(lang) {
     var grid = document.getElementById("topicsGrid");
     if (!grid) return;
     grid.innerHTML = "";
     C.TOPICS.forEach(function (topic) {
-      var card = document.createElement("button");
-      card.type = "button";
+      var card = document.createElement("a");
       card.className = "topic-card";
-      card.innerHTML =
-        '<span class="topic-card__icon">' + topic.icon + "</span>" +
-        '<span class="topic-card__title">' + topic.title[lang] + "</span>" +
-        '<span class="topic-card__teaser">' + topic.teaser[lang] + "</span>";
-      card.addEventListener("click", function () {
-        openTopicModal(topic.id);
-      });
+      card.href = "topics/" + topic.id + ".html";
+      card.innerHTML = topicCardMarkup(topic, lang);
       grid.appendChild(card);
     });
   }
@@ -215,78 +217,44 @@
     return span;
   }
 
-  function renderTopicModal() {
-    var topic = findTopic(STATE.activeTopicId);
+  /* ---- Topic page (dedicated page per topic, under /topics/) ---- */
+  function renderTopicPage(lang) {
+    var page = document.getElementById("topicPage");
+    if (!page) return;
+    var topic = findTopic(page.getAttribute("data-topic-id"));
     if (!topic) return;
-    var lang = STATE.lang;
-    document.getElementById("topicModalIcon").innerHTML = topic.icon;
-    document.getElementById("topicModalTitle").textContent = topic.title[lang];
-    var body = document.getElementById("topicModalBody");
-    body.innerHTML = "";
-    topic.body[lang].forEach(function (para) {
-      var p = document.createElement("p");
-      p.appendChild(renderInlineBold(para));
-      body.appendChild(p);
-    });
-    body.scrollTop = 0;
-    var panel = document.querySelector(".topic-modal__panel");
-    if (panel) panel.scrollTop = 0;
-  }
 
-  function openTopicModal(id) {
-    if (!findTopic(id)) return;
-    STATE.activeTopicId = id;
-    renderTopicModal();
-    var modal = document.getElementById("topicModal");
-    lastFocused = document.activeElement;
-    modal.classList.add("is-open");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-    var panel = modal.querySelector(".topic-modal__panel");
-    if (panel) panel.focus();
-    document.addEventListener("keydown", onModalKeydown);
-  }
+    var iconEl = document.getElementById("topicPageIcon");
+    if (iconEl) iconEl.innerHTML = topic.icon;
+    var titleEl = document.getElementById("topicPageTitle");
+    if (titleEl) titleEl.textContent = topic.title[lang];
+    var teaserEl = document.getElementById("topicPageTeaser");
+    if (teaserEl) teaserEl.textContent = topic.teaser[lang];
 
-  function closeTopicModal() {
-    var modal = document.getElementById("topicModal");
-    if (!modal) return;
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    document.removeEventListener("keydown", onModalKeydown);
-    STATE.activeTopicId = null;
-    if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
-  }
-
-  function onModalKeydown(e) {
-    if (e.key === "Escape") {
-      closeTopicModal();
-      return;
+    var body = document.getElementById("topicPageBody");
+    if (body) {
+      body.innerHTML = "";
+      topic.body[lang].forEach(function (para) {
+        var p = document.createElement("p");
+        p.appendChild(renderInlineBold(para));
+        body.appendChild(p);
+      });
     }
-    if (e.key === "Tab") {
-      var modal = document.getElementById("topicModal");
-      var focusables = modal.querySelectorAll("button, a[href]");
-      if (!focusables.length) return;
-      var first = focusables[0];
-      var last = focusables[focusables.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  }
 
-  function wireTopicModal() {
-    var modal = document.getElementById("topicModal");
-    if (!modal) return;
-    modal.querySelectorAll("[data-modal-close]").forEach(function (el) {
-      el.addEventListener("click", closeTopicModal);
-    });
-    var closeBtn = document.getElementById("topicModalClose");
-    if (closeBtn) closeBtn.addEventListener("click", closeTopicModal);
+    var moreGrid = document.getElementById("topicPageMoreGrid");
+    if (moreGrid) {
+      moreGrid.innerHTML = "";
+      C.TOPICS.forEach(function (t) {
+        if (t.id === topic.id) return;
+        var card = document.createElement("a");
+        card.className = "topic-card";
+        card.href = t.id + ".html";
+        card.innerHTML = topicCardMarkup(t, lang);
+        moreGrid.appendChild(card);
+      });
+    }
+
+    document.title = topic.title[lang] + " — HAVN";
   }
 
   /* ---- Help / Support ---- */
@@ -643,6 +611,41 @@
     });
   }
 
+  /* ---- Reframe-a-thought tool ---- */
+  function renderReframeStep() {
+    var steps = C.UI[STATE.lang].tools.reframeSteps;
+    var countEl = document.getElementById("reframeCount");
+    var stepEl = document.getElementById("reframeStep");
+    var nextBtn = document.getElementById("reframeNext");
+    var restartBtn = document.getElementById("reframeRestart");
+    if (!stepEl) return;
+    if (STATE.reframeStep >= steps.length) {
+      stepEl.textContent = C.UI[STATE.lang].tools.reframeDone;
+      countEl.textContent = "";
+      nextBtn.hidden = true;
+      restartBtn.hidden = false;
+    } else {
+      stepEl.textContent = steps[STATE.reframeStep];
+      countEl.textContent = STATE.reframeStep + 1 + " / " + steps.length;
+      nextBtn.hidden = false;
+      restartBtn.hidden = true;
+    }
+  }
+
+  function wireReframe() {
+    var nextBtn = document.getElementById("reframeNext");
+    var restartBtn = document.getElementById("reframeRestart");
+    if (!nextBtn) return;
+    nextBtn.addEventListener("click", function () {
+      STATE.reframeStep++;
+      renderReframeStep();
+    });
+    restartBtn.addEventListener("click", function () {
+      STATE.reframeStep = 0;
+      renderReframeStep();
+    });
+  }
+
   /* ---- Mood check-in (private: localStorage only, never sent anywhere) ---- */
   function moodStorageKey() {
     var d = new Date();
@@ -710,18 +713,119 @@
       : defaultPetName(STATE.petSpecies, STATE.lang);
     var msgEl = document.getElementById("petMessage");
     if (msgEl) msgEl.textContent = "";
+    var foodEmoji = document.getElementById("petFoodEmoji");
+    if (foodEmoji) foodEmoji.textContent = STATE.petSpecies === "dog" ? "🦴" : "🐟";
+    var toyEmoji = document.getElementById("petToyEmoji");
+    if (toyEmoji) toyEmoji.textContent = STATE.petSpecies === "dog" ? "🎾" : "🧶";
   }
 
-  function spawnPetProp(emoji) {
+  function spawnPetProp(emoji, thrown, throwX) {
     var stage = document.getElementById("petStage");
     if (!stage) return;
     var prop = document.createElement("span");
-    prop.className = "pet__prop";
+    prop.className = "pet__prop" + (thrown ? " is-thrown" : "");
     prop.textContent = emoji;
     prop.setAttribute("aria-hidden", "true");
+    if (thrown) {
+      var tx = Math.max(-70, Math.min(70, throwX * 0.4));
+      prop.style.setProperty("--throw-x", tx + "px");
+    }
     stage.appendChild(prop);
     prop.addEventListener("animationend", function () {
       if (prop.parentNode) prop.parentNode.removeChild(prop);
+    });
+  }
+
+  /* Drag an item onto a drop target via Pointer Events (mouse+touch+pen);
+     a short tap and Enter/Space both act as a keyboard/no-drag equivalent
+     so the interaction stays usable without a pointer. */
+  function makeDraggable(item, getTarget, onActivate) {
+    if (!item) return;
+    var dragging = false;
+    var pointerId = null;
+    var startX = 0,
+      startY = 0,
+      dx = 0,
+      dy = 0;
+    var highlighted = null;
+
+    function setPos(x, y) {
+      item.style.transform = x || y ? "translate3d(" + x + "px," + y + "px,0)" : "";
+    }
+
+    function hit(clientX, clientY) {
+      var target = getTarget();
+      if (!target) return null;
+      var r = target.getBoundingClientRect();
+      var pad = 18;
+      var inside =
+        clientX >= r.left - pad &&
+        clientX <= r.right + pad &&
+        clientY >= r.top - pad &&
+        clientY <= r.bottom + pad;
+      return inside ? target : null;
+    }
+
+    function highlight(target) {
+      if (target === highlighted) return;
+      if (highlighted) highlighted.classList.remove("is-drop-ready");
+      highlighted = target;
+      if (highlighted) highlighted.classList.add("is-drop-ready");
+    }
+
+    function end(activate) {
+      dragging = false;
+      item.classList.remove("is-dragging", "is-over-target");
+      highlight(null);
+      setPos(0, 0);
+      if (activate) onActivate({ thrown: Math.hypot(dx, dy) > 40, dx: dx });
+      dx = 0;
+      dy = 0;
+    }
+
+    item.addEventListener("pointerdown", function (e) {
+      if (e.button !== undefined && e.button > 0) return;
+      dragging = true;
+      pointerId = e.pointerId;
+      startX = e.clientX;
+      startY = e.clientY;
+      dx = 0;
+      dy = 0;
+      item.classList.add("is-dragging");
+      if (item.setPointerCapture) {
+        try {
+          item.setPointerCapture(pointerId);
+        } catch (err) {}
+      }
+    });
+
+    item.addEventListener("pointermove", function (e) {
+      if (!dragging || e.pointerId !== pointerId) return;
+      dx = e.clientX - startX;
+      dy = e.clientY - startY;
+      setPos(dx, dy);
+      var target = hit(e.clientX, e.clientY);
+      item.classList.toggle("is-over-target", !!target);
+      highlight(target);
+    });
+
+    item.addEventListener("pointerup", function (e) {
+      if (!dragging || e.pointerId !== pointerId) return;
+      var moved = Math.hypot(dx, dy);
+      var target = moved > 8 ? hit(e.clientX, e.clientY) : getTarget();
+      end(!!target);
+    });
+
+    item.addEventListener("pointercancel", function (e) {
+      if (!dragging || e.pointerId !== pointerId) return;
+      end(false);
+    });
+
+    item.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+        e.preventDefault();
+        onActivate({ thrown: false, dx: 0 });
+      }
     });
   }
 
@@ -730,8 +834,8 @@
     var catBtn = document.getElementById("petCat");
     var dogBtn = document.getElementById("petDog");
     var renameBtn = document.getElementById("petRename");
-    var feedBtn = document.getElementById("petFeed");
-    var playBtn = document.getElementById("petPlay");
+    var foodItem = document.getElementById("petFood");
+    var toyItem = document.getElementById("petToy");
     var msgEl = document.getElementById("petMessage");
     if (!picker || !catBtn || !dogBtn) return;
 
@@ -762,18 +866,15 @@
     dogBtn.addEventListener("click", function () {
       react(C.PET_MESSAGES.greet);
     });
-    if (feedBtn) {
-      feedBtn.addEventListener("click", function () {
-        react(C.PET_MESSAGES.feed);
-        spawnPetProp(STATE.petSpecies === "dog" ? "🦴" : "🐟");
-      });
-    }
-    if (playBtn) {
-      playBtn.addEventListener("click", function () {
-        react(C.PET_MESSAGES.play);
-        spawnPetProp(STATE.petSpecies === "dog" ? "🎾" : "🧶");
-      });
-    }
+
+    makeDraggable(foodItem, activePetEl, function () {
+      react(C.PET_MESSAGES.feed);
+      spawnPetProp(STATE.petSpecies === "dog" ? "🦴" : "🐟");
+    });
+    makeDraggable(toyItem, activePetEl, function (info) {
+      react(C.PET_MESSAGES.play);
+      spawnPetProp(STATE.petSpecies === "dog" ? "🎾" : "🧶", info.thrown, info.dx);
+    });
 
     if (renameBtn) {
       renameBtn.addEventListener("click", function () {
@@ -794,7 +895,14 @@
     }
   }
 
-  /* ---- Ambient sound (procedural, no external assets) ---- */
+  /* ---- Ambient sound ----
+     Generative, not a recording: no licensed track could be fetched from
+     this environment (outbound access is restricted to a small allowlist
+     that excludes every audio host tried — see README "Sound"), so this
+     synthesizes a slow-evolving ambient pad instead: a four-chord diatonic
+     progression, crossfaded between two oscillator banks so retuning is
+     always silent, a sparse generative pentatonic melody, and a procedural
+     convolution-reverb impulse (a decaying noise buffer, not a sample). */
   function initSound() {
     var buttons = [
       document.getElementById("soundToggle"),
@@ -805,47 +913,168 @@
     var AudioCtx = window.AudioContext || window.webkitAudioContext;
     var ctx = null,
       master = null,
+      dryBus = null,
+      reverbBus = null,
       playing = false,
-      fadeTimer = null;
+      fadeTimer = null,
+      chordTimer = null,
+      melodyTimer = null;
+
+    var banks = [null, null];
+    var activeBank = 0;
+    var chordIdx = 0;
+    var PROGRESSION = [
+      [130.81, 164.81, 196.0, 246.94], // C major 7
+      [110.0, 130.81, 164.81, 196.0], // A minor 7
+      [87.31, 110.0, 130.81, 164.81], // F major 7
+      [98.0, 130.81, 146.83, 196.0], // G suspended 4
+    ];
+    var PENTATONIC = [261.63, 293.66, 329.63, 392.0, 440.0];
+
+    function makeImpulse() {
+      var duration = 2.6,
+        decay = 2.4,
+        rate = ctx.sampleRate,
+        length = Math.floor(rate * duration);
+      var buf = ctx.createBuffer(2, length, rate);
+      for (var c = 0; c < 2; c++) {
+        var data = buf.getChannelData(c);
+        for (var i = 0; i < length; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+        }
+      }
+      return buf;
+    }
+
+    function makeBank(freqs) {
+      var bankGain = ctx.createGain();
+      bankGain.gain.value = 0;
+      var oscs = freqs.map(function (f) {
+        var osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = f;
+        var voiceGain = ctx.createGain();
+        voiceGain.gain.value = 0.12;
+        osc.connect(voiceGain);
+        if (ctx.createStereoPanner) {
+          var pan = ctx.createStereoPanner();
+          pan.pan.value = Math.random() * 1.2 - 0.6;
+          voiceGain.connect(pan);
+          pan.connect(bankGain);
+        } else {
+          voiceGain.connect(bankGain);
+        }
+        osc.start();
+        return osc;
+      });
+      return { gain: bankGain, oscs: oscs };
+    }
+
+    function crossfadeToChord() {
+      var next = (chordIdx + 1) % PROGRESSION.length;
+      var incoming = activeBank === 0 ? 1 : 0;
+      banks[incoming].oscs.forEach(function (osc, i) {
+        osc.frequency.setValueAtTime(PROGRESSION[next][i], ctx.currentTime);
+      });
+      var now = ctx.currentTime,
+        dur = 6;
+      [banks[activeBank].gain, banks[incoming].gain].forEach(function (g, idx) {
+        var target = idx === 0 ? 0 : 1;
+        g.gain.cancelScheduledValues(now);
+        g.gain.setValueAtTime(g.gain.value, now);
+        g.gain.linearRampToValueAtTime(target, now + dur);
+      });
+      activeBank = incoming;
+      chordIdx = next;
+    }
+
+    function scheduleMelody() {
+      var delay = 6000 + Math.random() * 9000;
+      melodyTimer = setTimeout(function () {
+        if (!playing) return;
+        var freq = PENTATONIC[Math.floor(Math.random() * PENTATONIC.length)];
+        var osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        var g = ctx.createGain();
+        g.gain.value = 0;
+        osc.connect(g);
+        g.connect(dryBus);
+        g.connect(reverbBus);
+        var now = ctx.currentTime;
+        g.gain.linearRampToValueAtTime(0.045, now + 1.4);
+        g.gain.linearRampToValueAtTime(0, now + 5.5);
+        osc.start(now);
+        osc.stop(now + 6);
+        setTimeout(function () {
+          try {
+            osc.disconnect();
+            g.disconnect();
+          } catch (e) {}
+        }, 6200);
+        scheduleMelody();
+      }, delay);
+    }
+
+    function startSchedulers() {
+      clearInterval(chordTimer);
+      clearTimeout(melodyTimer);
+      chordTimer = setInterval(crossfadeToChord, 24000);
+      scheduleMelody();
+    }
+    function stopSchedulers() {
+      clearInterval(chordTimer);
+      clearTimeout(melodyTimer);
+    }
 
     function build() {
       if (!AudioCtx) return false;
       ctx = new AudioCtx();
+      if (ctx.state === "suspended") ctx.resume();
 
       master = ctx.createGain();
       master.gain.value = 0;
       master.connect(ctx.destination);
 
-      var filter = ctx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.value = 800;
-      filter.Q.value = 0.35;
-      filter.connect(master);
+      dryBus = ctx.createGain();
+      dryBus.gain.value = 0.7;
+      reverbBus = ctx.createGain();
+      reverbBus.gain.value = 0.45;
+      var convolver = ctx.createConvolver();
+      convolver.buffer = makeImpulse();
+      var wetGain = ctx.createGain();
+      wetGain.gain.value = 0.32;
 
-      [
-        { f: 65.41, g: 0.05 },
-        { f: 130.81, g: 0.045 },
-        { f: 164.81, g: 0.045 },
-        { f: 196.0, g: 0.04 },
-      ].forEach(function (voice) {
-        var osc = ctx.createOscillator();
-        osc.type = "sine";
-        osc.frequency.value = voice.f;
-        var g = ctx.createGain();
-        g.gain.value = voice.g;
-        osc.connect(g);
-        g.connect(filter);
-        osc.start();
-      });
+      var padFilter = ctx.createBiquadFilter();
+      padFilter.type = "lowpass";
+      padFilter.frequency.value = 900;
+      padFilter.Q.value = 0.3;
+
+      padFilter.connect(dryBus);
+      padFilter.connect(reverbBus);
+      reverbBus.connect(convolver);
+      convolver.connect(wetGain);
+      dryBus.connect(master);
+      wetGain.connect(master);
+
+      banks[0] = makeBank(PROGRESSION[0]);
+      banks[1] = makeBank(PROGRESSION[1]);
+      banks[0].gain.connect(padFilter);
+      banks[1].gain.connect(padFilter);
+      banks[0].gain.gain.value = 1;
+      banks[1].gain.gain.value = 0;
+      activeBank = 0;
+      chordIdx = 0;
 
       var lfo = ctx.createOscillator();
-      lfo.frequency.value = 0.06;
+      lfo.frequency.value = 0.05;
       var lfoGain = ctx.createGain();
-      lfoGain.gain.value = 160;
+      lfoGain.gain.value = 140;
       lfo.connect(lfoGain);
-      lfoGain.connect(filter.frequency);
+      lfoGain.connect(padFilter.frequency);
       lfo.start();
 
+      startSchedulers();
       return true;
     }
 
@@ -858,12 +1087,13 @@
 
     function enable() {
       if (!ctx && !build()) return;
-      ctx.resume();
+      if (ctx.state === "suspended") ctx.resume();
+      startSchedulers();
       clearTimeout(fadeTimer);
       var now = ctx.currentTime;
       master.gain.cancelScheduledValues(now);
       master.gain.setValueAtTime(master.gain.value, now);
-      master.gain.linearRampToValueAtTime(0.5, now + 2.2);
+      master.gain.linearRampToValueAtTime(0.5, now + 2.5);
       playing = true;
       setPressed(true);
     }
@@ -875,11 +1105,12 @@
       var now = ctx.currentTime;
       master.gain.cancelScheduledValues(now);
       master.gain.setValueAtTime(master.gain.value, now);
-      master.gain.linearRampToValueAtTime(0, now + 1.2);
+      master.gain.linearRampToValueAtTime(0, now + 1.4);
+      stopSchedulers();
       clearTimeout(fadeTimer);
       fadeTimer = setTimeout(function () {
         if (ctx && !playing) ctx.suspend();
-      }, 1300);
+      }, 1600);
     }
 
     buttons.forEach(function (b) {

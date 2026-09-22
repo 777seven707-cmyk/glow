@@ -223,22 +223,6 @@
   </div>
 </section>
 
-<!-- ============ TOPIC MODAL ============ -->
-<div class="topic-modal" id="topicModal" aria-hidden="true">
-  <div class="topic-modal__backdrop" data-modal-close></div>
-  <div class="topic-modal__panel" role="dialog" aria-modal="true" aria-labelledby="topicModalTitle" tabindex="-1">
-    <button class="topic-modal__close" id="topicModalClose" type="button">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-      <span class="sr-only" data-i18n="topics.close">Close</span>
-    </button>
-    <div class="topic-modal__icon" id="topicModalIcon" aria-hidden="true"></div>
-    <h3 class="topic-modal__title" id="topicModalTitle"></h3>
-    <div class="topic-modal__body" id="topicModalBody"></div>
-    <p class="topic-modal__closing" id="topicModalClosing" data-i18n="topics.closing"></p>
-    <a href="#help" class="btn btn--sm" id="topicModalHelpLink" data-modal-close><span data-i18n="topics.openSupport">Go to Support →</span></a>
-  </div>
-</div>
-
 <!-- ============ SPACES ============ -->
 <section class="section spaces" id="spaces" data-mood="clarity">
   <div class="container">
@@ -331,6 +315,19 @@
         <div class="mood__options" id="moodOptions"></div>
         <p class="mood__reflection" id="moodReflection" hidden aria-live="polite"></p>
       </div>
+
+      <div class="tool" data-reveal="scale">
+        <h3 data-i18n="tools.reframeTitle">Loosen a stuck thought</h3>
+        <p data-i18n="tools.reframeDesc">A short, gentle version of a technique therapists actually use — five prompts, nothing to write down.</p>
+        <div class="ground">
+          <span class="ground__count" id="reframeCount">1 / 5</span>
+          <p class="ground__step" id="reframeStep"></p>
+          <div class="ground__actions">
+            <button class="btn btn--sm" id="reframeNext" type="button"><span data-i18n="tools.reframeNext">Next</span></button>
+            <button class="btn btn--ghost btn--sm" id="reframeRestart" type="button" hidden><span data-i18n="tools.reframeRestart">Start over</span></button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -414,11 +411,17 @@
           <span class="pet__name" id="petName">Momo</span>
           <button class="pet__rename" id="petRename" type="button" data-i18n="companion.rename">rename</button>
         </div>
-        <p class="pet__hint" id="petHint" data-i18n="companion.hint">Click to say hi</p>
+        <p class="pet__hint" id="petHint" data-i18n="companion.hint">Click to say hi — or drag food or a toy over</p>
 
         <div class="pet__actions">
-          <button class="btn btn--ghost btn--sm" id="petFeed" type="button"><span data-i18n="companion.feed">Feed</span></button>
-          <button class="btn btn--ghost btn--sm" id="petPlay" type="button"><span data-i18n="companion.play">Play</span></button>
+          <button class="pet__item" id="petFood" type="button">
+            <span class="pet__item-emoji" id="petFoodEmoji" aria-hidden="true">🐟</span>
+            <span data-i18n="companion.foodItem">Food</span>
+          </button>
+          <button class="pet__item" id="petToy" type="button">
+            <span class="pet__item-emoji" id="petToyEmoji" aria-hidden="true">🧶</span>
+            <span data-i18n="companion.toyItem">Toy</span>
+          </button>
         </div>
 
         <p class="pet__message" id="petMessage" aria-live="polite"></p>

@@ -954,6 +954,24 @@
       url: "988lifeline.org"
     },
     {
+      name: "Crisis Text Line",
+      region: { en: "US, Canada, UK & Ireland", ru: "США, Канада, Великобритания и Ирландия" },
+      desc: {
+        en: "Text HOME to 741741 — free, confidential, 24/7 support by text.",
+        ru: "Отправьте HOME на номер 741741 — бесплатная конфиденциальная поддержка по переписке, круглосуточно."
+      },
+      url: "crisistextline.org"
+    },
+    {
+      name: "Samaritans",
+      region: { en: "UK & Ireland", ru: "Великобритания и Ирландия" },
+      desc: {
+        en: "Call 116 123 — free, 24/7, for anyone struggling to cope.",
+        ru: "Звонок на 116 123 — бесплатно, круглосуточно, для всех, кому трудно справляться."
+      },
+      url: "samaritans.org"
+    },
+    {
       name: "Find A Helpline",
       region: { en: "Worldwide", ru: "Весь мир" },
       desc: {
@@ -1094,6 +1112,9 @@
         openSupport: "Go to Support →",
         close: "Close"
       },
+      topicPage: {
+        back: "Back to Topics", moreTopics: "More topics"
+      },
       spaces: {
         eyebrow: "Spaces", title1: "Five rooms,", title2: "one quiet.",
         desc: "Each part of HAVN holds a different kind of calm. Move through them slowly — there's nowhere else you need to be.",
@@ -1113,14 +1134,25 @@
         groundSteps: ["Name 5 things you can see", "4 things you can touch", "3 things you can hear", "2 things you can smell", "1 thing you can taste"],
         groundNext: "Next", groundRestart: "Start over", groundDone: "Well done. You're here, right now.",
         moodTitle: "How are you, right now?", moodDesc: "Just for you — this stays on this device, and nowhere else.",
-        moodAgain: "Update today's check-in"
+        moodAgain: "Update today's check-in",
+        reframeTitle: "Loosen a stuck thought",
+        reframeDesc: "A short, gentle version of a technique therapists actually use — five prompts, nothing to write down.",
+        reframeSteps: [
+          "Bring the thought to mind — the one that's been loud today.",
+          "Is this a fact, or does it just feel like one right now?",
+          "What would you say to a friend who told you this exact thing?",
+          "What's one small piece of evidence against it?",
+          "Try putting it more gently — even 10% gentler is enough."
+        ],
+        reframeNext: "Next", reframeRestart: "Start over",
+        reframeDone: "That's the whole exercise. However it landed, that's okay."
       },
       companion: {
         eyebrow: "Some company", title1: "You don't have to", title2: "sit with this alone.",
-        desc: "Pick a companion. Feed it, play with it, rename it if you'd like. It'll be here whenever you come back — no schedule, no pressure.",
+        desc: "Pick a companion. Drag food or a toy over to it, rename it if you'd like. It'll be here whenever you come back — no schedule, no pressure.",
         pickCat: "Cat", pickDog: "Dog",
-        hint: "Click to say hi", rename: "rename",
-        feed: "Feed", play: "Play", petAction: "Pet",
+        hint: "Click to say hi — or drag food or a toy over", rename: "rename",
+        foodItem: "Food", toyItem: "Toy", petAction: "Pet",
         catName: "Momo", dogName: "Biscuit"
       },
       statement: { text: "Stillness is a place you can visit." },
@@ -1190,6 +1222,9 @@
         openSupport: "К разделу «Поддержка» →",
         close: "Закрыть"
       },
+      topicPage: {
+        back: "Назад к темам", moreTopics: "Другие темы"
+      },
       spaces: {
         eyebrow: "Пространства", title1: "Пять комнат,", title2: "одна тишина.",
         desc: "Каждая часть HAVN хранит свой оттенок спокойствия. Проходите через них медленно — спешить некуда.",
@@ -1209,14 +1244,25 @@
         groundSteps: ["Назовите 5 вещей, которые видите", "4 вещи, которые можете потрогать", "3 звука, которые слышите", "2 запаха", "1 вкус"],
         groundNext: "Далее", groundRestart: "Начать заново", groundDone: "Отлично. Вы здесь, прямо сейчас.",
         moodTitle: "Как вы сейчас?", moodDesc: "Это только для вас — остаётся на этом устройстве и больше нигде.",
-        moodAgain: "Обновить отметку за сегодня"
+        moodAgain: "Обновить отметку за сегодня",
+        reframeTitle: "Ослабить навязчивую мысль",
+        reframeDesc: "Короткая, мягкая версия техники, которую действительно используют психотерапевты — пять вопросов, ничего не нужно записывать.",
+        reframeSteps: [
+          "Вспомните мысль — ту самую, что громче всех звучала сегодня.",
+          "Это факт — или просто сейчас так ощущается?",
+          "Что бы вы сказали другу, который сказал бы вам это же самое?",
+          "Какое есть хоть одно маленькое доказательство против неё?",
+          "Попробуйте сформулировать её мягче — пусть даже на 10% мягче будет достаточно."
+        ],
+        reframeNext: "Далее", reframeRestart: "Начать заново",
+        reframeDone: "Это всё упражнение. Как бы оно ни отозвалось — это нормально."
       },
       companion: {
         eyebrow: "Немного компании", title1: "Не обязательно", title2: "переживать это в одиночку.",
-        desc: "Выберите питомца. Покормите его, поиграйте, при желании переименуйте. Он будет здесь при каждом вашем возвращении — без расписания и без давления.",
+        desc: "Выберите питомца. Перетащите к нему корм или игрушку, при желании переименуйте. Он будет здесь при каждом вашем возвращении — без расписания и без давления.",
         pickCat: "Кот", pickDog: "Пёс",
-        hint: "Нажмите, чтобы поздороваться", rename: "переименовать",
-        feed: "Покормить", play: "Поиграть", petAction: "Погладить",
+        hint: "Нажмите, чтобы поздороваться, или перетащите корм или игрушку", rename: "переименовать",
+        foodItem: "Корм", toyItem: "Игрушка", petAction: "Погладить",
         catName: "Мурзик", dogName: "Бублик"
       },
       statement: { text: "Тишина — это место, которое можно посетить." },

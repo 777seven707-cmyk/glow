@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anxiety — HAVN</title>
+<meta name="description" content="Racing thoughts, a tight chest, waiting for something bad.">
+<meta name="theme-color" content="#eef7fd">
+<meta name="author" content="HAVN">
+<meta name="color-scheme" content="light">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anxiety — HAVN">
+<meta property="og:description" content="Racing thoughts, a tight chest, waiting for something bad.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="../assets/img/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HAVN — a digital sanctuary, an orb resting on a soft horizon">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="../assets/img/og-cover.png">
+
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+<script>document.documentElement.classList.add("js");</script>
+<noscript><style>.loader{display:none!important}</style></noscript>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <svg class="loader__mark" viewBox="0 0 48 40" aria-hidden="true">
+      <circle cx="24" cy="17" r="12" fill="url(#markGlow)" stroke="currentColor" stroke-width="1.1"/>
+      <line x1="4" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="12" y1="33" x2="36" y2="33" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".4"/>
+    </svg>
+    <span class="loader__word" data-i18n="loader.word">Arriving, quietly</span>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+  </div>
+</div>
+
+<svg class="sr-only" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="markGlow" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#cfe9fb"/>
+      <stop offset="100%" stop-color="#8fd0f2"/>
+    </radialGradient>
+    <filter id="glass-distort" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.06" numOctaves="1" seed="7" result="turbulence"/>
+      <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="18" xChannelSelector="R" yChannelSelector="B"/>
+    </filter>
+    <symbol id="cloud-shape" viewBox="0 0 200 100">
+      <g fill="currentColor">
+        <ellipse cx="60" cy="66" rx="46" ry="27"/>
+        <ellipse cx="102" cy="48" rx="44" ry="35"/>
+        <ellipse cx="142" cy="62" rx="40" ry="26"/>
+        <ellipse cx="86" cy="72" rx="58" ry="21"/>
+        <ellipse cx="132" cy="74" rx="40" ry="19"/>
+      </g>
+    </symbol>
+    <symbol id="bird-shape" viewBox="0 0 24 12">
+      <path d="M0 7 Q6 -1 12 7 Q18 -1 24 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="atmosphere" id="atmosphere" aria-hidden="true">
+  <div class="mood-layer" data-mood="dawn"></div>
+  <div class="mood-layer" data-mood="clarity"></div>
+  <div class="mood-layer" data-mood="deep"></div>
+  <div class="mood-layer" data-mood="glow"></div>
+  <span class="blob blob--1"></span>
+  <span class="blob blob--2"></span>
+  <span class="blob blob--3"></span>
+  <span class="blob blob--4"></span>
+  <span class="ray ray--1"></span>
+  <span class="ray ray--2"></span>
+  <div class="clouds">
+    <svg class="cloud cloud--1" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+    <svg class="cloud cloud--2" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+    <svg class="cloud cloud--3" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+    <svg class="cloud cloud--4" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+    <svg class="cloud cloud--5" viewBox="0 0 200 100"><use href="#cloud-shape"/></svg>
+  </div>
+  <div class="birds">
+    <div class="bird bird--1"><svg class="bird__glyph" viewBox="0 0 24 12"><use href="#bird-shape"/></svg></div>
+    <div class="bird bird--2"><svg class="bird__glyph" viewBox="0 0 24 12"><use href="#bird-shape"/></svg></div>
+    <div class="bird bird--3"><svg class="bird__glyph" viewBox="0 0 24 12"><use href="#bird-shape"/></svg></div>
+  </div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="cursor" id="cursor" aria-hidden="true">
+  <span class="cursor__glow"></span>
+  <span class="cursor__ring"></span>
+  <span class="cursor__dot"></span>
+</div>
+
+<div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+<div class="nav-wrap" id="navWrap">
+  <nav class="nav" aria-label="Primary">
+    <a href="../index.html" class="brand" data-magnetic>
+      <svg class="brand__mark" viewBox="0 0 48 40" aria-hidden="true">
+        <circle cx="24" cy="17" r="12" fill="url(#markGlow)" stroke="currentColor" stroke-width="1.1"/>
+        <line x1="4" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+      </svg>
+      <span class="brand__word">HAVN</span>
+    </a>
+
+    <div class="nav__links">
+      <a href="../index.html#topics" class="nav__link"><span data-i18n="nav.topics">Topics</span></a>
+      <a href="../index.html#tools" class="nav__link"><span data-i18n="nav.tools">Tools</span></a>
+      <a href="../index.html#companion" class="nav__link"><span data-i18n="nav.companion">Companion</span></a>
+      <a href="../index.html#gallery" class="nav__link"><span data-i18n="nav.moments">Moments</span></a>
+      <a href="../index.html#help" class="nav__link nav__link--help"><span data-i18n="nav.support">Support</span></a>
+    </div>
+
+    <button class="lang-toggle" id="langToggle" type="button">
+      <span id="langToggleLabel">EN</span>
+    </button>
+
+    <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+      <span class="sound-toggle__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="sr-only" data-i18n="sound.label">Toggle ambient sound</span>
+    </button>
+
+    <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
+      <i></i><i></i>
+    </button>
+  </nav>
+</div>
+
+<div class="mmenu" id="mobileMenu" aria-hidden="true">
+  <a href="../index.html#topics" data-i18n="nav.topics">Topics</a>
+  <a href="../index.html#tools" data-i18n="nav.tools">Tools</a>
+  <a href="../index.html#companion" data-i18n="nav.companion">Companion</a>
+  <a href="../index.html#gallery" data-i18n="nav.moments">Moments</a>
+  <a href="../index.html#help" data-i18n="nav.support">Support</a>
+  <div class="mmenu__row">
+    <button class="lang-toggle" id="langToggleMobile" type="button"><span id="langToggleMobileLabel">EN</span></button>
+    <button class="sound-toggle mmenu__sound" id="soundToggleMobile" type="button" aria-pressed="false">
+      <span class="sound-toggle__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="sr-only" data-i18n="sound.label">Toggle ambient sound</span>
+    </button>
+  </div>
+</div>
+
+<main id="main">
+
+<section class="section topic-page" id="topicPage" data-mood="clarity" data-topic-id="anxiety">
+  <div class="container container--narrow">
+    <a class="topic-page__back" href="../index.html#topics" data-i18n="topicPage.back" data-reveal>← Back to Topics</a>
+    <div class="topic-page__icon" id="topicPageIcon" aria-hidden="true" data-reveal><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="24" cy="24" r="6"/><circle cx="24" cy="24" r="13" opacity=".55"/><circle cx="24" cy="24" r="20" opacity=".28"/></svg></div>
+    <h1 class="topic-page__title" id="topicPageTitle" data-reveal>Anxiety</h1>
+    <p class="topic-page__teaser" id="topicPageTeaser" data-reveal>Racing thoughts, a tight chest, waiting for something bad.</p>
+    <div class="topic-page__body" id="topicPageBody" data-reveal>
+      <p>If you're here right now, maybe there's too much going on inside you again.</p>
+      <p>Thoughts keep arriving one after another, and they won't let you stop. You try to picture what happens next, run through the possibilities, replay what already happened, search your own words and actions for mistakes. Maybe you're going over the same conversation again. Thinking you could have said it differently. Picturing a bad outcome before anything has actually happened.</p>
+      <p>And the most exhausting part — you realize you just want to stop thinking, and you can't.</p>
+      <p>Your body can feel like it's joining the fear too. Breathing gets harder. Your chest tightens. Your shoulders tense. Your heart beats faster. Your hands might shake. There can be a feeling that you urgently need to do something, even if you can't say exactly what.</p>
+      <p>Please, stop for a few seconds.</p>
+      <p>You don't need to figure out your whole life right now.</p>
+      <p>You don't need to know what happens tomorrow.</p>
+      <p>You don't need to live through every possible future in advance.</p>
+      <p>Right now there is only this moment. You are here. You are reading these words. And right now you don't need to do anything except be here for a little while.</p>
+      <p>Anxiety knows how to sound very convincing. It can make you believe that every thought is a warning, every sensation is a sign of danger, and every &quot;what if&quot; demands an answer right now.</p>
+      <p>But a thought is not a fact.</p>
+      <p>An assumption is not a prediction.</p>
+      <p>Fear doesn't always mean danger.</p>
+      <p>Sometimes your brain is just trying too hard to protect you. It looks for threats where there might not be any, because it wants to prepare you for everything in advance. But no one can prepare for everything.</p>
+      <p>You don't have to control every little thing to be safe.</p>
+      <p>If you didn't do everything you wanted to today, that doesn't mean everything is ruined. If someone hasn't answered your message, that doesn't mean you've been rejected. If you made a mistake, that doesn't mean your whole life is now going wrong.</p>
+      <p>Try something very simple right now.</p>
+      <p>Put your feet on the floor.</p>
+      <p>Look around you.</p>
+      <p>Notice the place you're in.</p>
+      <p>Take a slow breath in.</p>
+      <p>And just as slow a breath out.</p>
+      <p>Don't try to force the anxiety to disappear. Just let yourself be near it, without obeying every thought it hands you.</p>
+      <p>You can tell yourself:</p>
+      <p><strong>&quot;I'm scared, but I don't have to act from fear.&quot;</strong></p>
+      <p><strong>&quot;I don't know what happens next, and I don't need to know that right now.&quot;</strong></p>
+      <p><strong>&quot;I can get through today without solving all of tomorrow.&quot;</strong></p>
+      <p>You're not weak for feeling anxious.</p>
+      <p>You haven't broken.</p>
+      <p>You haven't gotten worse.</p>
+      <p>You're just a person who's having a hard time right now.</p>
+      <p>And if the anxiety has become strong enough that it's stopping you from sleeping, eating, studying, working, leaving the house, or living your life normally, please don't try to prove to yourself that you have to handle it alone. A therapist, a doctor, or someone close to you can become the support that helps you slowly find your footing again.</p>
+      <p>And if right now it feels like you might hurt yourself, or you're not safe, please reach out to someone near you and to emergency help in your country.</p>
+      <p>You don't have to get through this moment alone.</p>
+      <p>And remember one thing:</p>
+      <p><strong>you don't have to feel calm to keep living. Sometimes it's enough to just take the next small step.</strong></p>
+    </div>
+    <p class="topic-page__closing" data-i18n="topics.closing" data-reveal>If this feels bigger than a website can hold, that's okay — that's what Support, below, is for.</p>
+    <a href="../index.html#help" class="btn btn--sm" data-reveal><span data-i18n="topics.openSupport">Go to Support →</span></a>
+  </div>
+
+  <div class="container topic-page__more">
+    <span class="sec-eyebrow" data-i18n="topicPage.moreTopics" data-reveal>More topics</span>
+    <div class="topics__grid" id="topicPageMoreGrid" data-reveal="scale">
+      <a class="topic-card" href="depression.html"><span class="topic-card__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="8" y1="17" x2="40" y2="17"/><circle cx="24" cy="30" r="9"/></svg></span><span class="topic-card__title">Depression</span><span class="topic-card__teaser">Everything feels flat, heavy, or far away.</span></a>
+      <a class="topic-card" href="loneliness.html"><span class="topic-card__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="24" cy="24" r="19" opacity=".32"/><circle cx="24" cy="24" r="2.6" fill="currentColor" stroke="none"/></svg></span><span class="topic-card__title">Loneliness</span><span class="topic-card__teaser">Invisible, even in a room full of people.</span></a>
+      <a class="topic-card" href="grief.html"><span class="topic-card__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="24" cy="24" r="16" stroke-dasharray="86 14" stroke-linecap="round"/></svg></span><span class="topic-card__title">Grief &amp; loss</span><span class="topic-card__teaser">For a person, a version of you, or a future you'd planned on.</span></a>
+      <a class="topic-card" href="bullying.html"><span class="topic-card__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="24" cy="24" r="7"/><path d="M24 6v8M24 34v8M6 24h8M34 24h8M11 11l6 6M31 31l6 6M37 11l-6 6M17 31l-6 6"/></svg></span><span class="topic-card__title">Bullying &amp; harassment</span><span class="topic-card__teaser">Online, at school, at work — none of it is your fault.</span></a>
+      <a class="topic-card" href="disability.html"><span class="topic-card__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="19" cy="24" r="13" opacity=".75"/><circle cx="29" cy="24" r="13" opacity=".75"/></svg></span><span class="topic-card__title">Disability &amp; chronic illness</span><span class="topic-card__teaser">The exhaustion of a world not built with you in mind.</span></a>
+      <a class="topic-card" href="burnout.html"><span class="topic-card__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="24" cy="24" r="7"/><path d="M24 6v6" opacity=".65"/><path d="M38 12l-4.5 4.5" opacity=".5"/><path d="M42 24h-6" opacity=".35"/><path d="M38 36l-4.5-4.5" opacity=".22"/></svg></span><span class="topic-card__title">Burnout</span><span class="topic-card__teaser">Hollowed out from giving too much, for too long.</span></a>
+      <a class="topic-card" href="selfesteem.html"><span class="topic-card__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="24" cy="18" r="9"/><ellipse cx="24" cy="37" rx="9" ry="3" opacity=".3"/></svg></span><span class="topic-card__title">Low self-esteem</span><span class="topic-card__teaser">That loud inner voice — it isn't accurate.</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="../index.html" class="brand" data-magnetic>
+          <svg class="brand__mark" viewBox="0 0 48 40" aria-hidden="true">
+            <circle cx="24" cy="17" r="12" fill="url(#markGlow)" stroke="currentColor" stroke-width="1.1"/>
+            <line x1="4" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+          </svg>
+          <span class="brand__word">HAVN</span>
+        </a>
+        <p data-i18n="footer.tagline">A digital sanctuary for a noisy world.</p>
+      </div>
+
+      <div class="footer__cols">
+        <div class="footer__col">
+          <b data-i18n="footer.explore">Explore</b>
+          <a href="../index.html#philosophy" data-i18n="footer.philosophy">Philosophy</a>
+          <a href="../index.html#spaces" data-i18n="footer.spacesLink">Spaces</a>
+          <a href="../index.html#ritual" data-i18n="footer.ritual">Ritual</a>
+          <a href="../index.html#presence" data-i18n="footer.presence">Presence</a>
+          <a href="../index.html#gallery" data-i18n="footer.moments">Moments</a>
+        </div>
+        <div class="footer__col">
+          <b data-i18n="footer.support">Get support</b>
+          <a href="../index.html#topics" data-i18n="footer.topicsLink">Topics</a>
+          <a href="../index.html#tools" data-i18n="footer.toolsLink">Tools</a>
+          <a href="../index.html#companion" data-i18n="footer.companionLink">Companion</a>
+          <a href="../index.html#help" data-i18n="footer.helpLink">Support</a>
+        </div>
+        <div class="footer__col">
+          <b data-i18n="footer.connect">Connect</b>
+          <a href="mailto:hello@havn.studio">hello@havn.studio</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__line" aria-hidden="true"></div>
+
+    <div class="footer__bottom">
+      <span>© <span id="year">2026</span> <span data-i18n="footer.copyright">HAVN. A digital sanctuary.</span></span>
+      <a href="../index.html" class="to-top" data-magnetic><span data-i18n="footer.toTop">Back to top ↑</span></a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/content.js"></script>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

@@ -25,14 +25,16 @@ a portfolio/demo project.
 
 ```
 index.html                 all sections, SVG defs (glass filter, mark/cloud/bird symbols)
+topics/*.html               one static, crawlable page per topic (generated — see below)
 assets/css/style.css       design tokens, atmosphere, glass, motion, responsive
 assets/js/content.js       bilingual (en/ru) copy: topics, tool labels, pet
                             affirmations, crisis resources, every UI string
 assets/js/main.js          i18n engine, loader, reveals, mood/parallax, cursor,
-                            sound, topic modal, breathing/grounding/mood tools,
+                            sound, topic pages, breathing/grounding/mood tools,
                             pet companion, nav
 assets/img/favicon.svg     the HAVN mark (orb + horizon)
 assets/img/og-cover.png    1200×630 share preview, rendered from the same mark
+scripts/build-topic-pages.js  one-off Node generator for topics/*.html (below)
 components/ui/             React/shadcn reference components (not used by the
                             static site — see "Moving to React" below)
 .nojekyll                  so GitHub Pages serves files as-is
@@ -133,31 +135,61 @@ blue. One `IntersectionObserver` in `main.js` drives all of it.
 ## Sound
 
 Off by default, everywhere. The glass toggle in the navbar (and its twin in
-the mobile menu) doesn't play a file — there's no licensed ambient track to
-ship — it **synthesizes** one with the Web Audio API: four sine oscillators
-(a soft low C-major voicing) through a shared lowpass filter, with a slow
-LFO breathing the filter's cutoff so the pad shifts instead of droning.
-Gain ramps over ~2s on enable and ~1.2s on disable (no clicks), and the
-`AudioContext` is created lazily on the first click (autoplay policy) and
-suspended after fade-out so a muted tab costs nothing.
+the mobile menu) doesn't play a file — it **generates** the music live with
+the Web Audio API. This wasn't the first choice; a real recorded ambient
+track was — but this build environment's outbound network is restricted to
+a small allowlist (package registries, the configured GitHub repo) and every
+audio host tried (Wikimedia Commons, Internet Archive, Pixabay, incompetech,
+Free Music Archive, freepd) came back blocked at the network layer, not a
+licensing problem. If you'd rather ship a real track, drop a file at
+`assets/audio/ambient.mp3` (a CC0/CC-BY loop from any of the sites above
+works well) and point the toggle at an `<audio>` element instead — the
+generative engine below is a genuine fallback, not a placeholder.
+
+What it actually does: two oscillator banks (four sine voices each) crossfade
+between four diatonic chords — Cmaj7 → Am7 → Fmaj7 → Gsus4, chosen so
+neighboring chords share tones — over a 24s cycle, always retuning the
+*silent* bank so nothing audibly snaps. A sparse generative melody
+(one soft pentatonic note every 6-15s, picked at random) plays over it.
+Both run through a shared lowpass filter with a slow breathing LFO, and
+through a procedural reverb — a `ConvolverNode` fed a synthesized decaying-
+noise impulse response, not a recorded impulse sample — for a sense of space
+without a single shipped byte of audio. Gain ramps over ~2.5s on enable and
+~1.4s on disable (no clicks); the `AudioContext` is created lazily on first
+click (autoplay policy), and both the oscillator graph and the JS chord/
+melody schedulers pause when the context suspends after fade-out, so a
+muted tab costs nothing.
 
 ## Topics, Tools & Companion
 
 **Topics** (`#topics`) is a catalog of eight things that are hard to carry —
 anxiety, depression, loneliness, grief, bullying, disability/chronic illness,
-burnout, low self-esteem. Each card opens (in an accessible modal —
-focus-trapped, closes on Escape/backdrop/close button, returns focus on
-close, scrolls its own body independently on long content) a full,
-long-form piece written directly to the reader in second person: not a
-bullet-point symptom list, but a real, warm piece of writing — validating,
-never diagnostic, ending with a bridge to Support. `content.js` stores each
-one as an array of paragraph strings (`**text**` renders as an emphasized
-line via `renderInlineBold()`, built with `createElement`/`textContent`,
-never `innerHTML`, even though the content is fully first-party) — both
-languages run 1,300–1,900 words per topic, translated for warmth rather
-than word-for-word.
+burnout, low self-esteem. Each card is a real link to its own static page
+under `topics/` (`topics/anxiety.html`, etc.) — a genuine URL that's
+crawlable, bookmarkable and shareable, not a modal or a tab. Each page holds
+a full, long-form piece written directly to the reader in second person:
+not a bullet-point symptom list, but a real, warm piece of writing —
+validating, never diagnostic, ending with a bridge to Support, plus a "more
+topics" grid linking to the other seven. `content.js` stores each one as an
+array of paragraph strings (`**text**` renders as an emphasized line via
+`renderInlineBold()` client-side, or the equivalent plain-string transform
+in the page generator — both build with `createElement`/`textContent` or
+escape-then-replace, never raw `innerHTML` of unescaped content, even
+though the content is fully first-party) — both languages run 1,300–1,900
+words per topic, translated for warmth rather than word-for-word.
 
-**Tools** (`#tools`) are three small, real exercises, not gamified in any
+The eight `topics/*.html` files are generated, not hand-written — run
+`node scripts/build-topic-pages.js` after editing `TOPICS` in `content.js`
+to regenerate them. The script reads `content.js` in a Node `vm` sandbox (a
+stand-in `window` object) so the browser-only content file needs no changes
+to also run at build time, and writes one self-contained HTML file per
+topic: shared nav/atmosphere/footer chrome (with `../`-relative links back
+into `index.html`), a statically-rendered English body for no-JS visitors
+and crawlers, and the same `assets/js/main.js` the rest of the site uses —
+`renderTopicPage()` hydrates the page and handles the live language toggle
+exactly like every other section.
+
+**Tools** (`#tools`) are four small, real exercises, not gamified in any
 way that would reward staying longer than needed:
 - *Breathe with me* — one minute of box breathing (4-4-4-4), a CSS
   `animation` on the ring synced to a `setInterval` label ("Breathe in" /
@@ -169,18 +201,32 @@ way that would reward staying longer than needed:
   `localStorage` only, keyed by today's date; nothing is sent anywhere,
   ever. There is deliberately no history/streak/chart — the goal is a
   moment of noticing, not a habit-tracking product to keep opening.
+- *Loosen a stuck thought* — a five-prompt, guided version of cognitive
+  reframing (the "is this a fact or does it just feel like one," "what
+  would you tell a friend" technique CBT actually uses), stepped through
+  the same one-prompt-at-a-time UI as grounding. No free-text box: nothing
+  typed is stored or evaluated, since there's no server and no model
+  reading it — it's a worksheet, not a chatbot.
 
 **Companion** (`#companion`) is a small SVG cat or dog (visitor's choice,
 persisted locally) with a body, a wagging tail, and blush cheeks, not just
-a face. Three separate interactions — pet, Feed, Play — each play a gentle
-bounce/tail-wag and surface a random line from their own affirmation pool
-(16 general, 9 feed-themed, 9 play-themed, per language); Feed and Play
-also pop a small species-appropriate emoji (fish/bone, yarn/tennis ball)
-that fades on its own. None of it decays — there's no hunger bar, no
-neglect state, nothing that could make a hard week feel like a second
-failure. The companion can be renamed via a native `prompt()`. It exists
-to be a soft, low-stakes, always-available presence — not a chatbot, not a
-game with a score.
+a face. A plain click/tap still greets it — but Food and a Toy sit next to
+it as real draggable objects (Pointer Events, so mouse/touch/pen all work):
+pick one up and drag it onto the companion to feed or play, release short of
+the target and it springs back to its dock instead. A toy dragged with real
+motion gets thrown — it tumbles across the stage along the release direction
+and speed (`--throw-x` driving a dedicated `petPropThrow` keyframe) rather
+than just popping in place; food always uses the gentler pop. Dragging isn't
+required, though: a short tap/click on either item, or `Tab` to it and press
+`Enter`/`Space`, triggers the same feed/play reaction without needing a
+pointer — needed for keyboard and screen-reader use, and a straightforward
+fallback for anyone who'd rather not fuss with dragging. Every reaction
+plays a gentle bounce/tail-wag and surfaces a random line from its own
+affirmation pool (16 general, 9 feed-themed, 9 play-themed, per language).
+None of it decays — there's no hunger bar, no neglect state, nothing that
+could make a hard week feel like a second failure. The companion can be
+renamed via a native `prompt()`. It exists to be a soft, low-stakes,
+always-available presence — not a chatbot, not a game with a score.
 
 All of the above's state (`havn_pet_species`, `havn_pet_name`,
 `havn_mood_<date>`, `havn_lang`) lives only in the visitor's own
@@ -190,13 +236,16 @@ interaction above.
 
 ## Support resources
 
-`#help` lists real, verified places to get real help, each checked against
-its own organization's site before being included: a national crisis line
-for Russia (the long-established, official Детский телефон доверия,
-8-800-2000-122), the US 988 Suicide & Crisis Lifeline, and two international
-directories (Find A Helpline, Befrienders Worldwide) for everywhere else.
-The section opens with an explicit, two-language statement that HAVN is not
-a person, a doctor, or a crisis line, and that immediate danger means
+`#help` lists six real, verified places to get real help, each checked live
+against its own organization's site (via web search) before being included:
+a national crisis line for Russia (the long-established, official Детский
+телефон доверия, 8-800-2000-122), the US 988 Suicide & Crisis Lifeline,
+Crisis Text Line (US/Canada/UK/Ireland — text HOME to 741741, for anyone who
+can't or doesn't want to make a phone call), Samaritans (UK & Ireland, 116
+123, 24/7 since long before either country had a mental-health app), and two
+worldwide directories (Find A Helpline, Befrienders Worldwide) for everyone
+else. The section opens with an explicit, two-language statement that HAVN
+is not a person, a doctor, or a crisis line, and that immediate danger means
 contacting local emergency services — not this website.
 
 **If you fork this for real-world use beyond a portfolio/demo:** re-verify
@@ -213,8 +262,8 @@ Two full languages ship today — English (default for most visitors) and
 Russian (default when the browser reports a `ru*` locale, or after a manual
 switch) — toggled from the pill button in the nav (and mobile menu), and
 remembered in `localStorage`. Every string on the page, including the eight
-Topics, the four Support resources, and all eight pet affirmations, is
-translated, not just the UI chrome.
+Topics, all six Support resources, and every pet affirmation, is translated,
+not just the UI chrome.
 
 Architecture: `assets/js/content.js` exports one `HAVN_CONTENT` object —
 `UI` (nested per-section strings, looked up by dot-path, e.g.
@@ -241,13 +290,24 @@ lighter "muted" tier up to the AA-safe one). All motion — parallax, cursor,
 blob/cloud/bird drift, breathing ring, reveal transitions — is disabled or
 collapsed to instant/static under `prefers-reduced-motion: reduce`. Content
 is fully present and readable without JavaScript (`<noscript>` hides the
-loader; reveal states only apply once an `html.js` class is set; the Topics/
-Support/Tools/Companion sections do need JS to render their content, same
-as any data-driven part of a JS-free-by-default page).
+loader; reveal states only apply once an `html.js` class is set; the
+homepage's Topics/Support/Tools/Companion sections do need JS to render
+their content, same as any data-driven part of a JS-free-by-default page —
+but each `topics/*.html` page ships its full English text statically, so it
+reads and works with JavaScript off; JS only takes over to hydrate the
+language toggle).
 
-The topic modal is a real dialog: `role="dialog"` + `aria-modal`, opening
-moves focus into the panel, `Tab`/`Shift+Tab` are trapped inside it, `Escape`
-or the backdrop closes it, and focus returns to whatever opened it.
+Topics used to open in a focus-trapped modal; they're now real pages
+(`topics/*.html`), which sidesteps the whole class of modal-focus-trap bugs
+— normal document flow, normal `Tab` order, the browser's own back button
+instead of a close button and a restored-focus workaround.
+
+The companion's Food/Toy items are draggable, but dragging is never the
+only way in: both items are real `<button>`s in the normal tab order, and
+`Enter`/`Space` triggers the exact same feed/play reaction a completed drag
+does — `makeDraggable()` in `main.js` wires pointer and keyboard handling
+side by side rather than faking keyboard support on top of a mouse-only
+gesture.
 
 One general-purpose fix worth noting: `[hidden]{display:none !important}`
 was added to the reset, because the grounding tool's "Start over" button —
