@@ -1,364 +1,161 @@
-# «На твоё усмотрение» — сайт студии разработки сайтов
+# HAVN — a digital sanctuary
 
-Одностраничный сайт-витрина мини-студии: услуги, тарифы, процесс работы, форматы проектов,
-FAQ и форма заявки. Чистый HTML/CSS/JS — без сборки, зависимостей и фреймворков.
+A one-page, single-scroll experience built around calm instead of conversion.
+No pricing, no portfolio, no "start a project" funnel — just a slow, quiet
+digital space made of light, glass and soft motion. Pure HTML/CSS/JS,
+no build step, no dependencies.
 
-## Тарифы
+## Concept
 
-| Тариф   | Цена  | Срок        | Объём            |
-|---------|-------|-------------|------------------|
-| Малый   | $70   | 3–5 дней    | 1 страница       |
-| Средний | $200  | 7–10 дней   | до 6 страниц     |
-| Большой | $500  | 14–20 дней  | без лимита       |
+HAVN isn't a studio site. It's a place a visitor arrives at, slows down in,
+and leaves a little calmer. The whole page is written as one continuous
+arc — dawn → clarity → depth → glow — and the background mood shifts
+gently underneath the content to match.
 
-## Структура
+## Structure
 
 ```
-index.html                 разметка всех секций + SVG-фильтры стекла
-assets/css/style.css       стили (чёрный на белом), адаптив, анимации, арт-слои
-assets/js/main.js          прелоадер, курсор, reveal, счётчики, меню, форма,
-                           параллакс, стеклянный глаз
-assets/js/blackhole.js     чёрная дыра на WebGL: шейдер + отрисовка
-assets/js/paths.js         летящие линии на фоне секций
-assets/img/blackhole.jpg   чёрная дыра — первый экран и превью для соцсетей
-assets/img/rider.jpg       фигура в тумане с подсвеченными очками
-assets/img/og-cover.png    обложка ссылки 1200×630
-assets/img/favicon.svg
-components/ui/             React-компоненты для shadcn (сайтом не используются)
-.nojekyll                  чтобы GitHub Pages отдавал файлы как есть
+index.html                 all sections, SVG defs (glass filter, mark gradient)
+assets/css/style.css       design tokens, atmosphere, glass, motion, responsive
+assets/js/main.js          loader, reveals, mood/parallax, cursor, sound, nav
+assets/img/favicon.svg     the HAVN mark (orb + horizon)
+assets/img/og-cover.png    1200×630 share preview, rendered from the same mark
+components/ui/             React/shadcn reference components (not used by the
+                            static site — see "Moving to React" below)
+.nojekyll                  so GitHub Pages serves files as-is
 ```
 
-## Запуск локально
+## Run locally
 
-Достаточно открыть `index.html` в браузере. Либо поднять простой сервер:
+Open `index.html` directly, or serve it:
 
 ```bash
 python3 -m http.server 8000
 # http://localhost:8000
 ```
 
-## Публикация
-
-Сайт статический, поэтому подойдёт любой хостинг.
-
-**GitHub Pages:** Settings → Pages → Source: `Deploy from a branch` → ветка и папка `/ (root)`.
-
-**Netlify / Vercel / Cloudflare Pages:** подключить репозиторий, build command оставить пустым,
-publish directory — корень проекта.
-
-## Оформление
-
-Направление — техническая документация: моноширинные метки секций
-(`01 / УСЛУГИ`) с прочерчивающейся линейкой, сквозная сетка направляющих
-на всю страницу (`.grid-lines`), карточки без коробок — только тонкие
-разделители, табличные цифры в ценах и статистике.
-
-Шрифт для служебных надписей — системный моноширинный (`--font-mono`),
-веб-шрифт не подгружается.
-
-Блоки появляются двумя способами: обычные — подъёмом с раскрытием снизу
-вверх (`clip-path`), заголовки секций — вайпом слева направо
-(`data-reveal="wipe"`).
-
-## Тема
-
-Сайт тёмный целиком. Палитра собрана на четырёх переменных в начале
-`style.css`, менять цвета нужно только там:
-
-| Переменная | Что это |
-|------------|---------|
-| `--bg` | фон страницы |
-| `--surface` | фон контрастных секций (`.section--dark`) |
-| `--ink` | основной цвет текста и заливок (кнопки, плашки) |
-| `--on-ink` | цвет текста поверх заливки `--ink` |
-
-Единственное светлое пятно — карточка тарифа «Средний» (`.plan--pop`):
-белая плашка работает акцентом на чёрном.
-
-Чтобы вернуть светлую тему, поменяйте местами `--bg` с `--ink` и
-`--surface` с `--on-ink` — остальное подтянется автоматически.
-
-## Фоновая графика
-
-Все три снимка лежат в `assets/img/` и подключены как фоновые слои.
-
-**Как заменить на свои оригиналы:** положите файлы в `assets/img/` и поправьте
-`src` в `index.html` — больше ничего менять не нужно, размеры и маски подстроятся:
-
-| Где | Сейчас | На что меняется |
-|-----|--------|-----------------|
-| первый экран | `assets/img/blackhole.jpg` | горизонтальный кадр, ~16:9 |
-| секция «Фокус на результате» | `assets/img/rider.jpg` | вертикальный кадр, ~4:5 |
-
-Все снимки — 736px по ширине. Для фоновых слоёв этого хватает, но если
-найдутся версии побольше, картинка станет заметно чётче: сейчас она
-растягивается примерно вдвое.
-
-Снимки взяты из внешних источников. Перед коммерческим запуском стоит
-убедиться, что права на них позволяют такое использование, либо заменить
-своими — подстановка занимает одну строку.
-
-Снимок фигуры сделан в светлом тумане, поэтому на чёрном он притушен
-фильтром и растворён по краям маской, а свечение очков возвращено отдельным
-слоем `.rider__glow` — иначе фильтр гасит и его тоже. Координаты слоя
-привязаны к центру визора на снимке, при замене фото их нужно поправить.
-
-**Важно про маски:** радиусы радиального градиента должны укладываться в
-габариты блока (не больше 50% по той оси, где нужно полное затухание).
-Иначе градиент обрывается на краю и появляется видимый прямоугольник.
-
-Прицел (рамка с уголками и перекрестием) — отдельный SVG прямо в разметке,
-позиционируется в процентах от картинки. Если пропорции вашего фото другие,
-подвиньте `.rider__hud` — параметры `top` и `width` в `style.css`.
-
-## Чёрная дыра
-
-Считается в реальном времени на WebGL (`assets/js/blackhole.js`), а не берётся
-картинкой — поэтому чёткая на любом экране и по-настоящему вращается.
-
-Фрагментный шейдер трассирует лучи в искривлённом пространстве: на каждом шаге
-к скорости фотона добавляется ускорение `-1.5·h²·pos/r⁵` (приближение Шварцшильда).
-Луч, пересёкший плоскость диска, набирает свечение; ушедший под горизонт —
-обрывается. Отсюда берутся и дуга над горизонтом, и фотонное кольцо — их
-никто не рисовал отдельно, они получаются из геометрии.
-
-Диск вращается вокруг оси Y с дифференциальной скоростью: внутренние слои
-быстрее внешних (`w = t·spin/r^1.5`). Шум сэмплируется так, что угловая
-координата меняется медленно, а радиальная быстро — газ вытягивается
-в волокна вдоль орбиты. При наведении курсора вращение плавно разгоняется.
-
-### Нагрузка
-
-Измерения показали, что дыра съедала больше половины всей работы страницы,
-поэтому она ограничена сразу с нескольких сторон:
-
-| Приём | Значение |
-|-------|----------|
-| Частота кадров | 24 в секунду — диск вращается медленно, разницы с 60 не видно |
-| Разрешение кадра | 0.5 от CSS-размера (0.38 на телефонах), дальше растягивается |
-| Шагов трассировки | 72 (64 на телефонах) |
-| Октав шума | 3 |
-| Вне экрана | цикл простаивает |
-| `prefers-reduced-motion` | один статичный кадр |
-| Без WebGL | остаётся `assets/img/blackhole.jpg` |
-| Программный рендерер | WebGL не запускается вовсе, остаётся картинка |
-
-Последняя строка — самая важная. Если у браузера нет аппаратного ускорения
-(SwiftShader, llvmpipe, «Microsoft Basic Render»), шейдер считает процессор,
-и трассировка лучей роняет **всю страницу** до 5–7 кадров в секунду — это
-проверено замером, а не предположение. Поэтому модуль читает
-`WEBGL_debug_renderer_info` и при программном рендерере просто не стартует:
-на месте остаётся `blackhole.jpg`, который на первом экране визуально почти
-неотличим от шейдера. Страница при этом идёт ровно 60 кадров в секунду.
-
-Если средний промежуток между кадрами превышает целевой в 1.4 раза, модуль
-сам снижает шаги, а потом и разрешение. Важно: меряется именно промежуток
-**между** кадрами, а не время вызова `drawArrays` — тот возвращается сразу,
-работа уходит на видеокарту асинхронно, и по нему нагрузку не увидеть.
-Первая версия проверки была написана неверно и не срабатывала никогда.
-
-Снижать шаги ниже 48 нельзя: при постоянной длине пути шаг становится
-слишком крупным и геометрия линзы разваливается.
-
-## Первый экран
-
-Слева лежит затемняющая шторка (`.hero__space::after`), чтобы заголовок
-читался поверх свечения диска.
-
-Шапка над ним прозрачная: класс `at-hero` на `<html>` снимается скриптом,
-как только первый экран уходит вверх.
-
-При наведении курсора диск раскручивается. Крутится не сам кадр — его
-разворот выглядел бы сломанным, — а блик по фотонному кольцу: элемент
-`.bh-spin` с коническим градиентом в режиме `screen`. Скорость разгоняется
-и тормозит плавно, координаты кольца привязаны к центру дыры на снимке.
-
-## Обложка ссылки
-
-`assets/img/og-cover.png` (1200×630) подключена в `og:image` и `twitter:image`.
-Пути указаны относительными — **при публикации замените их на абсолютные**
-(`https://ваш-домен/assets/img/og-cover.png`), иначе Telegram, WhatsApp и
-соцсети не подтянут картинку.
-
-Обложка собрана из той же чёрной дыры; если меняете тарифы или заголовок,
-перерисуйте её любым способом с теми же размерами.
-
-Прежние версии фоновой графики, нарисованные в SVG, остались в истории
-git (коммит `a7dc7aa`) — если понадобится вернуться к ним.
-
-## Летящие линии
-
-Фон секций после первого экрана — два встречных пучка по 20 кривых, по которым
-бежит разрыв штриха. Разметку создаёт `assets/js/paths.js`, стили лежат в блоке
-`.paths`.
-
-Кривые считаются по той же формуле, что в компоненте `background-paths`:
-координаты намеренно выходят далеко за `viewBox`, поэтому в кадр попадает
-только середина — линии влетают и вылетают.
-
-Движение сделано через `stroke-dashoffset` при `pathLength="1"`: доли штриха
-считаются от длины самой кривой, а не в пикселях. Штрих почти сплошной
-(`.82 .18`) — по линии бежит разрыв, а не пунктир.
-
-### Почему «дыхание» вынесено на контейнер
-
-Первая версия анимировала у каждой кривой ещё и `opacity` — отдельным
-ключевым кадром `pathFade`. Это оказалось единственной по-настоящему дорогой
-вещью на всём сайте. Замер на изолированном стенде (две секции, 6 секунд
-виртуального времени):
-
-| Вариант | Время |
-|---------|-------|
-| без линий | 0.47 с |
-| линии нарисованы, но не анимированы | 0.53 с |
-| только `stroke-dashoffset` | 0.54 с |
-| **только `opacity` на каждой кривой** | **1.58 с** |
-
-Сама геометрия почти бесплатна, бег штриха — тоже. А вот 120 элементов,
-каждый со своей фазой прозрачности, заставляют браузер перерисовывать их
-по отдельности в каждом кадре. Поэтому пульсация теперь задана один раз на
-контейнере `.paths` (один композитный слой), а не на 120 кривых.
-
-### Остальные ограничители
-
-* Наблюдателей два, и это важно. Первый готовит разметку заранее, с запасом
-  в пол-экрана: когда секция въезжает в кадр, линии уже нарисованы и стоят
-  на паузе — не видно, как фон возникает на ходу. Второй, с `rootMargin: 0px`,
-  запускает движение только у того пучка, который реально в кадре, а не
-  у трёх соседних про запас.
-* «Дыхание» объявлено на `.paths` всегда и управляется паузой, а не
-  добавлением правила. Иначе при уходе секции с экрана анимация исчезала
-  вместе с классом и прозрачность скачком возвращалась к единице.
-* Вне экрана анимация ставится на паузу через `animation-play-state`.
-* Полоса занимает середину секции (`inset:14% 0`), а не всю высоту — слой
-  перерисовки вдвое меньше, и под заголовком линий всё равно не видно.
-* `contain:layout paint style` отрезает слой от остальной страницы.
-* При `prefers-reduced-motion` линии рисуются статично.
-* Разброс скоростей задан формулой один раз при создании, а не случайным
-  числом на каждом кадре — иначе любой пересчёт перезапускал бы все анимации.
-
-Непрозрачность держится в пределах `0.012…0.087` (на пике дыхания до `0.15`).
-Выше поднимать нельзя — линии начинают спорить с текстом, это проверено:
-на `0.72` заголовки становились нечитаемыми.
-
-### Что дало всё вместе
-
-Прокрутка страницы целиком, Chromium с эмуляцией слабого процессора
-(`Emulation.setCPUThrottlingRate`) и без аппаратного WebGL:
-
-| | было | стало |
-|---|---|---|
-| ×4 | 5.3 кадра/с, худший кадр 250 мс | 58.8 кадра/с, худший кадр 67 мс |
-| ×6 | 5.7 кадра/с, худший кадр 417 мс | 59.9 кадра/с, худший кадр 33 мс |
-
-Отдельно на секции тарифов (только линии, дыра вне экрана): было 8.6,
-стало 54 кадра в секунду.
-
-## Эффект liquid glass
-
-Стеклянные кнопки (`.btn--glass`) и «стеклянный глаз» в герое используют
-`backdrop-filter` с SVG-фильтром смещения — фон под элементом реально
-преломляется, а не просто размывается. Фильтр `#container-glass`
-объявлен в начале `index.html`.
-
-Safari не поддерживает SVG-фильтр внутри `backdrop-filter`, поэтому первым
-объявлением идёт обычный `blur() saturate()` — там стекло будет матовым, но
-не сломается.
-
-Сила искажения регулируется атрибутом `scale` у `feDisplacementMap`:
-`34` для кнопок, `76` для линзы.
-
-## Доступность
-
-Страница проверена автоматическим аудитом в headless-браузере на ширинах
-1440px и 500px. Что проверялось и текущее состояние:
-
-| Проверка | Результат |
-|----------|-----------|
-| Контраст текста (WCAG AA: 4.5:1, крупный — 3:1) | без нарушений |
-| Зоны нажатия не меньше 44×44px | без нарушений |
-| `alt` у картинок, `label` у полей, доступные имена ссылок | без нарушений |
-| `width`/`height` у картинок (защита от скачков вёрстки) | проставлены везде |
-| Горизонтальная прокрутка | отсутствует на обеих ширинах |
-| Базовый кегль и интерлиньяж | 16px / 1.6 |
-
-Приглушённый текст задан через `rgba(255,255,255,…)`. Если будете
-осветлять фон или менять прозрачность, держите её не ниже `.62` —
-на более низких значениях контраст падает ниже нормы.
-
-Ссылки в футере, контактах и меню специально имеют `min-height:44px`:
-визуально это обычная строка, но палец попадает по ней без промаха.
-Подчёркивание при наведении смещено внутрь (`bottom` у `::after`),
-чтобы не отрывалось от текста.
-
-## Переезд на React + shadcn/ui
-
-Сайт статический и React не требует. Если всё-таки нужен — компоненты
-уже лежат в `components/ui` (чёрная дыра и liquid-glass-кнопки),
-останется поднять окружение:
-
-```bash
-npx create-next-app@latest . --typescript --tailwind --eslint --app
-npx shadcn@latest init            # создаст lib/utils.ts с функцией cn и алиас @/*
-npm i @radix-ui/react-slot class-variance-authority
-npm i @splinetool/runtime @splinetool/react-spline framer-motion
-```
-
-`shadcn init` пропишет алиас `@/*` в `tsconfig.json` и создаст `lib/utils.ts` —
-без них импорт `@/lib/utils` в компоненте не разрешится. Папка
-`components/ui` — путь по умолчанию для shadcn: CLI кладёт туда все компоненты
-и ожидает их там при последующих `shadcn add`, поэтому переименовывать её не стоит.
-
-Использование:
-
-```tsx
-import BlackHole from "@/components/ui/black-hole"
-import { LiquidButton } from "@/components/ui/liquid-glass-button"
-
-export default function Demo() {
-  return (
-    <div className="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
-      <BlackHole />
-      <LiquidButton>Liquid Glass</LiquidButton>
-    </div>
-  )
-}
-```
-
-Подробности по компонентам — в `components/ui/README.md`.
-
-## Что настроить под себя
-
-| Где | Что менять |
-|-----|------------|
-| `index.html` — блок `<!-- КОНТАКТЫ -->` и футер | почта `hello@natvoeusmotrenie.studio`, ссылка на Telegram |
-| `assets/js/main.js` — константа `MAIL` в `initForm()` | адрес, на который уходит заявка |
-| `index.html` — блок `<!-- ТАРИФЫ -->` и таблица сравнения | цены, сроки, состав пакетов |
-| `index.html` — секция `#works` | форматы проектов, при желании — реальное портфолио |
-| `assets/css/style.css` — блок `:root` | шрифты, отступы, ширина контейнера |
-
-## Форма заявки
-
-Сейчас форма собирает данные и открывает почтовый клиент через `mailto:` — это работает
-без сервера. Для приёма заявок прямо на сайте замените обработчик в `initForm()`
-на отправку `fetch()` в Formspree, Getform, Telegram Bot API или собственный бэкенд.
-
-## Анимации
-
-Прелоадер со счётчиком, кастомный курсор, магнитные кнопки, появление блоков при
-скролле (IntersectionObserver), анимированные счётчики, бегущая строка, 3D-наклон
-карточек тарифов, скрывающаяся при скролле шапка, индикатор прогресса чтения,
-аккордеон FAQ и зерно поверх страницы.
-
-Фоновая графика: диск чёрной дыры раскручивается под курсором, хром плавает по
-собственной траектории и одновременно двигается параллаксом от скролла,
-стеклянный глаз следует за курсором со сглаживанием и дрейфует сам по себе,
-когда мышь ушла, очки на фигуре пульсируют.
-
-Всё отключается автоматически при `prefers-reduced-motion: reduce`, а на тач-устройствах
-не запускаются курсор, магнитные кнопки и наклон карточек.
-
-## Браузеры
-
-Chrome, Firefox, Safari, Edge — актуальные версии. При отключённом JavaScript контент
-остаётся читаемым: прелоадер скрывается, блоки показываются без анимаций.
+## Deploy
+
+Static site, any host works.
+
+**GitHub Pages:** Settings → Pages → Source: `Deploy from a branch` → root.
+**Netlify / Vercel / Cloudflare Pages:** connect the repo, leave the build
+command empty, publish directory = repo root.
+
+If you publish under a real domain, change `og:image` / `twitter:image` in
+`index.html` to an absolute URL — otherwise Telegram/WhatsApp/Slack previews
+won't pick up the cover image.
+
+## Brand
+
+**HAVN** (styled without the middle *e*) — a stand-in for *haven*: shelter,
+not excitement. The mark is an orb resting on a horizon line — morning light
+meeting still water — built as inline SVG so it can breathe (a slow
+`scale` pulse) everywhere it appears: loader, navbar, hero, footer.
+
+## Theme
+
+Everything lives in CSS custom properties at the top of `style.css`:
+
+| Token | Role |
+|---|---|
+| `--white` / `--milk` / `--mist` / `--ice` / `--sky` | the light-to-icy background ramp |
+| `--cyan` / `--cyan-2` / `--azure` / `--azure-deep` | accent, used sparingly (one gradient word per heading, links, glow) |
+| `--ink` / `--ink-2` / `--ink-3` | text, darkest to most muted (opacity-based, not separate colors) |
+| `--glass` / `--glass-border` / `--glass-shadow` | shared glassmorphism recipe |
+| `--ease-out` / `--ease-soft` | the two easing curves used for every transition |
+
+The site is light-only by design — there is no dark mode to keep visually
+consistent with a second palette; introducing one would need real design
+work, not a token flip.
+
+## The background
+
+`.atmosphere` is a fixed layer behind everything: four large radial-gradient
+blobs drifting on 55–85s keyframe loops, two soft diagonal light rays, and
+four full-bleed "mood" gradients that cross-fade (opacity, not gradient
+interpolation — the reliable way to morph gradients smoothly) as the visitor
+scrolls past each `section[data-mood]`. A scrollspy-style `IntersectionObserver`
+with a thin center band (`rootMargin: "-45% 0px -45% 0px"`) decides which
+mood is active. The whole layer nudges a few pixels toward the cursor via
+two CSS custom properties (`--mx`/`--my`) written from a rAF-throttled
+`mousemove` listener, smoothed with a CSS `transition` rather than manual
+lerp math.
+
+Deliberately **not** WebGL/Three.js: a shader background fights the brief's
+own instruction not to feel like "a technological interface." Layered CSS
+gradients are also cheaper, need no shader tuning, and degrade to a static
+frame for free under `prefers-reduced-motion`.
+
+## Motion system
+
+Three reveal variants, applied with `data-reveal`, so the page doesn't use
+one animation for every element (nor a different one for each):
+
+* `[data-reveal]` (default) — fade + rise + blur-to-sharp, for most blocks.
+* `[data-reveal="scale"]` — same, with a touch of scale, for glass cards.
+* `[data-reveal="line"]` — per-line blur/translate reveal, used once, for
+  the hero heading.
+
+Kinetic typography (`[data-split="words"]`) is wrapped into `.word` spans
+at runtime — not hand-authored in the markup — so paragraph copy stays
+editable as plain text; `data-tint="word"` tints a specific word to accent
+blue. One `IntersectionObserver` in `main.js` drives all of it.
+
+## Sound
+
+Off by default, everywhere. The glass toggle in the navbar (and its twin in
+the mobile menu) doesn't play a file — there's no licensed ambient track to
+ship — it **synthesizes** one with the Web Audio API: four sine oscillators
+(a soft low C-major voicing) through a shared lowpass filter, with a slow
+LFO breathing the filter's cutoff so the pad shifts instead of droning.
+Gain ramps over ~2s on enable and ~1.2s on disable (no clicks), and the
+`AudioContext` is created lazily on the first click (autoplay policy) and
+suspended after fade-out so a muted tab costs nothing.
+
+## Accessibility
+
+Semantic sections/headings (one `h1`, `h2` per section, `h3` for sub-items),
+a skip link, visible `:focus-visible` rings, 44px-tall nav/footer links,
+`aria-pressed` on the sound toggle, `aria-expanded`/`aria-controls` on the
+mobile menu trigger, and AA-safe contrast (ink tokens sit well above 4.5:1
+on every background in the palette). All motion — parallax, cursor,
+blob drift, reveal transitions — is disabled or collapsed to instant/static
+under `prefers-reduced-motion: reduce`. Content is fully present and
+readable without JavaScript (`<noscript>` hides the loader; reveal states
+only apply once an `html.js` class is set).
+
+## Performance
+
+No images except the two small SVGs and the OG cover; no WebGL; no
+animation loop runs unless something is actually moving (the cursor's rAF
+loop is the one exception, and it's skipped entirely on touch/coarse
+pointers and under reduced motion). Everything animated uses `transform`/
+`opacity`/`filter` only. Scroll/mousemove handlers are rAF-throttled. Large
+blobs get their softness from gradient stops, not `filter: blur()`, to
+avoid blurring huge painted layers.
+
+## Customize
+
+| Where | What |
+|---|---|
+| `index.html` — `<!-- HERO -->` | badge, heading, subtitle, CTA labels |
+| `index.html` — `<!-- SPACES -->` | the five room names/descriptions/swatch colors |
+| `index.html` — `<!-- RITUAL -->` | the four "how to be here" steps |
+| `index.html` — `<!-- PRESENCE -->` | the three quotes |
+| `assets/css/style.css` — `:root` | palette, spacing, easing |
+| `assets/js/main.js` — `initSound()` | the chord/voicing used for ambient sound |
+| `index.html` — footer `mailto:` | contact address |
+
+## Moving to React
+
+Not needed for this site, but `components/ui` already has shadcn-style
+building blocks (button, card, spotlight) left over from earlier
+exploration, in case a future rebuild wants them — see
+`components/ui/README.md`. They aren't wired into `index.html`.
+
+## Browsers
+
+Chrome, Firefox, Safari, Edge — current versions. `backdrop-filter` falls
+back gracefully (plain blur before the SVG-displacement enhanced version,
+so Safari still gets real glass, just without the refraction texture).

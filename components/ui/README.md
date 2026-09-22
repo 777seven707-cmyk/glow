@@ -27,8 +27,10 @@ spline-scene-basic.tsx          демо: Card + Spotlight + SplineScene
 ## black-hole
 
 Компонент пришёл без модуля `black-hole-utils/renderer`, на который ссылается,
-поэтому рендерер написан заново — на основе того же шейдера, что работает
-на живом сайте (`assets/js/blackhole.js`).
+поэтому рендерер написан заново — на основе шейдера, который раньше работал
+на живом сайте. Сайт с тех пор сменил тему на светлую («HAVN»), и
+`assets/js/blackhole.js` в текущей версии удалён; этот React-компонент —
+единственное место в репозитории, где шейдер ещё живёт.
 
 ```tsx
 import BlackHole from "@/components/ui/black-hole";

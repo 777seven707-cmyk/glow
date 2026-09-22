@@ -1,682 +1,354 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>На твоё усмотрение — студия разработки сайтов</title>
-<meta name="description" content="Студия «На твоё усмотрение»: разрабатываем сайты под ключ. Три тарифа — Малый $70, Средний $200, Большой $500. Дизайн, вёрстка, адаптив, запуск и поддержка.">
-<meta name="theme-color" content="#07070b">
-<meta name="author" content="На твоё усмотрение">
+<title>HAVN — A Digital Sanctuary</title>
+<meta name="description" content="HAVN is a digital sanctuary — a slow, quiet space built from light, glass and soft motion. No noise, no rush. Just a quieter place to be for a few minutes.">
+<meta name="theme-color" content="#eef7fd">
+<meta name="author" content="HAVN">
+<meta name="color-scheme" content="light">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="На твоё усмотрение — студия разработки сайтов">
-<meta property="og:description" content="Сайты под ключ за 3–20 дней. Тарифы: $70 / $200 / $500.">
-<meta property="og:locale" content="ru_RU">
-<!-- При публикации замените на абсолютный URL: https://ваш-домен/assets/img/og-cover.png -->
+<meta property="og:title" content="HAVN — A Digital Sanctuary">
+<meta property="og:description" content="A slow, quiet digital space built from light, glass and soft motion.">
+<meta property="og:locale" content="en_US">
 <meta property="og:image" content="assets/img/og-cover.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Сайты, которые приносят деньги — тарифы $70, $200, $500">
+<meta property="og:image:alt" content="HAVN — a digital sanctuary, an orb resting on a soft horizon">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="assets/img/og-cover.png">
 
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
-<script>document.documentElement.classList.add("js","at-hero");</script>
+<script>document.documentElement.classList.add("js");</script>
+<noscript><style>.loader{display:none!important}</style></noscript>
 </head>
 <body>
 
-<!-- ============ ПРЕЛОАДЕР ============ -->
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- ============ LOADER ============ -->
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__inner">
-    <div class="loader__word"><span>На</span><span>твоё</span><span>усмотрение</span></div>
+    <svg class="loader__mark" viewBox="0 0 48 40" aria-hidden="true">
+      <circle cx="24" cy="17" r="12" fill="url(#markGlow)" stroke="currentColor" stroke-width="1.1"/>
+      <line x1="4" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="12" y1="33" x2="36" y2="33" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".4"/>
+    </svg>
+    <span class="loader__word">Arriving, quietly</span>
     <div class="loader__bar"><i id="loaderBar"></i></div>
-    <div class="loader__num"><span id="loaderNum">0</span>%</div>
   </div>
 </div>
 
-
-<!-- ============ SVG-ФИЛЬТРЫ ДЛЯ СТЕКЛА ============ -->
-<svg class="svg-defs" aria-hidden="true" focusable="false">
+<!-- ============ SVG DEFS ============ -->
+<svg class="sr-only" aria-hidden="true" focusable="false">
   <defs>
-    <filter id="container-glass" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves="1" seed="1" result="turbulence"/>
+    <radialGradient id="markGlow" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#cfe9fb"/>
+      <stop offset="100%" stop-color="#8fd0f2"/>
+    </radialGradient>
+    <filter id="glass-distort" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.06" numOctaves="1" seed="7" result="turbulence"/>
       <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise"/>
-      <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="34" xChannelSelector="R" yChannelSelector="B" result="displaced"/>
-      <feGaussianBlur in="displaced" stdDeviation="3" result="finalBlur"/>
-      <feComposite in="finalBlur" in2="finalBlur" operator="over"/>
+      <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="18" xChannelSelector="R" yChannelSelector="B"/>
     </filter>
   </defs>
 </svg>
 
-<!-- ============ НАПРАВЛЯЮЩИЕ ============ -->
-<div class="grid-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-
-<!-- ============ ДЕКОР ============ -->
+<!-- ============ ATMOSPHERE ============ -->
+<div class="atmosphere" id="atmosphere" aria-hidden="true">
+  <div class="mood-layer" data-mood="dawn"></div>
+  <div class="mood-layer" data-mood="clarity"></div>
+  <div class="mood-layer" data-mood="deep"></div>
+  <div class="mood-layer" data-mood="glow"></div>
+  <span class="blob blob--1"></span>
+  <span class="blob blob--2"></span>
+  <span class="blob blob--3"></span>
+  <span class="blob blob--4"></span>
+  <span class="ray ray--1"></span>
+  <span class="ray ray--2"></span>
+</div>
 <div class="grain" aria-hidden="true"></div>
-<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
-<div class="scroll-progress" aria-hidden="true"><i id="scrollBar"></i></div>
 
-<!-- ============ ШАПКА ============ -->
-<header class="header" id="header">
-  <div class="container header__in">
-    <a href="#top" class="logo" data-magnetic>
-      <span class="logo__mark" aria-hidden="true">
-        <svg viewBox="0 0 32 32" width="28" height="28"><circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 21V11l14 10V11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
-      </span>
-      <span class="logo__txt">На&nbsp;твоё<br>усмотрение</span>
+<!-- ============ CURSOR ============ -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <span class="cursor__glow"></span>
+  <span class="cursor__dot"></span>
+</div>
+
+<!-- ============ SCROLL PROGRESS ============ -->
+<div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+<!-- ============ NAVBAR ============ -->
+<div class="nav-wrap" id="navWrap">
+  <nav class="nav" aria-label="Primary">
+    <a href="#top" class="brand" data-magnetic>
+      <svg class="brand__mark" viewBox="0 0 48 40" aria-hidden="true">
+        <circle cx="24" cy="17" r="12" fill="url(#markGlow)" stroke="currentColor" stroke-width="1.1"/>
+        <line x1="4" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+      </svg>
+      <span class="brand__word">HAVN</span>
     </a>
 
-    <nav class="nav" id="nav" aria-label="Основная навигация">
-      <a href="#services" class="nav__link"><span>Услуги</span></a>
-      <a href="#pricing" class="nav__link"><span>Тарифы</span></a>
-      <a href="#process" class="nav__link"><span>Процесс</span></a>
-      <a href="#works" class="nav__link"><span>Форматы</span></a>
-      <a href="#faq" class="nav__link"><span>Вопросы</span></a>
-    </nav>
+    <div class="nav__links">
+      <a href="#philosophy" class="nav__link"><span>Philosophy</span></a>
+      <a href="#spaces" class="nav__link"><span>Spaces</span></a>
+      <a href="#presence" class="nav__link"><span>Presence</span></a>
+    </div>
 
-    <a href="#contact" class="btn btn--sm header__cta" data-magnetic><span>Обсудить проект</span></a>
+    <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+      <span class="sound-toggle__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="sr-only">Toggle ambient sound</span>
+    </button>
 
-    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="mobileMenu">
+    <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
       <i></i><i></i>
     </button>
-  </div>
-</header>
-
-<!-- ============ МОБИЛЬНОЕ МЕНЮ ============ -->
-<div class="mmenu" id="mobileMenu" aria-hidden="true">
-  <nav class="mmenu__nav">
-    <a href="#services"><em>01</em> Услуги</a>
-    <a href="#pricing"><em>02</em> Тарифы</a>
-    <a href="#process"><em>03</em> Процесс</a>
-    <a href="#works"><em>04</em> Форматы</a>
-    <a href="#faq"><em>05</em> Вопросы</a>
-    <a href="#contact"><em>06</em> Контакты</a>
   </nav>
-  <div class="mmenu__foot">
-    <a href="mailto:hello@natvoeusmotrenie.studio">hello@natvoeusmotrenie.studio</a>
-    <a href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
-  </div>
 </div>
 
-<main id="top">
-
-<!-- ============ ГЕРОЙ ============ -->
-<section class="hero">
-  <div class="hero__space" aria-hidden="true">
-    <div class="hero__space-in" data-par="-46">
-      <div class="bh-stage" id="bhStage">
-        <img class="bh-fallback" src="assets/img/blackhole.jpg" alt="" width="736" height="414" decoding="async">
-      </div>
-    </div>
-  </div>
-  <div class="glass-eye" id="glassEye" aria-hidden="true">
-    <span class="glass-eye__shell"></span>
-    <span class="glass-eye__iris"></span>
-    <span class="glass-eye__pupil"></span>
-  </div>
-
-  <div class="container">
-    <div class="hero__top" data-reveal>
-      <span class="tag"><i class="dot"></i> Принимаем 4 проекта на этот месяц</span>
-      <span class="hero__loc">Работаем удалённо · со всем миром · 2019 — сейчас</span>
-    </div>
-
-    <h1 class="hero__title">
-      <span class="line" data-split><span>Сайты,</span></span>
-      <span class="line" data-split><span>которые</span></span>
-      <span class="line line--accent" data-split><span>приносят деньги</span></span>
-    </h1>
-
-    <div class="hero__bottom">
-      <p class="hero__lead" data-reveal>
-        Мини-студия <b>«На твоё усмотрение»</b>. Делаем сайты под ключ: от идеи и текста
-        до вёрстки, домена и запуска. Прозрачные тарифы — <b>$70</b>, <b>$200</b> и <b>$500</b>.
-        Без скрытых доплат и бесконечных согласований.
-      </p>
-      <div class="hero__actions" data-reveal>
-        <a href="#pricing" class="btn" data-magnetic><span>Смотреть тарифы</span></a>
-        <a href="#contact" class="btn btn--glass" data-magnetic><span>Бесплатная консультация</span></a>
-      </div>
-    </div>
-
-    <div class="hero__stats">
-      <div class="stat" data-reveal><b class="count" data-to="180">0</b><span>проектов<br>запущено</span></div>
-      <div class="stat" data-reveal><b class="count" data-to="3">0</b><span>дня — минимальный<br>срок сдачи</span></div>
-      <div class="stat" data-reveal><b class="count" data-to="98">0</b><span>% клиентов<br>возвращаются</span></div>
-      <div class="stat" data-reveal><b class="count" data-to="24">0</b><span>часа — среднее<br>время ответа</span></div>
-    </div>
-
-    <div class="hero__scroll" aria-hidden="true"><span>прокрути вниз</span><i></i></div>
-  </div>
-</section>
-
-<!-- ============ БЕГУЩАЯ СТРОКА ============ -->
-<div class="marquee" aria-hidden="true">
-  <div class="marquee__track">
-    <span>Лендинги</span><i>✦</i><span>Корпоративные сайты</span><i>✦</i><span>Интернет-магазины</span><i>✦</i>
-    <span>Портфолио</span><i>✦</i><span>Редизайн</span><i>✦</i><span>Адаптив</span><i>✦</i>
-    <span>Лендинги</span><i>✦</i><span>Корпоративные сайты</span><i>✦</i><span>Интернет-магазины</span><i>✦</i>
-    <span>Портфолио</span><i>✦</i><span>Редизайн</span><i>✦</i><span>Адаптив</span><i>✦</i>
-  </div>
+<!-- ============ MOBILE MENU ============ -->
+<div class="mmenu" id="mobileMenu" aria-hidden="true">
+  <a href="#philosophy">Philosophy</a>
+  <a href="#spaces">Spaces</a>
+  <a href="#ritual">Ritual</a>
+  <a href="#presence">Presence</a>
+  <button class="sound-toggle mmenu__sound" id="soundToggleMobile" type="button" aria-pressed="false">
+    <span class="sound-toggle__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="sr-only">Toggle ambient sound</span>
+  </button>
 </div>
 
-<!-- ============ УСЛУГИ ============ -->
-<section class="section" id="services">
-  <div class="art paths" data-paths aria-hidden="true"></div>
-  <div class="container">
-    <div class="sec-head">
-      <span class="sec-num" data-reveal>01 / Услуги</span>
-      <h2 class="sec-title" data-reveal="wipe">Что входит<br>в работу</h2>
-      <p class="sec-desc" data-reveal>
-        Мы не продаём «часы дизайнера». Мы продаём готовый результат: сайт, который
-        открывается, грузится за секунду и понятен посетителю с первого экрана.
-      </p>
-    </div>
+<main id="main">
 
-    <div class="cards">
-      <article class="card" data-reveal>
-        <span class="card__num">01</span>
-        <h3>Дизайн</h3>
-        <p>Собираем макет под вашу задачу: структура экранов, типографика, сетка, состояния кнопок. Показываем до вёрстки — правки бесплатны.</p>
-        <ul class="card__list"><li>Прототип</li><li>UI-макет</li><li>Мобильная версия</li></ul>
-      </article>
-      <article class="card" data-reveal>
-        <span class="card__num">02</span>
-        <h3>Вёрстка и код</h3>
-        <p>Чистый HTML/CSS/JS или готовая CMS. Валидная семантика, быстрый старт, анимации, которые не мешают, а помогают читать.</p>
-        <ul class="card__list"><li>Адаптив 320–2560px</li><li>Кроссбраузерность</li><li>Скорость 90+</li></ul>
-      </article>
-      <article class="card" data-reveal>
-        <span class="card__num">03</span>
-        <h3>Тексты и смысл</h3>
-        <p>Помогаем сформулировать оффер: что вы продаёте, кому и почему у вас. Если текста нет — напишем черновик сами.</p>
-        <ul class="card__list"><li>Структура</li><li>Оффер</li><li>Призывы к действию</li></ul>
-      </article>
-      <article class="card" data-reveal>
-        <span class="card__num">04</span>
-        <h3>SEO-база</h3>
-        <p>Мета-теги, заголовки, микроразметка, sitemap, robots, Open Graph. Сайт готов к индексации в день запуска.</p>
-        <ul class="card__list"><li>Семантика</li><li>OG-превью</li><li>Sitemap + robots</li></ul>
-      </article>
-      <article class="card" data-reveal>
-        <span class="card__num">05</span>
-        <h3>Запуск</h3>
-        <p>Регистрируем домен, настраиваем хостинг, SSL, почту на домене, подключаем аналитику и цели. Отдаём рабочий сайт, а не архив.</p>
-        <ul class="card__list"><li>Домен и SSL</li><li>Хостинг</li><li>Аналитика</li></ul>
-      </article>
-      <article class="card" data-reveal>
-        <span class="card__num">06</span>
-        <h3>Поддержка</h3>
-        <p>После сдачи остаёмся на связи. Правим мелочи, объясняем, как менять контент, и записываем короткое видео-руководство.</p>
-        <ul class="card__list"><li>Гарантия</li><li>Видео-инструкция</li><li>Быстрые правки</li></ul>
-      </article>
-    </div>
+<!-- ============ HERO ============ -->
+<section class="hero" id="top" data-mood="dawn">
+  <svg class="hero__mark" data-reveal viewBox="0 0 48 40" aria-hidden="true">
+    <circle cx="24" cy="17" r="12" fill="url(#markGlow)" stroke="currentColor" stroke-width="1.1"/>
+    <line x1="4" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="12" y1="33" x2="36" y2="33" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".4"/>
+  </svg>
+
+  <span class="badge" data-reveal><i></i> Take a breath</span>
+
+  <h1 class="hero__title" data-reveal="line">
+    <span class="line-in">Find the</span><br>
+    <span class="line-in accent">quiet</span><br>
+    <span class="line-in">inside you.</span>
+  </h1>
+
+  <p class="hero__lead" data-reveal>
+    HAVN is a digital space built for stillness — where light moves slower,
+    and thought finally has room to breathe.
+  </p>
+
+  <div class="hero__actions" data-reveal>
+    <a href="#philosophy" class="btn" data-magnetic><span>Enter</span><svg class="btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a href="#ritual" class="btn btn--ghost" data-magnetic><span>How to be here</span></a>
   </div>
+
+  <div class="hero__scroll" aria-hidden="true"><span>Scroll</span><i></i></div>
 </section>
 
-<!-- ============ ТАРИФЫ ============ -->
-<section class="section section--dark" id="pricing">
-  <div class="art paths paths--flip" data-paths aria-hidden="true"></div>
+<!-- ============ PHILOSOPHY ============ -->
+<section class="section philosophy" id="philosophy" data-mood="clarity">
   <div class="container">
-    <div class="sec-head">
-      <span class="sec-num" data-reveal>02 / Тарифы</span>
-      <h2 class="sec-title" data-reveal="wipe">Тарифы</h2>
-      <p class="sec-desc" data-reveal>
-        Три пакета на выбор. Цена фиксируется в договорённости до старта —
-        итог не вырастет «по ходу дела». Оплата 50% на старте, 50% при сдаче.
-      </p>
-    </div>
+    <h2 class="philosophy__text" data-split="words" data-reveal>
+      In a world that never stops moving, HAVN is the place that stands still —
+      a quiet interval between everything you have to do, and everything you are.
+    </h2>
 
-    <div class="plans">
-
-      <article class="plan" data-reveal data-tilt>
-        <header class="plan__head">
-          <span class="plan__label">Тариф 01</span>
-          <h3 class="plan__name">Малый</h3>
-          <p class="plan__for">Одностраничный сайт. Быстрый старт для услуги, продукта или личного бренда.</p>
-        </header>
-        <div class="plan__price"><span class="cur">$</span><b class="count" data-to="70">0</b></div>
-        <div class="plan__meta"><span>3–5 дней</span><span>1 страница</span></div>
-        <a href="#contact" class="btn btn--block" data-magnetic><span>Выбрать «Малый»</span></a>
-        <ul class="plan__list">
-          <li>Лендинг до 6 смысловых блоков</li>
-          <li>Адаптив под телефон и планшет</li>
-          <li>Форма заявки на почту или в Telegram</li>
-          <li>Базовое SEO и Open Graph</li>
-          <li>Подключение домена и SSL</li>
-          <li>2 круга правок</li>
-          <li>Гарантия 14 дней</li>
-        </ul>
-      </article>
-
-      <article class="plan plan--pop" data-reveal data-tilt>
-        <span class="plan__badge">Выбирают чаще всего</span>
-        <header class="plan__head">
-          <span class="plan__label">Тариф 02</span>
-          <h3 class="plan__name">Средний</h3>
-          <p class="plan__for">Полноценный сайт компании: услуги, кейсы, команда, контакты.</p>
-        </header>
-        <div class="plan__price"><span class="cur">$</span><b class="count" data-to="200">0</b></div>
-        <div class="plan__meta"><span>7–10 дней</span><span>до 6 страниц</span></div>
-        <a href="#contact" class="btn btn--block" data-magnetic><span>Выбрать «Средний»</span></a>
-        <ul class="plan__list">
-          <li>Всё из тарифа «Малый»</li>
-          <li>До 6 страниц с индивидуальным дизайном</li>
-          <li>Блог или раздел новостей</li>
-          <li>Админка: контент меняете сами</li>
-          <li>Анимации и интерактив</li>
-          <li>Мультиязычность (2 языка)</li>
-          <li>Аналитика и настройка целей</li>
-          <li>4 круга правок</li>
-          <li>Гарантия 30 дней</li>
-        </ul>
-      </article>
-
-      <article class="plan" data-reveal data-tilt>
-        <header class="plan__head">
-          <span class="plan__label">Тариф 03</span>
-          <h3 class="plan__name">Большой</h3>
-          <p class="plan__for">Магазин или крупный проект с каталогом, оплатой и личным кабинетом.</p>
-        </header>
-        <div class="plan__price"><span class="cur">$</span><b class="count" data-to="500">0</b></div>
-        <div class="plan__meta"><span>14–20 дней</span><span>без лимита страниц</span></div>
-        <a href="#contact" class="btn btn--block" data-magnetic><span>Выбрать «Большой»</span></a>
-        <ul class="plan__list">
-          <li>Всё из тарифа «Средний»</li>
-          <li>Каталог товаров и корзина</li>
-          <li>Онлайн-оплата и доставка</li>
-          <li>Личный кабинет пользователя</li>
-          <li>Интеграции: CRM, почта, мессенджеры</li>
-          <li>Поиск и фильтры по каталогу</li>
-          <li>Оптимизация скорости и нагрузки</li>
-          <li>Безлимит правок в ходе проекта</li>
-          <li>Поддержка и гарантия 90 дней</li>
-        </ul>
-      </article>
-
-    </div>
-
-    <p class="plans__note" data-reveal>
-      Не уверены, какой тариф ваш? Напишите пару слов о задаче — предложим вариант и честно скажем,
-      если хватит более простого.
-    </p>
-  </div>
-</section>
-
-<!-- ============ СРАВНЕНИЕ ============ -->
-<section class="section" id="compare">
-  <div class="art paths paths--flip" data-paths aria-hidden="true"></div>
-  <div class="container">
-    <div class="sec-head">
-      <span class="sec-num" data-reveal>03 / Сравнение</span>
-      <h2 class="sec-title" data-reveal="wipe">Сравнение тарифов</h2>
-    </div>
-
-    <div class="table-wrap" data-reveal>
-      <table class="table">
-        <thead>
-          <tr><th>Что входит</th><th>Малый<em>$70</em></th><th>Средний<em>$200</em></th><th>Большой<em>$500</em></th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Страниц</td><td>1</td><td>до 6</td><td>без лимита</td></tr>
-          <tr><td>Срок</td><td>3–5 дней</td><td>7–10 дней</td><td>14–20 дней</td></tr>
-          <tr><td>Индивидуальный дизайн</td><td><i class="yes"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Адаптив под мобильные</td><td><i class="yes"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Форма заявки</td><td><i class="yes"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Админка для контента</td><td><i class="no"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Блог / новости</td><td><i class="no"></i></td><td><i class="yes"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Мультиязычность</td><td><i class="no"></i></td><td>2 языка</td><td>без лимита</td></tr>
-          <tr><td>Каталог и корзина</td><td><i class="no"></i></td><td><i class="no"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Онлайн-оплата</td><td><i class="no"></i></td><td><i class="no"></i></td><td><i class="yes"></i></td></tr>
-          <tr><td>Интеграция с CRM</td><td><i class="no"></i></td><td>по запросу</td><td><i class="yes"></i></td></tr>
-          <tr><td>Кругов правок</td><td>2</td><td>4</td><td>без лимита</td></tr>
-          <tr><td>Гарантия</td><td>14 дней</td><td>30 дней</td><td>90 дней</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="addons">
-      <h3 class="addons__title" data-reveal>Дополнительно — к любому тарифу</h3>
-      <ul class="addons__list">
-        <li data-reveal><span>Логотип и фирменный стиль</span><b>+$60</b></li>
-        <li data-reveal><span>Дополнительная страница</span><b>+$25</b></li>
-        <li data-reveal><span>Тексты под ключ (за страницу)</span><b>+$20</b></li>
-        <li data-reveal><span>Перенос сайта на новый хостинг</span><b>+$30</b></li>
-        <li data-reveal><span>Ежемесячная поддержка</span><b>$40/мес</b></li>
-        <li data-reveal><span>Срочный запуск (×2 скорость)</span><b>+50%</b></li>
+    <aside class="elements" data-reveal="scale">
+      <span class="elements__label">The elements</span>
+      <ul>
+        <li><i></i> Light</li>
+        <li><i></i> Air</li>
+        <li><i></i> Water</li>
+        <li><i></i> Silence</li>
       </ul>
-    </div>
+    </aside>
   </div>
 </section>
 
-<!-- ============ ПРОЦЕСС ============ -->
-<section class="section section--dark" id="process">
-  <div class="art paths" data-paths aria-hidden="true"></div>
+<!-- ============ SPACES ============ -->
+<section class="section spaces" id="spaces" data-mood="clarity">
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>04 / Процесс</span>
-      <h2 class="sec-title" data-reveal="wipe">Как проходит<br>работа</h2>
-      <p class="sec-desc" data-reveal>
-        Пять шагов, понятных заранее. На каждом — вы видите результат и можете сказать «стоп»
-        или «переделай», пока это дёшево.
-      </p>
+      <span class="sec-eyebrow" data-reveal>Spaces</span>
+      <h2 class="sec-title" data-reveal>Five rooms,<br>one quiet.</h2>
+      <p class="sec-desc" data-reveal>Each part of HAVN holds a different kind of calm. Move through them slowly — there's nowhere else you need to be.</p>
     </div>
 
-    <ol class="steps">
-      <li class="step" data-reveal>
-        <span class="step__n">01</span>
-        <div class="step__body">
-          <h3>Знакомство и бриф</h3>
-          <p>Созваниваемся или переписываемся 20 минут. Выясняем задачу, аудиторию, примеры, которые вам нравятся. Сразу называем тариф и срок.</p>
-        </div>
-        <span class="step__time">1 день</span>
-      </li>
-      <li class="step" data-reveal>
-        <span class="step__n">02</span>
-        <div class="step__body">
-          <h3>Структура и смыслы</h3>
-          <p>Собираем каркас: какие блоки, в каком порядке, что на первом экране. Здесь решается, будет сайт продавать или просто красиво выглядеть.</p>
-        </div>
-        <span class="step__time">1–2 дня</span>
-      </li>
-      <li class="step" data-reveal>
-        <span class="step__n">03</span>
-        <div class="step__body">
-          <h3>Дизайн</h3>
-          <p>Рисуем макет десктопа и мобильной версии. Показываем, собираем правки, доводим до состояния «нравится».</p>
-        </div>
-        <span class="step__time">2–6 дней</span>
-      </li>
-      <li class="step" data-reveal>
-        <span class="step__n">04</span>
-        <div class="step__body">
-          <h3>Разработка</h3>
-          <p>Верстаем, программируем логику, подключаем формы и интеграции. Вы следите за прогрессом по тестовой ссылке в любой момент.</p>
-        </div>
-        <span class="step__time">2–10 дней</span>
-      </li>
-      <li class="step" data-reveal>
-        <span class="step__n">05</span>
-        <div class="step__body">
-          <h3>Запуск и передача</h3>
-          <p>Переносим на ваш домен, проверяем на реальных устройствах, отдаём доступы и видео-инструкцию. Дальше — гарантия и поддержка.</p>
-        </div>
-        <span class="step__time">1 день</span>
-      </li>
-    </ol>
-  </div>
-</section>
-
-<!-- ============ ФОРМАТЫ ПРОЕКТОВ ============ -->
-<section class="section" id="works">
-  <div class="art paths" data-paths aria-hidden="true"></div>
-  <div class="container">
-    <div class="sec-head">
-      <span class="sec-num" data-reveal>05 / Форматы</span>
-      <h2 class="sec-title" data-reveal="wipe">Форматы,<br>с которыми работаем</h2>
-      <p class="sec-desc" data-reveal>Шесть типов проектов, которые закрывают 95% запросов. Для остального — напишите, обсудим индивидуально.</p>
-    </div>
-
-    <div class="works">
-      <a href="#contact" class="work" data-reveal>
-        <div class="work__vis" aria-hidden="true">
-          <svg viewBox="0 0 200 130"><rect x="12" y="12" width="176" height="30" /><rect x="12" y="52" width="100" height="10" /><rect x="12" y="70" width="140" height="10" /><rect x="12" y="94" width="60" height="22" /></svg>
-        </div>
-        <div class="work__info"><h3>Лендинг</h3><span>Малый · от $70</span></div>
-        <p>Одна страница, один оффер, одна цель — заявка. Идеально для запуска услуги или теста ниши.</p>
-      </a>
-      <a href="#contact" class="work" data-reveal>
-        <div class="work__vis" aria-hidden="true">
-          <svg viewBox="0 0 200 130"><rect x="12" y="12" width="176" height="18" /><rect x="12" y="40" width="82" height="76" /><rect x="106" y="40" width="82" height="36" /><rect x="106" y="84" width="82" height="32" /></svg>
-        </div>
-        <div class="work__info"><h3>Корпоративный сайт</h3><span>Средний · от $200</span></div>
-        <p>Услуги, кейсы, команда, контакты. Лицо компании, которому доверяют подрядчики и клиенты.</p>
-      </a>
-      <a href="#contact" class="work" data-reveal>
-        <div class="work__vis" aria-hidden="true">
-          <svg viewBox="0 0 200 130"><rect x="12" y="12" width="176" height="16" /><rect x="12" y="38" width="54" height="40" /><rect x="73" y="38" width="54" height="40" /><rect x="134" y="38" width="54" height="40" /><rect x="12" y="88" width="176" height="28" /></svg>
-        </div>
-        <div class="work__info"><h3>Интернет-магазин</h3><span>Большой · от $500</span></div>
-        <p>Каталог, фильтры, корзина, оплата и доставка. Плюс админка, в которой разберётся кто угодно.</p>
-      </a>
-      <a href="#contact" class="work" data-reveal>
-        <div class="work__vis" aria-hidden="true">
-          <svg viewBox="0 0 200 130"><circle cx="46" cy="46" r="26" /><rect x="86" y="30" width="102" height="12" /><rect x="86" y="52" width="70" height="12" /><rect x="12" y="88" width="176" height="28" /></svg>
-        </div>
-        <div class="work__info"><h3>Портфолио / личный бренд</h3><span>Малый · от $70</span></div>
-        <p>Для фотографов, дизайнеров, экспертов и мастеров. Работы на первом плане, контакты — под рукой.</p>
-      </a>
-      <a href="#contact" class="work" data-reveal>
-        <div class="work__vis" aria-hidden="true">
-          <svg viewBox="0 0 200 130"><rect x="12" y="12" width="80" height="104" /><rect x="104" y="12" width="84" height="48" /><rect x="104" y="68" width="84" height="48" /></svg>
-        </div>
-        <div class="work__info"><h3>Редизайн старого сайта</h3><span>Средний · от $200</span></div>
-        <p>Оставляем то, что работает, переделываем остальное. Часто дешевле и быстрее, чем строить заново.</p>
-      </a>
-      <a href="#contact" class="work" data-reveal>
-        <div class="work__vis" aria-hidden="true">
-          <svg viewBox="0 0 200 130"><rect x="12" y="12" width="176" height="104" rx="4" fill="none" stroke-width="6" /><rect x="34" y="40" width="60" height="10" /><rect x="34" y="60" width="120" height="10" /><rect x="34" y="80" width="90" height="10" /></svg>
-        </div>
-        <div class="work__info"><h3>Сервис или веб-приложение</h3><span>Большой · от $500</span></div>
-        <p>Личные кабинеты, калькуляторы, панели, интеграции с внешними системами. Считаем индивидуально.</p>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ПОЧЕМУ МЫ ============ -->
-<section class="section section--split" id="why">
-  <div class="container why">
-    <div class="why__left">
-      <span class="sec-num" data-reveal>06 / Принципы</span>
-      <h2 class="sec-title" data-reveal="wipe">Почему<br>«На твоё<br>усмотрение»</h2>
-      <p class="sec-desc" data-reveal>
-        Название — не случайность. Это принцип: мы берём на себя решения, в которых
-        разбираемся лучше, и не заставляем вас выбирать между шестнадцатью оттенками серого.
-        Но последнее слово всегда за вами.
-      </p>
-      <a href="#contact" class="btn" data-magnetic data-reveal><span>Начать проект</span></a>
-    </div>
-
-    <div class="why__right">
-      <div class="why__item" data-reveal><b>Фиксированная цена</b><p>Тариф известен до старта. Дополнительные работы — только с вашего согласия и по прайсу, который вы видите на этой странице.</p></div>
-      <div class="why__item" data-reveal><b>Сроки, а не «скоро»</b><p>Каждый этап имеет дату. Если задерживаемся по своей вине — делаем скидку 10% за каждый просроченный день.</p></div>
-      <div class="why__item" data-reveal><b>Всё принадлежит вам</b><p>Домен, хостинг, исходники, доступы — оформляем на вас. Вы не привязаны к нам и можете уйти к любому подрядчику.</p></div>
-      <div class="why__item" data-reveal><b>Говорим по-человечески</b><p>Без «синергии оптимизации конверсионной воронки». Объясняем, что делаем и зачем, словами, понятными без словаря.</p></div>
-      <div class="why__item" data-reveal><b>Не берём лишнего</b><p>Если задача решается тарифом за $70 — предложим его, а не $500. Долгие отношения выгоднее разовой переплаты.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ФИГУРА В ТУМАНЕ ============ -->
-<section class="rider" id="rider">
-  <div class="container rider__in">
-
-    <div class="rider__text">
-      <span class="rider__eyebrow" data-reveal><i></i> Фокус на результате</span>
-      <p class="quote__text" data-reveal>
-        «Хороший сайт — это не тот, который получил награду.
-        Это тот, после которого вам написали».
-      </p>
-      <span class="quote__author" data-reveal>— принцип студии</span>
-      <div class="rider__actions" data-reveal>
-        <a href="#contact" class="btn btn--glass" data-magnetic><span>Обсудить задачу</span></a>
+    <div class="spaces__list">
+      <div class="space" data-reveal data-spotlight>
+        <span class="space__glow" aria-hidden="true"></span>
+        <span class="space__num">01</span>
+        <h3 class="space__name">Stillness</h3>
+        <p class="space__desc">A pause built into the interface.</p>
+        <span class="space__swatch" style="background:radial-gradient(circle at 30% 30%,#ffffff,#cfe9fb)" aria-hidden="true"></span>
+        <svg class="space__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="space" data-reveal data-spotlight>
+        <span class="space__glow" aria-hidden="true"></span>
+        <span class="space__num">02</span>
+        <h3 class="space__name">Light</h3>
+        <p class="space__desc">Morning glow, held in glass.</p>
+        <span class="space__swatch" style="background:radial-gradient(circle at 30% 30%,#e2f2fc,#6accf2)" aria-hidden="true"></span>
+        <svg class="space__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="space" data-reveal data-spotlight>
+        <span class="space__glow" aria-hidden="true"></span>
+        <span class="space__num">03</span>
+        <h3 class="space__name">Breath</h3>
+        <p class="space__desc">Rhythms slow enough to feel.</p>
+        <span class="space__swatch" style="background:radial-gradient(circle at 30% 30%,#cfe9fb,#38bdf8)" aria-hidden="true"></span>
+        <svg class="space__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="space" data-reveal data-spotlight>
+        <span class="space__glow" aria-hidden="true"></span>
+        <span class="space__num">04</span>
+        <h3 class="space__name">Reflection</h3>
+        <p class="space__desc">Water for the mind to settle in.</p>
+        <span class="space__swatch" style="background:radial-gradient(circle at 30% 30%,#b7defa,#0ea5e9)" aria-hidden="true"></span>
+        <svg class="space__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="space" data-reveal data-spotlight>
+        <span class="space__glow" aria-hidden="true"></span>
+        <span class="space__num">05</span>
+        <h3 class="space__name">Horizon</h3>
+        <p class="space__desc">Space enough to think clearly.</p>
+        <span class="space__swatch" style="background:radial-gradient(circle at 30% 30%,#ffffff,#b7defa)" aria-hidden="true"></span>
+        <svg class="space__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </div>
-
-    <figure class="rider__figure" data-reveal>
-      <img src="assets/img/rider.jpg" alt="Фигура в тумане с подсвеченными очками" width="736" height="919" loading="lazy" decoding="async">
-      <span class="rider__glow" aria-hidden="true"></span>
-    </figure>
-
   </div>
 </section>
 
-<!-- ============ FAQ ============ -->
-<section class="section" id="faq">
-  <div class="art paths paths--flip" data-paths aria-hidden="true"></div>
+<!-- ============ STATEMENT ============ -->
+<section class="section statement" id="statement" data-mood="deep">
+  <h2 class="statement__text" data-split="words" data-tint="stillness" data-reveal>Stillness is a place you can visit.</h2>
+</section>
+
+<!-- ============ RITUAL ============ -->
+<section class="section ritual" id="ritual" data-mood="deep">
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>07 / Вопросы</span>
-      <h2 class="sec-title" data-reveal="wipe">Частые вопросы</h2>
+      <span class="sec-eyebrow" data-reveal>A quiet ritual</span>
+      <h2 class="sec-title" data-reveal>How to be here.</h2>
+      <p class="sec-desc" data-reveal>There's no wrong way to visit HAVN. But if it helps, here's how most people settle in.</p>
     </div>
 
-    <div class="faq">
-      <details class="faq__item" data-reveal>
-        <summary><span>Что нужно от меня, чтобы начать?</span><i></i></summary>
-        <div class="faq__body"><p>Минимум — описание задачи в двух-трёх предложениях и примеры сайтов, которые вам нравятся. Логотип, тексты и фотографии полезны, но если их нет — соберём вместе или подберём аккуратные заглушки и стоковые материалы.</p></div>
-      </details>
-      <details class="faq__item" data-reveal>
-        <summary><span>Цена действительно фиксированная?</span><i></i></summary>
-        <div class="faq__body"><p>Да. Тариф фиксируется до старта работ. Сумма может измениться только если вы сами захотите добавить что-то сверх пакета — и тогда мы заранее называем стоимость по прайсу из блока «Дополнительно».</p></div>
-      </details>
-      <details class="faq__item" data-reveal>
-        <summary><span>Как происходит оплата?</span><i></i></summary>
-        <div class="faq__body"><p>50% после утверждения структуры и 50% перед передачей доступов. Для тарифа «Большой» возможна разбивка на три части по этапам. Принимаем карты, крипту и переводы — обсуждаем удобный вам способ.</p></div>
-      </details>
-      <details class="faq__item" data-reveal>
-        <summary><span>Сколько стоит домен и хостинг?</span><i></i></summary>
-        <div class="faq__body"><p>Это внешние расходы: домен обычно $10–15 в год, хостинг от $3 в месяц. Мы не берём наценку — вы платите напрямую регистратору, а настройку делаем бесплатно в рамках любого тарифа.</p></div>
-      </details>
-      <details class="faq__item" data-reveal>
-        <summary><span>Смогу ли я сам менять контент?</span><i></i></summary>
-        <div class="faq__body"><p>В тарифах «Средний» и «Большой» — да, там есть админка, и мы записываем короткое видео о том, как ей пользоваться. В тарифе «Малый» правки текста вносим мы: обычно это пара минут и входит в гарантийный период.</p></div>
-      </details>
-      <details class="faq__item" data-reveal>
-        <summary><span>Что, если мне не понравится результат?</span><i></i></summary>
-        <div class="faq__body"><p>Мы показываем работу на каждом этапе, поэтому сюрприза в конце не бывает. Если после первого макета вы понимаете, что направление не то, — возвращаем предоплату за вычетом уже проделанной работы по структуре.</p></div>
-      </details>
-      <details class="faq__item" data-reveal>
-        <summary><span>Вы работаете с моей страной / валютой?</span><i></i></summary>
-        <div class="faq__body"><p>Работаем удалённо и без географических ограничений. Цены указаны в долларах для прозрачности; итоговый платёж можно провести в удобной вам валюте по курсу на день оплаты.</p></div>
-      </details>
-      <details class="faq__item" data-reveal>
-        <summary><span>Что происходит после сдачи?</span><i></i></summary>
-        <div class="faq__body"><p>Действует гарантия — 14, 30 или 90 дней в зависимости от тарифа: всё, что сломалось не по вашей вине, чиним бесплатно. Дальше можно подключить поддержку за $40 в месяц или обращаться разово.</p></div>
-      </details>
+    <div class="ritual__line" id="ritualLine">
+      <span class="ritual__line-fill" id="ritualFill"></span>
+
+      <div class="ritual__step" data-reveal data-ritual-step>
+        <span class="ritual__num">01</span>
+        <h3>Arrive</h3>
+        <p>Let the page load. There's no rush — nothing here is timed.</p>
+      </div>
+      <div class="ritual__step" data-reveal data-ritual-step>
+        <span class="ritual__num">02</span>
+        <h3>Breathe</h3>
+        <p>Scroll slowly. Let the light move at its own pace, not yours.</p>
+      </div>
+      <div class="ritual__step" data-reveal data-ritual-step>
+        <span class="ritual__num">03</span>
+        <h3>Listen</h3>
+        <p>Turn on sound, if you'd like a little company.</p>
+      </div>
+      <div class="ritual__step" data-reveal data-ritual-step>
+        <span class="ritual__num">04</span>
+        <h3>Stay</h3>
+        <p>Stay as long as you need. Leave whenever you're ready.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ КОНТАКТЫ ============ -->
-<section class="section section--dark contact" id="contact">
-  <div class="art paths" data-paths aria-hidden="true"></div>
+<!-- ============ PRESENCE ============ -->
+<section class="section presence" id="presence" data-mood="glow">
   <div class="container">
     <div class="sec-head">
-      <span class="sec-num" data-reveal>08 / Контакты</span>
-      <h2 class="sec-title" data-reveal="wipe">Расскажите<br>о проекте</h2>
-      <p class="sec-desc" data-reveal>
-        Ответим в течение суток, чаще — быстрее. Консультация и оценка бесплатны и ни к чему не обязывают.
-      </p>
+      <span class="sec-eyebrow" data-reveal>Presence</span>
+      <h2 class="sec-title" data-reveal>Some quiet,<br>from other visitors.</h2>
     </div>
 
-    <div class="contact__grid">
-      <form class="form" id="form" novalidate>
-        <div class="field">
-          <label for="f-name">Как вас зовут</label>
-          <input type="text" id="f-name" name="name" placeholder="Иван" required>
-          <span class="field__err">Введите имя</span>
-        </div>
-        <div class="field">
-          <label for="f-contact">Почта или Telegram</label>
-          <input type="text" id="f-contact" name="contact" placeholder="you@mail.com или @nickname" required>
-          <span class="field__err">Оставьте способ связи</span>
-        </div>
+    <div class="presence__grid">
+      <blockquote class="quote" data-reveal="scale" data-spotlight>
+        <p>"For ten minutes, I forgot to check my phone."</p>
+        <span>— M.</span>
+      </blockquote>
+      <blockquote class="quote" data-reveal="scale" data-spotlight>
+        <p>"It felt like walking through fog, in the best way."</p>
+        <span>— J.</span>
+      </blockquote>
+      <blockquote class="quote" data-reveal="scale" data-spotlight>
+        <p>"The first site that made me slow down on purpose."</p>
+        <span>— A.</span>
+      </blockquote>
+    </div>
+  </div>
+</section>
 
-        <div class="field field--full">
-          <label>Тариф</label>
-          <div class="choice">
-            <label class="choice__item"><input type="radio" name="plan" value="Малый — $70"><span>Малый · $70</span></label>
-            <label class="choice__item"><input type="radio" name="plan" value="Средний — $200" checked><span>Средний · $200</span></label>
-            <label class="choice__item"><input type="radio" name="plan" value="Большой — $500"><span>Большой · $500</span></label>
-            <label class="choice__item"><input type="radio" name="plan" value="Пока не знаю"><span>Пока не знаю</span></label>
-          </div>
-        </div>
-
-        <div class="field field--full">
-          <label for="f-msg">О задаче</label>
-          <textarea id="f-msg" name="message" rows="4" placeholder="Что за проект, для кого, к какому сроку нужен сайт"></textarea>
-        </div>
-
-        <div class="field field--full form__foot">
-          <button type="submit" class="btn" data-magnetic><span>Отправить заявку</span></button>
-          <small>Нажимая кнопку, вы соглашаетесь на обработку указанных данных. Спама не будет.</small>
-        </div>
-
-        <p class="form__done" id="formDone" hidden>Заявка сформирована — откроется почтовый клиент. Если он не открылся, напишите нам напрямую на hello@natvoeusmotrenie.studio</p>
-      </form>
-
-      <aside class="contact__side">
-        <div class="contact__block" data-reveal>
-          <span>Почта</span>
-          <a href="mailto:hello@natvoeusmotrenie.studio">hello@natvoeusmotrenie.studio</a>
-        </div>
-        <div class="contact__block" data-reveal>
-          <span>Telegram</span>
-          <a href="https://t.me/" target="_blank" rel="noopener">@na_tvoe_usmotrenie</a>
-        </div>
-        <div class="contact__block" data-reveal>
-          <span>Часы работы</span>
-          <p>Пн–Пт, 10:00–19:00<br>Срочные вопросы — в любое время</p>
-        </div>
-        <div class="contact__block" data-reveal>
-          <span>Сейчас свободно</span>
-          <p class="contact__slots"><b>4</b> слота на ближайший месяц</p>
-        </div>
-      </aside>
+<!-- ============ CTA ============ -->
+<section class="section cta" id="cta" data-mood="glow">
+  <div class="container">
+    <span class="sec-eyebrow" data-reveal style="display:block;text-align:center">Before you go</span>
+    <h2 class="cta__title" data-reveal>Carry this <span class="accent">quiet</span><br>with you.</h2>
+    <p class="cta__sub" data-reveal>Come back whenever the noise outside gets loud. HAVN will still be here, moving slowly.</p>
+    <div data-reveal style="display:flex;justify-content:center">
+      <a href="#top" class="btn btn--lg" data-magnetic><span>Return to the surface</span><svg class="btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="transform:rotate(-90deg)"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
   </div>
 </section>
 
 </main>
 
-<!-- ============ ПОДВАЛ ============ -->
+<!-- ============ FOOTER ============ -->
 <footer class="footer">
   <div class="container">
-    <div class="footer__big" aria-hidden="true">
-      <span class="line" data-split><span>
-        <svg viewBox="0 0 1200 132" role="img" aria-label="На твоё усмотрение" focusable="false">
-          <text x="0" y="104" textLength="1200" lengthAdjust="spacingAndGlyphs">На твоё усмотрение</text>
-        </svg>
-      </span></span>
-    </div>
-    <div class="footer__row">
-      <div class="footer__col">
-        <b>Студия</b>
-        <a href="#services">Услуги</a>
-        <a href="#pricing">Тарифы</a>
-        <a href="#process">Процесс</a>
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="#top" class="brand" data-magnetic>
+          <svg class="brand__mark" viewBox="0 0 48 40" aria-hidden="true">
+            <circle cx="24" cy="17" r="12" fill="url(#markGlow)" stroke="currentColor" stroke-width="1.1"/>
+            <line x1="4" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+          </svg>
+          <span class="brand__word">HAVN</span>
+        </a>
+        <p>A digital sanctuary for a noisy world.</p>
       </div>
-      <div class="footer__col">
-        <b>Проекты</b>
-        <a href="#works">Форматы</a>
-        <a href="#compare">Сравнение</a>
-        <a href="#faq">Вопросы</a>
-      </div>
-      <div class="footer__col">
-        <b>Связь</b>
-        <a href="mailto:hello@natvoeusmotrenie.studio">Почта</a>
-        <a href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
-        <a href="#contact">Оставить заявку</a>
-      </div>
-      <div class="footer__col footer__col--wide">
-        <b>Мини-студия разработки сайтов</b>
-        <p>Делаем понятные сайты по фиксированной цене. Тарифы $70 / $200 / $500, срок от 3 дней, гарантия до 90 дней.</p>
+
+      <div class="footer__cols">
+        <div class="footer__col">
+          <b>Explore</b>
+          <a href="#philosophy">Philosophy</a>
+          <a href="#spaces">Spaces</a>
+          <a href="#ritual">Ritual</a>
+          <a href="#presence">Presence</a>
+        </div>
+        <div class="footer__col">
+          <b>Connect</b>
+          <a href="mailto:hello@havn.studio">hello@havn.studio</a>
+        </div>
       </div>
     </div>
+
+    <div class="footer__line" aria-hidden="true"></div>
+
     <div class="footer__bottom">
-      <span>© <span id="year">2026</span> «На твоё усмотрение». Все права защищены.</span>
-      <a href="#top" class="to-top" data-magnetic><span>Наверх ↑</span></a>
+      <span>© <span id="year">2026</span> HAVN. A digital sanctuary.</span>
+      <a href="#top" class="to-top" data-magnetic><span>Back to top ↑</span></a>
     </div>
   </div>
 </footer>
 
-<script src="assets/js/blackhole.js" defer></script>
-<script src="assets/js/paths.js" defer></script>
-<script src="assets/js/main.js"></script>
+<script src="assets/js/main.js" defer></script>
 </body>
 </html>
