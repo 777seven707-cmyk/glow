@@ -223,21 +223,43 @@ h1,h2,h3,h4{font-weight:500;letter-spacing:-.01em}
 
 .cursor{position:fixed;top:0;left:0;z-index:800;pointer-events:none;will-change:transform}
 .cursor__glow{
-  position:absolute;top:0;left:0;width:34px;height:34px;margin:-17px;
+  position:absolute;top:0;left:0;width:46px;height:46px;margin:-23px;
   border-radius:50%;
-  background:radial-gradient(circle,rgba(94,164,217,.35),rgba(94,164,217,0) 70%);
-  filter:blur(2px);
-  transition:width .4s var(--ease-out),height .4s var(--ease-out),
-             margin .4s var(--ease-out),background .4s var(--ease-out);
+  background:radial-gradient(circle,rgba(106,204,242,.32),rgba(106,204,242,0) 72%);
+  filter:blur(3px);
+  backdrop-filter:blur(5px) saturate(150%);-webkit-backdrop-filter:blur(5px) saturate(150%);
+  transition:width .5s var(--ease-out),height .5s var(--ease-out),
+             margin .5s var(--ease-out),background .5s var(--ease-out);
+}
+.cursor__ring{
+  position:absolute;top:0;left:0;width:24px;height:24px;margin:-12px;
+  border-radius:50%;border:1px solid rgba(10,132,196,.45);
+  opacity:.75;
+  transition:width .45s var(--ease-out),height .45s var(--ease-out),margin .45s var(--ease-out),
+             border-color .45s var(--ease-out),opacity .45s var(--ease-out);
 }
 .cursor__dot{
-  position:absolute;top:0;left:0;width:6px;height:6px;margin:-3px;
-  border-radius:50%;background:var(--azure-deep);
+  position:absolute;top:0;left:0;width:8px;height:8px;margin:-4px;
+  border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#ffffff,#cfe9fb 55%,#4bb8ec 100%);
+  box-shadow:0 0 10px rgba(94,164,217,.65);
   transition:transform .25s var(--ease-out),opacity .25s;
 }
-.cursor.is-active .cursor__glow{width:64px;height:64px;margin:-32px;background:radial-gradient(circle,rgba(94,164,217,.5),rgba(94,164,217,0) 72%)}
+.cursor.is-active .cursor__glow{width:76px;height:76px;margin:-38px;background:radial-gradient(circle,rgba(94,164,217,.4),rgba(94,164,217,0) 74%)}
+.cursor.is-active .cursor__ring{width:54px;height:54px;margin:-27px;border-color:rgba(10,132,196,.7);opacity:1}
 .cursor.is-active .cursor__dot{transform:scale(0)}
 .cursor.is-hidden{opacity:0}
+
+.cursor__ripple{
+  position:fixed;top:0;left:0;width:12px;height:12px;margin:-6px;
+  border-radius:50%;border:1px solid rgba(94,164,217,.6);
+  pointer-events:none;z-index:799;
+  animation:cursorRipple .7s var(--ease-out) forwards;
+}
+@keyframes cursorRipple{
+  from{transform:scale(1);opacity:.85}
+  to{transform:scale(4.2);opacity:0}
+}
 
 html.has-cursor,html.has-cursor a,html.has-cursor button{cursor:none}
 

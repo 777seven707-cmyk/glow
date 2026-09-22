@@ -386,6 +386,7 @@
     var cursor = document.getElementById("cursor");
     if (!cursor) return;
     var dot = cursor.querySelector(".cursor__dot");
+    var ring = cursor.querySelector(".cursor__ring");
     var glow = cursor.querySelector(".cursor__glow");
     document.documentElement.classList.add("has-cursor");
     cursor.classList.add("is-hidden");
@@ -394,6 +395,8 @@
       my = window.innerHeight / 2,
       gx = mx,
       gy = my,
+      rx = mx,
+      ry = my,
       visible = false;
 
     window.addEventListener(
@@ -405,6 +408,8 @@
           visible = true;
           gx = mx;
           gy = my;
+          rx = mx;
+          ry = my;
           cursor.classList.remove("is-hidden");
         }
       },
@@ -422,10 +427,24 @@
       if (e.target.closest(hoverSelector)) cursor.classList.remove("is-active");
     });
 
+    document.addEventListener("mousedown", function (e) {
+      var ripple = document.createElement("span");
+      ripple.className = "cursor__ripple";
+      ripple.style.left = e.clientX + "px";
+      ripple.style.top = e.clientY + "px";
+      document.body.appendChild(ripple);
+      ripple.addEventListener("animationend", function () {
+        if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
+      });
+    });
+
     function loop() {
       gx += (mx - gx) * 0.15;
       gy += (my - gy) * 0.15;
+      rx += (mx - rx) * 0.3;
+      ry += (my - ry) * 0.3;
       dot.style.transform = "translate3d(" + mx + "px," + my + "px,0)";
+      ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
       glow.style.transform = "translate3d(" + gx + "px," + gy + "px,0)";
       requestAnimationFrame(loop);
     }
