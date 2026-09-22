@@ -199,21 +199,38 @@
     return null;
   }
 
+  function renderInlineBold(text) {
+    var span = document.createDocumentFragment();
+    var parts = text.split(/\*\*(.+?)\*\*/g);
+    parts.forEach(function (part, i) {
+      if (!part) return;
+      if (i % 2 === 1) {
+        var strong = document.createElement("strong");
+        strong.textContent = part;
+        span.appendChild(strong);
+      } else {
+        span.appendChild(document.createTextNode(part));
+      }
+    });
+    return span;
+  }
+
   function renderTopicModal() {
     var topic = findTopic(STATE.activeTopicId);
     if (!topic) return;
     var lang = STATE.lang;
     document.getElementById("topicModalIcon").innerHTML = topic.icon;
     document.getElementById("topicModalTitle").textContent = topic.title[lang];
-    document.getElementById("topicModalIntro").textContent = topic.intro[lang];
-    var feelingsEl = document.getElementById("topicModalFeelings");
-    feelingsEl.innerHTML = "";
-    topic.feelings[lang].forEach(function (f) {
-      var li = document.createElement("li");
-      li.textContent = f;
-      feelingsEl.appendChild(li);
+    var body = document.getElementById("topicModalBody");
+    body.innerHTML = "";
+    topic.body[lang].forEach(function (para) {
+      var p = document.createElement("p");
+      p.appendChild(renderInlineBold(para));
+      body.appendChild(p);
     });
-    document.getElementById("topicModalPractice").textContent = topic.practice[lang];
+    body.scrollTop = 0;
+    var panel = document.querySelector(".topic-modal__panel");
+    if (panel) panel.scrollTop = 0;
   }
 
   function openTopicModal(id) {
@@ -695,11 +712,26 @@
     if (msgEl) msgEl.textContent = "";
   }
 
+  function spawnPetProp(emoji) {
+    var stage = document.getElementById("petStage");
+    if (!stage) return;
+    var prop = document.createElement("span");
+    prop.className = "pet__prop";
+    prop.textContent = emoji;
+    prop.setAttribute("aria-hidden", "true");
+    stage.appendChild(prop);
+    prop.addEventListener("animationend", function () {
+      if (prop.parentNode) prop.parentNode.removeChild(prop);
+    });
+  }
+
   function wireCompanion() {
     var picker = document.getElementById("companionPicker");
     var catBtn = document.getElementById("petCat");
     var dogBtn = document.getElementById("petDog");
     var renameBtn = document.getElementById("petRename");
+    var feedBtn = document.getElementById("petFeed");
+    var playBtn = document.getElementById("petPlay");
     var msgEl = document.getElementById("petMessage");
     if (!picker || !catBtn || !dogBtn) return;
 
@@ -713,19 +745,35 @@
       });
     });
 
-    function react(petEl) {
+    function activePetEl() {
+      return STATE.petSpecies === "dog" ? dogBtn : catBtn;
+    }
+    function react(pool) {
+      var petEl = activePetEl();
       petEl.classList.remove("is-happy");
       void petEl.offsetWidth;
       petEl.classList.add("is-happy");
-      var msgs = C.PET_MESSAGES[STATE.lang];
+      var msgs = pool[STATE.lang];
       msgEl.textContent = msgs[Math.floor(Math.random() * msgs.length)];
     }
     catBtn.addEventListener("click", function () {
-      react(catBtn);
+      react(C.PET_MESSAGES.greet);
     });
     dogBtn.addEventListener("click", function () {
-      react(dogBtn);
+      react(C.PET_MESSAGES.greet);
     });
+    if (feedBtn) {
+      feedBtn.addEventListener("click", function () {
+        react(C.PET_MESSAGES.feed);
+        spawnPetProp(STATE.petSpecies === "dog" ? "🦴" : "🐟");
+      });
+    }
+    if (playBtn) {
+      playBtn.addEventListener("click", function () {
+        react(C.PET_MESSAGES.play);
+        spawnPetProp(STATE.petSpecies === "dog" ? "🎾" : "🧶");
+      });
+    }
 
     if (renameBtn) {
       renameBtn.addEventListener("click", function () {

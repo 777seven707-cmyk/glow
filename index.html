@@ -233,15 +233,7 @@
     </button>
     <div class="topic-modal__icon" id="topicModalIcon" aria-hidden="true"></div>
     <h3 class="topic-modal__title" id="topicModalTitle"></h3>
-    <p class="topic-modal__intro" id="topicModalIntro"></p>
-    <div class="topic-modal__block">
-      <span class="topic-modal__label" id="topicModalFeelingsLabel" data-i18n="topics.feelingsLabel">You might be feeling</span>
-      <ul class="topic-modal__feelings" id="topicModalFeelings"></ul>
-    </div>
-    <div class="topic-modal__block">
-      <span class="topic-modal__label" id="topicModalPracticeLabel" data-i18n="topics.practiceLabel">A small thing that might help</span>
-      <p class="topic-modal__practice" id="topicModalPractice"></p>
-    </div>
+    <div class="topic-modal__body" id="topicModalBody"></div>
     <p class="topic-modal__closing" id="topicModalClosing" data-i18n="topics.closing"></p>
     <a href="#help" class="btn btn--sm" id="topicModalHelpLink" data-modal-close><span data-i18n="topics.openSupport">Go to Support →</span></a>
   </div>
@@ -349,7 +341,7 @@
     <div class="sec-head">
       <span class="sec-eyebrow" data-reveal data-i18n="companion.eyebrow">Some company</span>
       <h2 class="sec-title" data-reveal><span data-i18n="companion.title1">You don't have to</span><br><span data-i18n="companion.title2">sit with this alone.</span></h2>
-      <p class="sec-desc" data-reveal data-i18n="companion.desc">Pick a companion. Rename it if you'd like. It'll be here whenever you come back — no feeding schedule, no pressure.</p>
+      <p class="sec-desc" data-reveal data-i18n="companion.desc">Pick a companion. Feed it, play with it, rename it if you'd like. It'll be here whenever you come back — no schedule, no pressure.</p>
     </div>
 
     <div class="companion__box" data-reveal="scale">
@@ -358,9 +350,16 @@
         <button class="companion__pick" data-species="dog" type="button"><span data-i18n="companion.pickDog">Dog</span></button>
       </div>
 
-      <div class="pet-stage">
-        <button class="pet pet--cat" id="petCat" type="button" aria-label="Pet">
-          <svg viewBox="0 0 200 200" fill="currentColor">
+      <div class="pet-stage" id="petStage">
+        <button class="pet pet--cat" id="petCat" type="button">
+          <span class="sr-only" data-i18n="companion.petAction">Pet</span>
+          <svg viewBox="0 0 200 240" fill="currentColor">
+            <path class="pet-tail" d="M160 208 Q195 203 192 163 Q190 143 172 149" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+            <ellipse class="pet-body" cx="100" cy="206" rx="68" ry="40"/>
+            <g class="pet-paws" fill="#fff" opacity=".5">
+              <ellipse cx="74" cy="236" rx="15" ry="9"/>
+              <ellipse cx="126" cy="236" rx="15" ry="9"/>
+            </g>
             <g class="pet-ears">
               <path d="M55 62 L28 14 L82 42 Z"/>
               <path d="M145 62 L172 14 L118 42 Z"/>
@@ -369,6 +368,10 @@
             <g class="pet-inner-ears" fill="#fff" opacity=".55">
               <path d="M58 56 L46 32 L72 46 Z"/>
               <path d="M142 56 L154 32 L128 46 Z"/>
+            </g>
+            <g class="pet-cheeks" fill="#f2a9b8" opacity=".45">
+              <ellipse cx="60" cy="122" rx="10" ry="6.5"/>
+              <ellipse cx="140" cy="122" rx="10" ry="6.5"/>
             </g>
             <g class="pet-face" fill="none" stroke="#0f2740" stroke-width="2.4" stroke-linecap="round">
               <ellipse class="pet-eye pet-eye--l" cx="76" cy="104" rx="6.5" ry="8.5" fill="#0f2740" stroke="none"/>
@@ -379,13 +382,24 @@
             </g>
           </svg>
         </button>
-        <button class="pet pet--dog" id="petDog" type="button" aria-label="Pet" hidden>
-          <svg viewBox="0 0 200 200" fill="currentColor">
+        <button class="pet pet--dog" id="petDog" type="button" hidden>
+          <span class="sr-only" data-i18n="companion.petAction">Pet</span>
+          <svg viewBox="0 0 200 240" fill="currentColor">
+            <path class="pet-tail" d="M163 203 Q200 193 196 153 Q193 136 178 143" fill="none" stroke="currentColor" stroke-width="15" stroke-linecap="round"/>
+            <ellipse class="pet-body" cx="100" cy="204" rx="70" ry="42"/>
+            <g class="pet-paws" fill="#fff" opacity=".5">
+              <ellipse cx="74" cy="235" rx="15" ry="9"/>
+              <ellipse cx="126" cy="235" rx="15" ry="9"/>
+            </g>
             <g class="pet-ears">
               <ellipse cx="36" cy="120" rx="19" ry="41" transform="rotate(-16 36 120)"/>
               <ellipse cx="164" cy="120" rx="19" ry="41" transform="rotate(16 164 120)"/>
             </g>
             <circle class="pet-head" cx="100" cy="110" r="64"/>
+            <g class="pet-cheeks" fill="#f2a9b8" opacity=".4">
+              <ellipse cx="58" cy="112" rx="10" ry="6.5"/>
+              <ellipse cx="142" cy="112" rx="10" ry="6.5"/>
+            </g>
             <ellipse class="pet-muzzle" cx="100" cy="138" rx="32" ry="23" fill="#fff" opacity=".6"/>
             <g class="pet-face" fill="none" stroke="#3a2415" stroke-width="2.4" stroke-linecap="round">
               <ellipse class="pet-eye pet-eye--l" cx="76" cy="100" rx="6.5" ry="8.5" fill="#3a2415" stroke="none"/>
@@ -401,6 +415,12 @@
           <button class="pet__rename" id="petRename" type="button" data-i18n="companion.rename">rename</button>
         </div>
         <p class="pet__hint" id="petHint" data-i18n="companion.hint">Click to say hi</p>
+
+        <div class="pet__actions">
+          <button class="btn btn--ghost btn--sm" id="petFeed" type="button"><span data-i18n="companion.feed">Feed</span></button>
+          <button class="btn btn--ghost btn--sm" id="petPlay" type="button"><span data-i18n="companion.play">Play</span></button>
+        </div>
+
         <p class="pet__message" id="petMessage" aria-live="polite"></p>
       </div>
     </div>

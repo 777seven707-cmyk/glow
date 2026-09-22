@@ -145,11 +145,17 @@ suspended after fade-out so a muted tab costs nothing.
 
 **Topics** (`#topics`) is a catalog of eight things that are hard to carry —
 anxiety, depression, loneliness, grief, bullying, disability/chronic illness,
-burnout, low self-esteem. Each opens (in an accessible modal — focus-trapped,
-closes on Escape/backdrop/close button, returns focus on close) to a short
-validating intro, a "you might be feeling" list, and one small, concrete,
-non-prescriptive practice. Deliberately not diagnostic and not clinical —
-each card ends by pointing at Support.
+burnout, low self-esteem. Each card opens (in an accessible modal —
+focus-trapped, closes on Escape/backdrop/close button, returns focus on
+close, scrolls its own body independently on long content) a full,
+long-form piece written directly to the reader in second person: not a
+bullet-point symptom list, but a real, warm piece of writing — validating,
+never diagnostic, ending with a bridge to Support. `content.js` stores each
+one as an array of paragraph strings (`**text**` renders as an emphasized
+line via `renderInlineBold()`, built with `createElement`/`textContent`,
+never `innerHTML`, even though the content is fully first-party) — both
+languages run 1,300–1,900 words per topic, translated for warmth rather
+than word-for-word.
 
 **Tools** (`#tools`) are three small, real exercises, not gamified in any
 way that would reward staying longer than needed:
@@ -165,10 +171,16 @@ way that would reward staying longer than needed:
   moment of noticing, not a habit-tracking product to keep opening.
 
 **Companion** (`#companion`) is a small SVG cat or dog (visitor's choice,
-persisted locally) that reacts to a click with a gentle animation and one
-of eight rotating affirmations, and can be renamed. It exists to be a soft,
-low-stakes, always-available presence — not a chatbot, not a game with a
-score.
+persisted locally) with a body, a wagging tail, and blush cheeks, not just
+a face. Three separate interactions — pet, Feed, Play — each play a gentle
+bounce/tail-wag and surface a random line from their own affirmation pool
+(16 general, 9 feed-themed, 9 play-themed, per language); Feed and Play
+also pop a small species-appropriate emoji (fish/bone, yarn/tennis ball)
+that fades on its own. None of it decays — there's no hunger bar, no
+neglect state, nothing that could make a hard week feel like a second
+failure. The companion can be renamed via a native `prompt()`. It exists
+to be a soft, low-stakes, always-available presence — not a chatbot, not a
+game with a score.
 
 All of the above's state (`havn_pet_species`, `havn_pet_name`,
 `havn_mood_<date>`, `havn_lang`) lives only in the visitor's own
