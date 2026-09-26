@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Самурай — Путь воина</title>
+  <meta name="description" content="Интерактивная история самурая: 3D-доспех, который следит за курсором, семь добродетелей Бусидо, рождение катаны и тысяча лет эпох.">
+  <meta name="theme-color" content="#121011">
+  <meta property="og:title" content="Самурай — Путь воина">
+  <meta property="og:description" content="3D-самурай, кодекс Бусидо, катана и эпохи Японии.">
+  <meta property="og:image" content="assets/img/og-cover.png">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/models/samurai.glb" as="fetch" type="model/gltf-binary" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.min.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body class="is-locked">
+
+  <!-- ============ ВСТУПЛЕНИЕ ============ -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro__door intro__door--l"></div>
+    <div class="intro__door intro__door--r"></div>
+    <div class="intro__seam"></div>
+    <div class="intro__stage">
+      <svg class="intro__enso" viewBox="0 0 400 400">
+        <defs>
+          <filter id="brush" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="9"/>
+          </filter>
+        </defs>
+        <path id="ensoPath" pathLength="1" d="M174.0 52.3 L181.6 50.4 L189.4 48.9 L197.3 47.9 L205.3 47.3 L213.4 47.2 L221.4 47.5 L229.5 48.4 L237.5 49.7 L245.4 51.5 L253.2 53.8 L260.9 56.6 L268.4 59.8 L275.6 63.6 L282.6 67.7 L289.4 72.3 L295.8 77.4 L301.9 82.8 L307.6 88.5 L313.0 94.6 L318.0 101.0 L322.6 107.7 L326.7 114.5 L330.4 121.6 L333.8 128.9 L336.7 136.3 L339.1 143.8 L341.2 151.4 L342.9 159.0 L344.1 166.7 L345.0 174.4 L345.6 182.1 L345.7 189.8 L345.5 197.5 L345.0 205.1 L344.2 212.6 L343.0 220.1 L341.5 227.5 L339.8 234.9 L337.7 242.1 L335.3 249.3 L332.7 256.3 L329.7 263.3 L326.5 270.1 L323.0 276.8 L319.1 283.4 L315.0 289.8 L310.6 296.1 L305.8 302.2 L300.8 308.1 L295.4 313.7 L289.8 319.1 L283.8 324.3 L277.6 329.1 L271.0 333.6 L264.2 337.8 L257.2 341.6 L249.9 344.9 L242.4 347.9 L234.7 350.4 L226.9 352.5 L218.9 354.1 L210.9 355.2 L202.7 355.8 L194.6 355.8 L186.4 355.4 L178.3 354.5 L170.3 353.0 L162.3 351.0 L154.6 348.6 L147.0 345.7 L139.6 342.3 L132.4 338.5 L125.6 334.3 L119.0 329.7 L112.6 324.8 L106.7 319.5 L101.0 313.9 L95.7 308.0 L90.7 301.9 L86.0 295.6 L81.8 289.1 L77.8 282.4 L74.2 275.6 L70.9 268.6 L68.0 261.6 L65.4 254.4 L63.1 247.1 L61.1 239.8 L59.5 232.4 L58.1 225.0 L57.1 217.5 L56.3 210.0 L55.9 202.5 L55.8 195.0 L56.0 187.4 L56.5 179.8 L57.3 172.3 L58.5 164.7 L60.0 157.2 L61.9 149.7 L64.1 142.3 L66.7 135.0 L69.7 127.7 L73.0 120.6 L76.7 113.7 L80.9 106.9 L85.4 100.4 L90.3 94.0 L95.5 88.0 L101.2 82.2" fill="none" stroke-linecap="round" filter="url(#brush)"/>
+      </svg>
+      <div class="intro__kanji" id="introKanji">侍</div>
+      <div class="intro__hanko" id="introHanko"><span>武士</span></div>
+      <p class="intro__line" id="introLine">武士道 — путь воина</p>
+    </div>
+    <div class="intro__meta">
+      <span>Загрузка доспеха</span>
+      <span class="intro__count"><b id="introCount">000</b>/100</span>
+    </div>
+  </div>
+
+  <!-- ============ КУРСОР ============ -->
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor__ring"><span class="cursor__label" id="cursorLabel"></span></div>
+    <div class="cursor__dot"></div>
+  </div>
+
+  <!-- ============ ФОН ПЕРВОГО ЭКРАНА И 3D ============ -->
+  <div class="backdrop" aria-hidden="true">
+    <div class="backdrop__kanji">武</div>
+    <img class="backdrop__mountains" src="assets/img/mountains.svg" alt="">
+  </div>
+  <canvas class="scene" id="scene" aria-label="3D-модель самурая, которая следит за курсором"></canvas>
+  <img class="scene-fallback" id="sceneFallback" src="assets/img/samurai-poster.png" alt="Самурай в доспехе с катаной" loading="lazy" hidden>
+  <svg class="slash" id="slash" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+    <path id="slashPath" pathLength="1" d="M60 880 Q480 520 950 90"/>
+  </svg>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="progress" aria-hidden="true"></div>
+
+  <!-- ============ НАВИГАЦИЯ ============ -->
+  <header class="nav" id="nav">
+    <a class="nav__logo" href="#top" data-cursor="Наверх">
+      <img src="assets/img/kamon.svg" alt="" width="34" height="34">
+      <span>侍 <em>Самурай</em></span>
+    </a>
+    <nav class="nav__links" aria-label="Разделы">
+      <a href="#code"><i>01</i>Кодекс</a>
+      <a href="#armor"><i>02</i>Доспех</a>
+      <a href="#katana"><i>03</i>Катана</a>
+      <a href="#eras"><i>04</i>Эпохи</a>
+    </nav>
+    <button class="nav__burger" id="burger" aria-label="Меню" aria-expanded="false"><span></span><span></span></button>
+  </header>
+
+  <main>
+    <!-- ============ 1. ГЕРОЙ ============ -->
+    <section class="hero" id="top" data-cursor="斬">
+      <div class="hero__text">
+        <p class="eyebrow"><span class="eyebrow__dot"></span>武士道 · Бусидо · путь воина</p>
+        <h1 class="hero__title" id="heroTitle">
+          <span class="line">Путь</span>
+          <span class="line line--accent">самурая</span>
+        </h1>
+        <p class="hero__lead" id="heroLead">Тысяча лет японской истории в одной фигуре: доспех, меч и&nbsp;кодекс чести, который пережил своё сословие.</p>
+        <div class="hero__cta">
+          <a class="btn btn--ink" href="#manifest" data-magnetic><span>Начать путь</span><i>→</i></a>
+          <a class="btn btn--line" href="#code" data-magnetic><span>Кодекс Бусидо</span></a>
+        </div>
+      </div>
+
+      <div class="hero__vertical" aria-hidden="true">
+        <span class="hero__jp"><span>武</span><span>士</span><span>道</span></span>
+        <span class="hero__romaji">BU · SHI · DŌ</span>
+      </div>
+
+      <div class="hero__foot">
+        <span class="hero__hint"><b>Клик</b> — удар мечом · <b>курсор</b> — взгляд самурая</span>
+        <a class="scrollcue" href="#manifest" aria-label="Листать вниз"><span>Листайте</span><i></i></a>
+        <span class="hero__coord">35°00′N 135°46′E · Киото</span>
+      </div>
+      <div class="hero__fog" aria-hidden="true"></div>
+    </section>
+
+    <!-- ============ 2. МАНИФЕСТ ============ -->
+    <section class="manifest" id="manifest">
+      <div class="manifest__label"><span class="num">00</span><span>心 · Суть</span></div>
+      <p class="manifest__text" id="manifestText">Слово «самурай» происходит от глагола <em>сабурау</em> — «служить». Прежде чем стать легендой, самурай был служилым человеком: воином при господине, для которого верность, дисциплина и готовность к смерти были не словами, а&nbsp;повседневной практикой.</p>
+      <img class="manifest__enso" src="assets/img/enso.svg" alt="" aria-hidden="true">
+    </section>
+
+    <!-- ============ 3. КОДЕКС ============ -->
+    <section class="code section--dark" id="code">
+      <div class="section-head">
+        <p class="section-head__num">01 / 07</p>
+        <h2 class="section-head__title" data-split>Семь добродетелей Бусидо</h2>
+        <p class="section-head__sub">Неписаный кодекс воина систематизировал Нитобэ Инадзо в книге «Бусидо: душа Японии» (1900). Наведите курсор на иероглиф.</p>
+      </div>
+      <div class="virtues">
+        <article class="virtue" data-cursor="見 Смотреть">
+          <span class="virtue__kanji">義</span>
+          <div class="virtue__body"><p class="virtue__romaji">Ги</p><h3>Справедливость</h3><p>Верное решение без колебаний. Умение отличить правое от&nbsp;выгодного.</p></div>
+          <span class="virtue__n">i</span>
+        </article>
+        <article class="virtue" data-cursor="見 Смотреть">
+          <span class="virtue__kanji">勇</span>
+          <div class="virtue__body"><p class="virtue__romaji">Ю</p><h3>Мужество</h3><p>Не безрассудство, а смелость делать то, что правильно, — даже когда страшно.</p></div>
+          <span class="virtue__n">ii</span>
+        </article>
+        <article class="virtue" data-cursor="見 Смотреть">
+          <span class="virtue__kanji">仁</span>
+          <div class="virtue__body"><p class="virtue__romaji">Дзин</p><h3>Милосердие</h3><p>Сила воина проверяется тем, как он обходится со&nbsp;слабым.</p></div>
+          <span class="virtue__n">iii</span>
+        </article>
+        <article class="virtue" data-cursor="見 Смотреть">
+          <span class="virtue__kanji">礼</span>
+          <div class="virtue__body"><p class="virtue__romaji">Рэй</p><h3>Учтивость</h3><p>Уважение в каждом жесте — к&nbsp;другу, к&nbsp;гостю и&nbsp;к&nbsp;противнику.</p></div>
+          <span class="virtue__n">iv</span>
+        </article>
+        <article class="virtue" data-cursor="見 Смотреть">
+          <span class="virtue__kanji">誠</span>
+          <div class="virtue__body"><p class="virtue__romaji">Макото</p><h3>Искренность</h3><p>Слово самурая весомее договора: сказанное — значит сделанное.</p></div>
+          <span class="virtue__n">v</span>
+        </article>
+        <article class="virtue" data-cursor="見 Смотреть">
+          <span class="virtue__kanji">名誉</span>
+          <div class="virtue__body"><p class="virtue__romaji">Мэйё</p><h3>Честь</h3><p>Внутренний суд, от которого не скрыться. Позор страшнее смерти.</p></div>
+          <span class="virtue__n">vi</span>
+        </article>
+        <article class="virtue virtue--wide" data-cursor="見 Смотреть">
+          <span class="virtue__kanji">忠義</span>
+          <div class="virtue__body"><p class="virtue__romaji">Тюги</p><h3>Верность</h3><p>Преданность господину и долгу — стержень, на котором держится весь кодекс.</p></div>
+          <span class="virtue__n">vii</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ 4. ДОСПЕХ ============ -->
+    <section class="armor" id="armor">
+      <div class="armor__pin">
+        <div class="armor__side">
+          <p class="section-head__num">02 / Доспех</p>
+          <h2 class="armor__title">Анатомия <em>доспеха</em></h2>
+          <div class="armor__steps">
+            <article class="step is-active" data-shot="kabuto">
+              <span class="step__kanji">兜</span>
+              <div><h3>Кабуто <small>шлем</small></h3>
+              <p>Купол из склёпанных пластин с рёбрами-судзи. Ступенчатый назатыльник сикоро закрывает шею, а золотые рога кувагата делали воина узнаваемым на поле боя.</p></div>
+            </article>
+            <article class="step" data-shot="menpo">
+              <span class="step__kanji">面</span>
+              <div><h3>Мэмпо <small>маска</small></h3>
+              <p>Лакированная полумаска защищала лицо и держала шлем на подбородочном шнуре. Усы и грозный оскал пугали врага, а ёдарэ-какэ прикрывала горло.</p></div>
+            </article>
+            <article class="step" data-shot="do">
+              <span class="step__kanji">胴</span>
+              <div><h3>До <small>кираса</small></h3>
+              <p>Пластины из железа и кожи под десятками слоёв лака уруси связаны шёлковым шнуром одоси. Лак спасал металл от влажного японского климата.</p></div>
+            </article>
+            <article class="step" data-shot="sode">
+              <span class="step__kanji">袖</span>
+              <div><h3>Содэ <small>наплечники</small></h3>
+              <p>Широкие щиты висят на шнурах и двигаются вместе с руками — лучник мог стрелять, не снимая их. Снизу бёдра закрывает юбка из пластин кусадзури.</p></div>
+            </article>
+            <article class="step" data-shot="katana">
+              <span class="step__kanji">刀</span>
+              <div><h3>Катана <small>меч</small></h3>
+              <p>Изогнутый клинок носили за поясом лезвием вверх, чтобы выхватить и ударить одним движением. Рядом — короткий вакидзаси: пара дайсё была знаком сословия.</p></div>
+            </article>
+          </div>
+          <div class="armor__progress"><span id="armorNum">01</span><i><b id="armorBar"></b></i><span>05</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. КАТАНА ============ -->
+    <section class="katana section--dark" id="katana">
+      <div class="katana__pin">
+        <div class="katana__head">
+          <p class="section-head__num">03 / Рождение клинка</p>
+          <h2 class="section-head__title" data-split>Как куётся катана</h2>
+        </div>
+        <div class="katana__blade" aria-hidden="true">
+          <img src="assets/img/katana.svg" alt="">
+        </div>
+        <div class="katana__track" id="katanaTrack">
+          <article class="forge">
+            <span class="forge__n">一</span><span class="forge__kanji">玉鋼</span>
+            <h3>Тамахаганэ</h3>
+            <p>Сталь выплавляют из железистого песка в глиняной печи татара. Трое суток огня и тонны древесного угля — ради нескольких килограммов лучшего металла.</p>
+          </article>
+          <article class="forge">
+            <span class="forge__n">二</span><span class="forge__kanji">鍛錬</span>
+            <h3>Складывание</h3>
+            <p>Заготовку проковывают и складывают пополам снова и снова — до пятнадцати раз. Так выгоняют шлак и выравнивают углерод.</p>
+          </article>
+          <article class="forge">
+            <span class="forge__n">三</span><span class="forge__kanji">造込</span>
+            <h3>Сборка</h3>
+            <p>Твёрдая оболочка кавагане обнимает мягкое ядро синганэ: клинок режет как бритва и при этом не ломается от удара.</p>
+          </article>
+          <article class="forge">
+            <span class="forge__n">四</span><span class="forge__kanji">焼入</span>
+            <h3>Закалка</h3>
+            <p>Клинок обмазывают глиной — тонко у лезвия, толсто у обуха. В воде лезвие твердеет, на стали проступает линия хамон, а меч получает изгиб сори.</p>
+          </article>
+          <article class="forge">
+            <span class="forge__n">五</span><span class="forge__kanji">研</span>
+            <h3>Полировка</h3>
+            <p>Мастер-тогиси неделями полирует клинок камнями всё мельче и мельче, пока в стали не проявится её узор — хада.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 6. ЭПОХИ ============ -->
+    <section class="eras" id="eras">
+      <div class="section-head">
+        <p class="section-head__num">04 / Хронология</p>
+        <h2 class="section-head__title" data-split>Тысяча лет меча</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline__line"><i id="timelineFill"></i></div>
+        <article class="era"><span class="era__year">794</span><div class="era__card"><span class="era__kanji">平安</span><h3>Хэйан</h3><p>Столица переезжает в Киото. В провинциях растёт сословие вооружённых слуг — будущих самураев.</p></div></article>
+        <article class="era"><span class="era__year">1185</span><div class="era__card"><span class="era__kanji">鎌倉</span><h3>Камакура</h3><p>Минамото побеждают в войне Гэмпэй. В 1192 году Ёритомо становится сёгуном — власть переходит к воинам.</p></div></article>
+        <article class="era"><span class="era__year">1281</span><div class="era__card"><span class="era__kanji">神風</span><h3>Божественный ветер</h3><p>Самураи дважды отражают флот Хубилая, а тайфун камикадзе довершает разгром.</p></div></article>
+        <article class="era"><span class="era__year">1467</span><div class="era__card"><span class="era__kanji">戦国</span><h3>Сэнгоку</h3><p>Смута Онин открывает век воюющих провинций: замки, аркебузы и великие полководцы.</p></div></article>
+        <article class="era"><span class="era__year">1603</span><div class="era__card"><span class="era__kanji">江戸</span><h3>Эдо</h3><p>Токугава Иэясу — сёгун. Два с половиной века мира: самураи становятся чиновниками, поэтами и учёными.</p></div></article>
+        <article class="era"><span class="era__year">1876</span><div class="era__card"><span class="era__kanji">明治</span><h3>Мэйдзи</h3><p>После реставрации императорской власти сословие упразднено, а ношение мечей запрещено указом.</p></div></article>
+        <article class="era"><span class="era__year">1877</span><div class="era__card"><span class="era__kanji">西南</span><h3>Сацума</h3><p>Последнее восстание самураев во главе с Сайго Такамори. Эпоха меча уходит — легенда остаётся.</p></div></article>
+      </div>
+    </section>
+
+    <!-- ============ 7. ЦИТАТА ============ -->
+    <section class="quote section--dark" id="quote">
+      <div class="quote__sun" aria-hidden="true"></div>
+      <img class="quote__torii" src="assets/img/torii.svg" alt="" aria-hidden="true">
+      <p class="quote__jp" aria-hidden="true">武士道と云ふは死ぬ事と見付けたり</p>
+      <blockquote>
+        <p class="quote__text" id="quoteText">Путь самурая обретается в&nbsp;смерти.</p>
+        <footer>«Хагакурэ» · Ямамото Цунэтомо, 1716</footer>
+      </blockquote>
+      <p class="quote__note">Не призыв умереть, а призыв жить так, будто терять уже нечего: без страха и без сожалений.</p>
+    </section>
+  </main>
+
+  <!-- ============ ПОДВАЛ ============ -->
+  <footer class="footer section--dark">
+    <div class="footer__big" aria-hidden="true">侍</div>
+    <div class="footer__row">
+      <div class="footer__brand"><img src="assets/img/kamon.svg" alt="" width="44" height="44"><p>Самурай — интерактивная история<br><span>доспех, меч и кодекс чести</span></p></div>
+      <nav class="footer__nav" aria-label="Разделы">
+        <a href="#code">Кодекс</a><a href="#armor">Доспех</a><a href="#katana">Катана</a><a href="#eras">Эпохи</a>
+      </nav>
+      <a class="btn btn--light" href="#top" data-magnetic><span>Наверх</span><i>↑</i></a>
+    </div>
+    <p class="footer__small">3D-модель, иллюстрации и код — ручная работа · <a href="PLAN.md">План проекта</a> · <a href="../">← Студия</a></p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

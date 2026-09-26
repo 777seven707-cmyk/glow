@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 120" role="img" aria-label="Катана — японский меч, вид сбоку">
+  <defs>
+    <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f6f8"/>
+      <stop offset=".45" stop-color="#b9c0c8"/>
+      <stop offset=".55" stop-color="#e9edf1"/>
+      <stop offset="1" stop-color="#8b939c"/>
+    </linearGradient>
+  </defs>
+  <path d="M470.0 47.0 L470.0 47.0 L497.0 47.1 L524.0 47.1 L551.0 47.1 L578.0 47.0 L605.0 46.9 L632.0 46.8 L659.0 46.6 L686.0 46.4 L713.0 46.2 L740.0 45.9 L767.0 45.6 L794.0 45.2 L821.0 44.8 L848.0 44.4 L875.0 43.9 L902.0 43.4 L929.0 42.9 L956.0 42.3 L983.0 41.7 L1010.0 41.0 L1037.0 40.3 L1064.0 39.6 L1091.0 38.8 L1118.0 38.0 L1145.0 37.2 L1172.0 36.3 L1199.0 35.4 L1226.0 34.4 L1253.0 33.4 L1280.0 32.4 L1307.0 31.3 L1334.0 30.2 L1361.0 29.1 L1388.0 27.9 L1415.0 26.7 L1442.0 25.4 L1469.0 24.1 L1496.0 22.8 Q1562.0 20.0 1572.0 22.0 Q1496.0 43.1 1442.0 46.0 L1442.0 46.0 L1415.0 47.4 L1388.0 48.8 L1361.0 50.1 L1334.0 51.4 L1307.0 52.7 L1280.0 53.9 L1253.0 55.1 L1226.0 56.2 L1199.0 57.3 L1172.0 58.4 L1145.0 59.4 L1118.0 60.4 L1091.0 61.4 L1064.0 62.3 L1037.0 63.2 L1010.0 64.0 L983.0 64.8 L956.0 65.6 L929.0 66.3 L902.0 67.0 L875.0 67.7 L848.0 68.3 L821.0 68.9 L794.0 69.4 L767.0 69.9 L740.0 70.4 L713.0 70.8 L686.0 71.2 L659.0 71.6 L632.0 71.9 L605.0 72.2 L578.0 72.4 L551.0 72.6 L524.0 72.8 L497.0 72.9 L470.0 73.0 Z" fill="url(#steel)"/>
+  <path d="M470.0 64.0 L497.0 66.9 L524.0 65.6 L551.0 62.0 L578.0 61.3 L605.0 64.6 L632.0 66.8 L659.0 64.6 L686.0 60.9 L713.0 60.9 L740.0 64.1 L767.0 65.5 L794.0 62.5 L821.0 59.0 L848.0 59.6 L875.0 62.7 L902.0 63.2 L929.0 59.5 L956.0 56.3 L983.0 57.4 L1010.0 60.3 L1037.0 59.8 L1064.0 55.6 L1091.0 52.8 L1118.0 54.4 L1145.0 56.8 L1172.0 55.3 L1199.0 50.8 L1226.0 48.5 L1253.0 50.4 L1280.0 52.3 L1307.0 49.9 L1334.0 45.1 L1361.0 43.4 L1388.0 45.5 L1415.0 46.7 L1442.0 43.4" fill="none" stroke="#fff" stroke-width="2" opacity=".75"/>
+  <rect x="455" y="44" width="26" height="32" rx="3" fill="#d4a94f"/>
+  <ellipse cx="444" cy="60" rx="14" ry="50" fill="#1a1718" stroke="#d4a94f" stroke-width="4"/>
+  <rect x="120" y="44" width="310" height="32" rx="12" fill="#e9e2d0"/>
+  <path d="M150 46 L167 74 L184 46" fill="none" stroke="#121011" stroke-width="7" stroke-linejoin="round"/><path d="M184 46 L201 74 L218 46" fill="none" stroke="#121011" stroke-width="7" stroke-linejoin="round"/><path d="M218 46 L235 74 L252 46" fill="none" stroke="#121011" stroke-width="7" stroke-linejoin="round"/><path d="M252 46 L269 74 L286 46" fill="none" stroke="#121011" stroke-width="7" stroke-linejoin="round"/><path d="M286 46 L303 74 L320 46" fill="none" stroke="#121011" stroke-width="7" stroke-linejoin="round"/><path d="M320 46 L337 74 L354 46" fill="none" stroke="#121011" stroke-width="7" stroke-linejoin="round"/><path d="M354 46 L371 74 L388 46" fill="none" stroke="#121011" stroke-width="7" stroke-linejoin="round"/><path d="M388 46 L405 74 L422 46" fill="none" stroke="#121011" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M112 42 Q92 60 112 78 H132 V42 Z" fill="#d4a94f"/>
+</svg>

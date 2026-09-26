@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" role="img" aria-label="Тории — ворота синтоистского святилища">
+  <g fill="#c73a2b">
+    <path d="M8 34 Q200 6 392 34 L386 56 Q200 34 14 56 Z"/>
+    <rect x="30" y="52" width="340" height="16"/>
+    <rect x="44" y="98" width="312" height="16"/>
+    <rect x="188" y="64" width="24" height="36"/>
+    <path d="M84 60 H112 L118 320 H78 Z"/>
+    <path d="M288 60 H316 L322 320 H282 Z"/>
+  </g>
+  <g fill="#121011">
+    <path d="M4 28 Q200 -2 396 28 L392 38 Q200 10 8 38 Z"/>
+    <rect x="74" y="296" width="48" height="24"/>
+    <rect x="278" y="296" width="48" height="24"/>
+  </g>
+</svg>

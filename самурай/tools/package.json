@@ -1,0 +1,12 @@
+{
+  "name": "samurai-tools",
+  "private": true,
+  "type": "module",
+  "description": "Сборка 3D-модели самурая в GLB",
+  "scripts": {
+    "build:model": "node build-model.mjs"
+  },
+  "dependencies": {
+    "three": "^0.186.1"
+  }
+}

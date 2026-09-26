@@ -1,0 +1,929 @@
+/* =========================================================
+   Самурай — стили
+   Палитра: васи (бумага), суми (тушь), сю (киноварь), кин (золото)
+   ========================================================= */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+:root {
+  --washi: #efe8dc;
+  --washi-2: #e6ddcd;
+  --sumi: #121011;
+  --sumi-2: #1b1819;
+  --shu: #c73a2b;
+  --shu-2: #e0523f;
+  --kin: #b8924a;
+  --ink-70: rgba(18, 16, 17, .72);
+  --ink-45: rgba(18, 16, 17, .45);
+  --ink-12: rgba(18, 16, 17, .12);
+  --paper-70: rgba(239, 232, 220, .72);
+  --paper-45: rgba(239, 232, 220, .45);
+  --paper-12: rgba(239, 232, 220, .12);
+
+  --f-jp: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --f-display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --f-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --pad: clamp(20px, 6vw, 96px);
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+
+body {
+  margin: 0;
+  background: var(--washi);
+  color: var(--sumi);
+  font: 400 16px/1.6 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+body.is-locked { overflow: hidden; }
+img { display: block; max-width: 100%; }
+[hidden] { display: none !important; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+h1, h2, h3, p { margin: 0; }
+em { font-style: italic; }
+::selection { background: var(--shu); color: var(--washi); }
+:focus-visible { outline: 2px solid var(--shu); outline-offset: 4px; }
+
+/* ---------- слои ---------- */
+.backdrop {
+  position: absolute; inset: 0 0 auto 0;
+  height: 100svh;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 252, 245, .7), transparent 60%),
+    var(--washi);
+}
+.backdrop__kanji {
+  position: absolute; left: -4vw; top: 50%;
+  translate: 0 -52%;
+  font: 800 min(72vh, 58vw)/1 var(--f-jp);
+  color: rgba(18, 16, 17, .035);
+}
+.backdrop__mountains {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 34vh;
+  opacity: .75;
+}
+
+.scene {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+}
+.scene-fallback {
+  position: absolute; left: 50%; top: 8vh;
+  height: 86vh; width: auto; max-width: none;
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+main, .footer { position: relative; z-index: 2; }
+
+.grain {
+  position: fixed; inset: -50%;
+  z-index: 80;
+  pointer-events: none;
+  opacity: .09;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.08  0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(6) infinite;
+}
+@keyframes grain {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-3%, 2%); }
+  40%  { transform: translate(2%, -3%); }
+  60%  { transform: translate(-2%, -1%); }
+  80%  { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* прогресс чтения — CSS scroll-driven animation, JS подстраховывает */
+.progress {
+  position: fixed; left: 0; top: 0; right: 0;
+  height: 2px;
+  z-index: 70;
+  background: var(--shu);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--p, 0));
+}
+@supports (animation-timeline: scroll()) {
+  .progress { animation: progress linear both; animation-timeline: scroll(root); }
+  @keyframes progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+}
+
+/* след удара мечом */
+.slash {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+.slash path {
+  fill: none;
+  stroke: var(--shu);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+  filter: drop-shadow(0 0 6px rgba(199, 58, 43, .6));
+}
+
+/* =========================================================
+   ВСТУПЛЕНИЕ
+   ========================================================= */
+.intro {
+  position: fixed; inset: 0;
+  z-index: 100;
+  color: var(--washi);
+}
+.intro__door {
+  position: absolute; top: 0; bottom: 0;
+  width: 50.2%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 59px, rgba(184, 146, 74, .09) 59px 60px),
+    repeating-linear-gradient(0deg, transparent 0 89px, rgba(184, 146, 74, .09) 89px 90px),
+    radial-gradient(80% 60% at 50% 50%, #1d1a1b, var(--sumi));
+}
+.intro__door--l { left: 0; box-shadow: inset -1px 0 0 rgba(184, 146, 74, .3); }
+.intro__door--r { right: 0; box-shadow: inset 1px 0 0 rgba(184, 146, 74, .3); }
+.intro__seam {
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 2px; margin-left: -1px;
+  background: var(--shu);
+  box-shadow: 0 0 24px 2px rgba(199, 58, 43, .7);
+  transform: scaleY(0);
+}
+.intro__stage {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+}
+.intro__enso {
+  position: absolute;
+  width: min(62vmin, 460px);
+  overflow: visible;
+}
+.intro__enso path {
+  stroke: var(--washi);
+  stroke-width: 24;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+}
+.intro__kanji {
+  position: relative;
+  font: 800 min(27vmin, 210px)/1 var(--f-jp);
+  letter-spacing: 0;
+  opacity: 0;
+}
+.intro__hanko {
+  position: absolute;
+  left: calc(50% + min(19vmin, 145px));
+  top: calc(50% + min(14vmin, 110px));
+  width: 58px; height: 74px;
+  display: grid; place-items: center;
+  background: var(--shu);
+  border-radius: 6px;
+  color: var(--washi);
+  font: 700 22px/1 var(--f-jp);
+  writing-mode: vertical-rl;
+  letter-spacing: .1em;
+  box-shadow: inset 0 0 0 3px var(--shu), inset 0 0 0 5px rgba(239, 232, 220, .75);
+  opacity: 0;
+}
+.intro__line {
+  position: absolute; left: 0; right: 0; bottom: 16vh;
+  text-align: center;
+  font: 500 13px/1 var(--f-body);
+  letter-spacing: .5em;
+  text-transform: uppercase;
+  color: var(--paper-70);
+}
+.intro__meta {
+  position: absolute; left: var(--pad); right: var(--pad); bottom: 34px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  font-size: 12px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--paper-45);
+}
+.intro__count { font: 400 14px/1 var(--f-body); letter-spacing: .1em; }
+.intro__count b {
+  font: 500 56px/1 var(--f-display);
+  color: var(--washi);
+  font-variant-numeric: tabular-nums;
+  margin-right: 4px;
+}
+
+/* =========================================================
+   КУРСОР
+   ========================================================= */
+.cursor { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor, html.has-cursor * { cursor: none !important; }
+  .cursor { display: block; }
+}
+.cursor__dot, .cursor__ring {
+  position: fixed; left: 0; top: 0;
+  z-index: 95;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.cursor.is-on .cursor__dot, .cursor.is-on .cursor__ring { opacity: 1; }
+.cursor__dot {
+  width: 7px; height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  background: var(--shu);
+}
+.cursor__ring {
+  width: 42px; height: 42px;
+  margin: -21px 0 0 -21px;
+  border: 1px solid var(--ink-45);
+  display: grid; place-items: center;
+  transition: width .45s var(--ease), height .45s var(--ease), margin .45s var(--ease),
+              background-color .35s, border-color .35s, opacity .3s;
+}
+.cursor.is-dark .cursor__ring { border-color: var(--paper-45); }
+.cursor.is-link .cursor__ring {
+  width: 64px; height: 64px; margin: -32px 0 0 -32px;
+  background: rgba(199, 58, 43, .12);
+  border-color: var(--shu);
+}
+.cursor.has-label .cursor__ring {
+  width: 104px; height: 104px; margin: -52px 0 0 -52px;
+  background: var(--shu);
+  border-color: var(--shu);
+}
+.cursor.has-label .cursor__dot { opacity: 0; }
+.cursor.is-hint .cursor__ring {
+  width: 58px; height: 58px; margin: -29px 0 0 -29px;
+  border-color: var(--shu);
+}
+.cursor.is-hint .cursor__label { opacity: 1; transform: translate(26px, -26px); color: var(--shu); }
+.cursor.is-hint .cursor__label b { font-size: 16px; }
+.cursor__label {
+  font: 600 11px/1.2 var(--f-body);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--washi);
+  opacity: 0;
+  transform: scale(.6);
+  transition: opacity .3s, transform .45s var(--ease);
+  white-space: nowrap;
+}
+.cursor.has-label .cursor__label { opacity: 1; transform: none; }
+.cursor__label b { display: block; font: 800 22px/1.1 var(--f-jp); letter-spacing: 0; }
+
+/* =========================================================
+   НАВИГАЦИЯ
+   ========================================================= */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 60;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px var(--pad);
+  color: var(--sumi);
+  transition: color .5s, translate .6s var(--ease);
+}
+.nav.is-dark { color: var(--washi); }
+.nav.is-hidden { translate: 0 -110%; }
+.nav__logo { display: flex; align-items: center; gap: 12px; font: 700 20px/1 var(--f-jp); }
+.nav__logo em {
+  font: 500 13px/1 var(--f-body);
+  letter-spacing: .3em; text-transform: uppercase;
+  font-style: normal; margin-left: 6px;
+}
+.nav__links { display: flex; gap: clamp(18px, 3vw, 44px); }
+.nav__links a {
+  position: relative;
+  font-size: 13px; letter-spacing: .18em; text-transform: uppercase;
+  padding: 6px 0;
+}
+.nav__links i {
+  font-style: normal; font-size: 10px;
+  color: var(--shu);
+  margin-right: 8px; vertical-align: 2px;
+}
+.nav__links a::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: right;
+  transition: transform .5s var(--ease);
+}
+.nav__links a:hover::after { transform: scaleX(1); transform-origin: left; }
+.nav__burger { display: none; width: 44px; height: 44px; position: relative; }
+.nav__burger span {
+  position: absolute; left: 10px; right: 10px; height: 1.5px;
+  background: currentColor;
+  transition: transform .4s var(--ease);
+}
+.nav__burger span:first-child { top: 18px; }
+.nav__burger span:last-child { top: 25px; }
+.nav.is-open .nav__burger span:first-child { transform: translateY(3.5px) rotate(45deg); }
+.nav.is-open .nav__burger span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+
+/* =========================================================
+   КНОПКИ
+   ========================================================= */
+.btn {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 17px 28px;
+  border-radius: 999px;
+  font: 600 13px/1 var(--f-body);
+  letter-spacing: .16em; text-transform: uppercase;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color .45s var(--ease), border-color .45s;
+}
+.btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  z-index: -1;
+  background: var(--shu);
+  border-radius: inherit;
+  transform: translateY(101%);
+  transition: transform .55s var(--ease);
+}
+.btn:hover::before { transform: none; }
+.btn i { font-style: normal; transition: transform .45s var(--ease); }
+.btn:hover i { transform: translateX(4px); }
+.btn--ink { background: var(--sumi); color: var(--washi); }
+.btn--line { border: 1px solid var(--ink-45); }
+.btn--line:hover { color: var(--washi); border-color: var(--shu); }
+.btn--light { background: var(--washi); color: var(--sumi); }
+.btn--light:hover { color: var(--washi); }
+
+/* =========================================================
+   1. ГЕРОЙ
+   ========================================================= */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  padding: 0 var(--pad);
+}
+.hero__text {
+  position: absolute; left: var(--pad); top: 50%;
+  translate: 0 -46%;
+  max-width: min(36rem, 40vw);
+}
+.eyebrow {
+  display: flex; align-items: center; gap: 12px;
+  font: 600 12px/1 var(--f-body);
+  letter-spacing: .28em; text-transform: uppercase;
+  color: var(--ink-70);
+  margin-bottom: 28px;
+}
+.eyebrow__dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--shu);
+  box-shadow: 0 0 0 5px rgba(199, 58, 43, .15);
+  animation: pulse 2.4s var(--ease) infinite;
+}
+@keyframes pulse { 50% { box-shadow: 0 0 0 10px rgba(199, 58, 43, 0); } }
+.hero__title {
+  font: 500 clamp(3.6rem, 8.6vw, 9.4rem)/.88 var(--f-display);
+  letter-spacing: -.02em;
+  margin-bottom: 30px;
+}
+.hero__title .line { display: block; }
+.line--accent { font-style: italic; color: var(--shu); padding-left: .5em; }
+.hero__lead {
+  font-size: clamp(15px, 1.2vw, 18px);
+  color: var(--ink-70);
+  max-width: 25rem;
+  margin-bottom: 38px;
+}
+.hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.hero__vertical {
+  position: absolute; right: var(--pad); top: 50%;
+  translate: 0 -50%;
+  display: flex; gap: 18px; align-items: flex-start;
+  writing-mode: vertical-rl;
+}
+/* в вертикальном письме ось row идёт сверху вниз */
+.hero__jp {
+  display: flex; flex-direction: row; gap: .12em;
+  font: 800 clamp(3rem, 6.4vw, 6.4rem)/1 var(--f-jp);
+}
+.hero__jp span { display: block; }
+.hero__romaji {
+  font-size: 11px; letter-spacing: .5em; color: var(--ink-45);
+  padding-top: .6em;
+}
+.hero__foot {
+  position: absolute; left: var(--pad); right: var(--pad); bottom: 28px;
+  z-index: 2;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: end;
+  font-size: 12px; letter-spacing: .12em; color: var(--ink-70);
+}
+.hero__hint b { color: var(--shu); font-weight: 600; }
+.hero__coord { justify-self: end; letter-spacing: .2em; }
+.scrollcue {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
+}
+.scrollcue i {
+  position: relative; width: 1px; height: 54px;
+  background: var(--ink-12); overflow: hidden;
+}
+.scrollcue i::after {
+  content: ''; position: absolute; left: 0; top: 0;
+  width: 1px; height: 40%;
+  background: var(--shu);
+  animation: cue 2s var(--ease) infinite;
+}
+@keyframes cue { 0% { transform: translateY(-100%); } 100% { transform: translateY(260%); } }
+.hero__fog {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 20vh;
+  background: linear-gradient(to bottom, rgba(239, 232, 220, 0), var(--washi) 80%);
+  pointer-events: none;
+}
+
+/* =========================================================
+   2. МАНИФЕСТ
+   ========================================================= */
+.manifest {
+  position: relative;
+  min-height: 100svh;
+  padding: 22vh var(--pad);
+  display: grid;
+  gap: 40px;
+  align-content: center;
+}
+.manifest__label {
+  display: flex; align-items: baseline; gap: 18px;
+  font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--ink-45);
+}
+.num { font: 500 44px/1 var(--f-display); color: var(--shu); letter-spacing: 0; }
+.manifest__text {
+  max-width: 14em;
+  font: 400 clamp(1.9rem, 3.4vw, 3.5rem)/1.14 var(--f-display);
+  letter-spacing: -.01em;
+}
+.manifest__text em { color: var(--shu); }
+.manifest__text .word { opacity: .14; transition: none; }
+.manifest__enso {
+  position: absolute; right: 8vw; top: 50%;
+  width: min(34vw, 460px);
+  margin-top: calc(min(34vw, 460px) / -2);
+  opacity: .1;
+}
+
+/* =========================================================
+   ОБЩЕЕ: заголовки секций, тёмные секции
+   ========================================================= */
+.section--dark { background: var(--sumi); color: var(--washi); }
+.section-head { max-width: 60rem; margin-bottom: clamp(48px, 8vh, 90px); }
+.section-head__num {
+  font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--shu); margin-bottom: 18px;
+}
+.section-head__title {
+  font: 500 clamp(2.6rem, 6vw, 6rem)/.98 var(--f-display);
+  letter-spacing: -.015em;
+}
+.section-head__sub { margin-top: 22px; max-width: 34rem; color: var(--paper-70); }
+.eras .section-head__sub { color: var(--ink-70); }
+
+/* =========================================================
+   3. КОДЕКС
+   ========================================================= */
+.code {
+  padding: 20vh var(--pad) 16vh;
+  background:
+    radial-gradient(60% 50% at 85% 0%, rgba(199, 58, 43, .16), transparent 70%),
+    var(--sumi);
+}
+.virtues {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  perspective: 1200px;
+}
+.virtue {
+  --mx: 50%; --my: 50%;
+  position: relative;
+  min-height: 330px;
+  padding: 26px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  border-radius: 18px;
+  background: var(--sumi-2);
+  border: 1px solid var(--paper-12);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: border-color .4s;   /* transform анимирует GSAP — CSS-переход ему мешает */
+  will-change: transform;
+}
+/* подсветка, которая идёт за курсором */
+.virtue::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(380px circle at var(--mx) var(--my), rgba(199, 58, 43, .32), transparent 55%);
+  opacity: 0;
+  transition: opacity .4s;
+  pointer-events: none;
+}
+/* вращающаяся золотая кромка на @property */
+.virtue::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--angle), transparent 0 70%, var(--kin) 85%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity .4s;
+  animation: spin 4s linear infinite;
+  pointer-events: none;
+}
+@keyframes spin { to { --angle: 360deg; } }
+.virtue:hover { border-color: transparent; }
+.virtue:hover::before, .virtue:hover::after { opacity: 1; }
+.virtue--wide { grid-column: span 2; }
+.virtue__kanji {
+  position: relative;
+  font: 800 clamp(4.6rem, 7vw, 7rem)/1 var(--f-jp);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--paper-45);
+  background: linear-gradient(to top, var(--shu) 50%, transparent 50%) 0 0 / 100% 200% no-repeat;
+  -webkit-background-clip: text;
+          background-clip: text;
+  transition: background-position .8s var(--ease), -webkit-text-stroke-color .4s;
+  transform: translateZ(40px);
+  align-self: flex-start;
+}
+.virtue:hover .virtue__kanji { background-position: 0 100%; -webkit-text-stroke-color: var(--shu); }
+.virtue__body { position: relative; transform: translateZ(24px); }
+.virtue__romaji { font-size: 11px; letter-spacing: .35em; text-transform: uppercase; color: var(--kin); margin-bottom: 8px; }
+.virtue h3 { font: 500 30px/1.1 var(--f-display); margin-bottom: 10px; }
+.virtue p:last-child { font-size: 14px; color: var(--paper-70); }
+.virtue__n {
+  position: absolute; right: 24px; top: 22px;
+  font: italic 400 20px/1 var(--f-display);
+  color: var(--paper-45);
+}
+
+/* =========================================================
+   4. ДОСПЕХ
+   ========================================================= */
+.armor { position: relative; }
+.armor__pin {
+  position: relative;
+  height: 100svh;
+  display: flex; align-items: center;
+  padding: 0 var(--pad);
+}
+.armor__side { width: min(30rem, 34vw); }
+.armor__title {
+  font: 500 clamp(2.6rem, 5vw, 5rem)/1 var(--f-display);
+  margin-bottom: 44px;
+}
+.armor__title em { color: var(--shu); }
+.armor__steps { position: relative; min-height: 230px; }
+.step {
+  position: absolute; inset: 0 0 auto 0;
+  display: grid; grid-template-columns: auto 1fr; gap: 24px;
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(6px);
+  transition: opacity .7s var(--ease), transform .8s var(--ease), filter .7s;
+  pointer-events: none;
+}
+.step.is-active { opacity: 1; transform: none; filter: none; pointer-events: auto; }
+.step__kanji {
+  font: 800 88px/1 var(--f-jp);
+  color: var(--shu);
+}
+.step h3 { font: 500 34px/1.1 var(--f-display); margin-bottom: 12px; }
+.step h3 small {
+  display: block; margin-top: 6px;
+  font: 600 11px/1 var(--f-body); letter-spacing: .3em; text-transform: uppercase;
+  color: var(--ink-45);
+}
+.step p { color: var(--ink-70); }
+.armor__progress {
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 30px;
+  font: 500 16px/1 var(--f-display); font-variant-numeric: tabular-nums;
+}
+.armor__progress i { position: relative; flex: 1; max-width: 220px; height: 1px; background: var(--ink-12); }
+.armor__progress b {
+  position: absolute; inset: 0;
+  background: var(--shu);
+  transform-origin: 0 50%;
+  transform: scaleX(.2);
+}
+
+/* =========================================================
+   5. КАТАНА — горизонтальный скролл
+   ========================================================= */
+.katana { position: relative; overflow: hidden; }
+.katana::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url(../assets/img/seigaiha.svg) 0 0 / 80px 40px;
+  opacity: .22;
+  -webkit-mask: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent);
+          mask: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent);
+}
+.katana__pin {
+  position: relative;
+  height: 100svh;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 5vh;
+  padding: 12vh 0 8vh;
+}
+.katana__head { padding: 0 var(--pad); }
+.katana__head .section-head__title { max-width: 12ch; }
+.katana__blade {
+  position: relative;
+  margin: 0 var(--pad);
+  clip-path: inset(0 100% 0 0);
+}
+.katana__blade img { width: 100%; height: auto; }
+/* блик бежит по клинку: градиент, вырезанный по силуэту меча */
+.katana__blade::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(100deg, transparent calc(var(--glint, -30%) - 8%), rgba(255, 255, 255, .95) var(--glint, -30%), transparent calc(var(--glint, -30%) + 8%));
+  -webkit-mask: url(../assets/img/katana.svg) 0 0 / 100% 100% no-repeat;
+          mask: url(../assets/img/katana.svg) 0 0 / 100% 100% no-repeat;
+  pointer-events: none;
+}
+.katana__track {
+  display: flex; gap: 20px;
+  padding: 0 var(--pad);
+  width: max-content;
+  will-change: transform;
+}
+.forge {
+  position: relative;
+  width: clamp(280px, 30vw, 440px);
+  padding: 30px 30px 34px;
+  border-top: 1px solid var(--paper-12);
+}
+.forge::before {
+  content: '';
+  position: absolute; left: 0; top: -1px;
+  width: 60px; height: 1px;
+  background: var(--shu);
+}
+.forge__n {
+  position: absolute; right: 30px; top: 28px;
+  font: 700 18px/1 var(--f-jp); color: var(--paper-45);
+}
+.forge__kanji {
+  display: block;
+  font: 800 64px/1 var(--f-jp);
+  color: var(--kin);
+  margin-bottom: 22px;
+}
+.forge h3 { font: 500 32px/1.1 var(--f-display); margin-bottom: 12px; }
+.forge p { color: var(--paper-70); font-size: 15px; }
+
+/* =========================================================
+   6. ЭПОХИ
+   ========================================================= */
+.eras { padding: 20vh var(--pad) 18vh; position: relative; }
+.eras .section-head { text-align: center; margin-inline: auto; }
+.timeline {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid; gap: 7vh;
+}
+.timeline__line {
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 1px; background: var(--ink-12);
+}
+.timeline__line i {
+  position: absolute; inset: 0;
+  background: var(--shu);
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+}
+.era {
+  position: relative;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+  align-items: center;
+}
+.era::before {
+  content: '';
+  position: absolute; left: 50%; top: 50%;
+  width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px;
+  border-radius: 50%;
+  background: var(--washi);
+  border: 1px solid var(--shu);
+  transition: background .4s;
+}
+.era.is-in::before { background: var(--shu); box-shadow: 0 0 0 6px rgba(199, 58, 43, .12); }
+.era__year {
+  font: 400 clamp(4rem, 8vw, 8rem)/1 var(--f-display);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--sumi);
+  text-align: right;
+  font-variant-numeric: lining-nums;
+}
+.era__card { position: relative; max-width: 26rem; }
+.era__kanji {
+  position: absolute; right: -72px; top: 0;
+  font: 800 40px/1.05 var(--f-jp);
+  color: rgba(199, 58, 43, .35);
+  writing-mode: vertical-rl;
+}
+.era h3 { font: 500 36px/1.1 var(--f-display); margin-bottom: 10px; }
+.era p { color: var(--ink-70); max-width: 22rem; }
+.era:nth-child(odd) .era__year { order: 2; text-align: left; }
+.era:nth-child(odd) .era__card { justify-self: end; text-align: right; }
+.era:nth-child(odd) .era__kanji { right: auto; left: -72px; }
+.era:nth-child(odd) p { margin-left: auto; }
+
+/* =========================================================
+   7. ЦИТАТА
+   ========================================================= */
+.quote {
+  position: relative;
+  min-height: 110svh;
+  padding: 20vh var(--pad);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+.quote__sun {
+  position: absolute; left: 50%; top: 40%;
+  width: min(62vmin, 620px); aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, var(--shu-2), var(--shu) 55%, #8f2219);
+  translate: -50% -50%;
+  box-shadow: 0 0 120px 20px rgba(199, 58, 43, .25);
+}
+.quote__torii {
+  position: absolute; left: 50%; bottom: -2px;
+  width: min(48vw, 520px);
+  translate: -50% 0;
+  opacity: .9;
+  filter: brightness(.55);
+}
+.quote__jp {
+  position: absolute; right: var(--pad); top: 50%;
+  translate: 0 -50%;
+  writing-mode: vertical-rl;
+  font: 700 18px/1 var(--f-jp);
+  letter-spacing: .4em;
+  color: var(--paper-45);
+}
+.quote blockquote { position: relative; margin: 0; }
+.quote__text {
+  font: 500 clamp(2.6rem, 7vw, 7.4rem)/1 var(--f-display);
+  letter-spacing: -.02em;
+  max-width: 12ch;
+  margin: 0 auto 30px;
+  text-shadow: 0 4px 40px rgba(18, 16, 17, .35);
+}
+.quote footer { font-size: 12px; letter-spacing: .32em; text-transform: uppercase; color: var(--washi); }
+.quote__note {
+  position: relative;
+  margin-top: 26vh;
+  max-width: 30rem;
+  color: var(--paper-70);
+}
+
+/* =========================================================
+   ПОДВАЛ
+   ========================================================= */
+.footer { padding: 10vh var(--pad) 40px; overflow: hidden; }
+.footer__big {
+  font: 800 min(44vw, 520px)/.9 var(--f-jp);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--paper-12);
+  text-align: center;
+  margin-bottom: 4vh;
+  user-select: none;
+}
+.footer__row {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 30px;
+  padding-top: 34px;
+  border-top: 1px solid var(--paper-12);
+}
+.footer__brand { display: flex; align-items: center; gap: 16px; font: 500 20px/1.25 var(--f-display); }
+.footer__brand span { font: 400 13px/1.5 var(--f-body); color: var(--paper-45); }
+.footer__nav { display: flex; gap: 28px; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; }
+.footer__nav a:hover { color: var(--shu); }
+.footer__small { margin-top: 40px; font-size: 12px; color: var(--paper-45); }
+.footer__small a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* =========================================================
+   РАСКРЫТИЕ ПРИ ПОЯВЛЕНИИ — чистый CSS, где поддерживается
+   ========================================================= */
+@supports (animation-timeline: view()) {
+  .forge, .footer__row {
+    animation: rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+  }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(40px); } }
+
+/* =========================================================
+   АДАПТИВ
+   ========================================================= */
+@media (max-width: 960px) {
+  .nav__links {
+    position: fixed; inset: 0;
+    flex-direction: column; justify-content: center; align-items: center;
+    gap: 26px;
+    background: var(--sumi); color: var(--washi);
+    clip-path: circle(0 at calc(100% - 44px) 44px);
+    transition: clip-path .8s var(--ease);
+  }
+  .nav__links a { font: 500 34px/1 var(--f-display); letter-spacing: 0; text-transform: none; }
+  .nav.is-open .nav__links { clip-path: circle(150% at calc(100% - 44px) 44px); }
+  .nav.is-open { color: var(--washi); }
+  .nav__burger { display: block; z-index: 1; }
+
+  .hero__text {
+    top: 15svh; translate: none;
+    max-width: none; right: var(--pad);
+  }
+  .hero__title { font-size: clamp(3rem, 14vw, 5.5rem); margin-bottom: 18px; }
+  .hero__lead { font-size: 15px; margin-bottom: 0; max-width: 20rem; }
+  .hero__cta { display: none; }
+  .hero__vertical { top: 17svh; translate: none; }
+  .hero__jp { font-size: 2.4rem; }
+  .hero__romaji { display: none; }
+  .hero__foot { grid-template-columns: 1fr auto; }
+  .hero__hint { display: none; }
+
+  .manifest { grid-template-columns: 1fr; align-content: start; padding-top: 16vh; }
+  .virtues { grid-template-columns: 1fr 1fr; }
+  .virtue--wide { grid-column: span 2; }
+
+  .armor__pin { align-items: flex-end; padding-bottom: 7svh; }
+  .armor__side {
+    width: 100%;
+    padding: 22px 22px 20px;
+    border-radius: 18px;
+    background: rgba(239, 232, 220, .82);
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+  }
+  .armor__side .section-head__num { display: none; }
+  .armor__title { font-size: 28px; margin-bottom: 16px; }
+  .armor__steps { min-height: 190px; }
+  .step { gap: 16px; }
+  .step__kanji { font-size: 52px; }
+  .step h3 { font-size: 26px; }
+  .step p { font-size: 14px; }
+  .armor__progress { margin-top: 8px; }
+
+  .timeline__line { left: 8px; }
+  .era { grid-template-columns: 1fr; gap: 6px; padding-left: 40px; }
+  .era::before { left: 8px; top: 34px; }
+  .era__year, .era:nth-child(odd) .era__year { order: 0; text-align: left; font-size: 3.4rem; }
+  .era:nth-child(odd) .era__card { justify-self: start; text-align: left; }
+  .era__kanji, .era:nth-child(odd) .era__kanji { left: auto; right: 0; top: -54px; font-size: 30px; }
+  .era:nth-child(odd) p { margin-left: 0; }
+  .quote__jp { display: none; }
+}
+@media (max-width: 560px) {
+  .virtues { grid-template-columns: 1fr; }
+  .virtue--wide { grid-column: auto; }
+  .virtue { min-height: 250px; }
+  .hero__coord { display: none; }
+  .hero__foot { grid-template-columns: 1fr; justify-items: center; }
+}
+
+/* без JS-анимаций (библиотеки не загрузились) — всё видно сразу */
+.no-motion .intro { display: none; }
+.no-motion .manifest__text .word { opacity: 1; }
+.no-motion .katana__blade { clip-path: none; }
+.no-motion .step { position: relative; opacity: 1; transform: none; filter: none; margin-bottom: 28px; }
+.no-motion .armor__steps { min-height: 0; }
+.no-motion .katana__track { flex-wrap: wrap; width: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .grain, .eyebrow__dot, .scrollcue i::after, .virtue::after { animation: none; }
+}
