@@ -1,0 +1,3 @@
+# копия модели для хостингов без .glb — собирается build_samurai.py
+assets/models/*.gltf.json
+__pycache__/

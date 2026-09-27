@@ -14,7 +14,10 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-const MODEL_URL = new URL('../assets/models/samurai.glb', import.meta.url).href;
+// GLB — основной файл; .gltf.json — та же модель текстом для хостингов,
+// которые не отдают .glb (например, артефакты claude.ai)
+const MODEL_URLS = ['../assets/models/samurai.glb', '../assets/models/samurai.gltf.json']
+  .map((p) => new URL(p, import.meta.url).href);
 
 export async function createScene(canvas, { onProgress = () => {} } = {}) {
   /* ---------- рендерер ---------- */
@@ -86,13 +89,19 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
 
   /* ---------- модель ---------- */
   let model;
-  try {
-    const gltf = await new GLTFLoader().loadAsync(MODEL_URL, (e) => {
-      if (e.total) onProgress(e.loaded / e.total);
-    });
-    model = gltf.scene.getObjectByName('Samurai') || gltf.scene;
-  } catch (err) {
-    console.warn('samurai.glb не загрузился, собираю модель из примитивов', err);
+  for (const url of MODEL_URLS) {
+    try {
+      const gltf = await new GLTFLoader().loadAsync(url, (e) => {
+        if (e.total) onProgress(e.loaded / e.total);
+      });
+      model = gltf.scene.getObjectByName('Samurai') || gltf.scene;
+      break;
+    } catch (err) {
+      console.warn('Модель не загрузилась:', url, err);
+    }
+  }
+  if (!model) {
+    // последний запасной вариант — упрощённая фигура из примитивов
     const { buildSamurai } = await import('./samurai-model.js');
     model = buildSamurai(THREE);
   }
@@ -166,12 +175,26 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     return new THREE.CanvasTexture(c);
   })();
   const glowMat = new THREE.SpriteMaterial({ map: glowTex, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0.8 });
-  [-1, 1].forEach((s) => {
-    const sp = new THREE.Sprite(glowMat);
-    sp.scale.setScalar(0.06);
-    sp.position.set(0.036 * s, 0.13, 0.1);
-    parts.head && parts.head.add(sp);
-  });
+  // ореол ставим туда, где в модели глаза (меш с материалом eyes)
+  if (parts.head) {
+    let eyes = null;
+    parts.head.traverse((o) => { if (!eyes && o.isMesh && o.material.name === 'eyes') eyes = o; });
+    const box = new THREE.Box3();
+    if (eyes) {
+      eyes.geometry.computeBoundingBox();
+      box.copy(eyes.geometry.boundingBox).applyMatrix4(eyes.matrix);
+    } else {
+      box.set(new THREE.Vector3(-0.05, 0.12, 0.08), new THREE.Vector3(0.05, 0.14, 0.1));
+    }
+    const c = box.getCenter(new THREE.Vector3());
+    const half = (box.max.x - box.min.x) / 2;
+    [-1, 1].forEach((s) => {
+      const sp = new THREE.Sprite(glowMat);
+      sp.scale.setScalar(0.05);
+      sp.position.set(c.x + s * half * 0.7, c.y, box.max.z + 0.01);
+      parts.head.add(sp);
+    });
+  }
 
   /* ---------- сакура ---------- */
   const PETALS = software ? 60 : 140;
@@ -273,10 +296,11 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     const a0 = { x: a.x, y: a.y, z: a.z }, f0 = { x: f.x, y: f.y, z: f.z };
     const glint = { v: 0 };
     const tl = gsap.timeline({ onComplete: () => { slashing = false; } });
-    tl.to(a, { x: -2.6, z: -0.55, duration: 0.32, ease: 'power2.out' })
-      .to(f, { x: -0.9, duration: 0.32, ease: 'power2.out' }, 0)
-      .to(a, { x: 0.35, z: 0.1, duration: 0.16, ease: 'power4.in' })
-      .to(f, { x: -0.05, duration: 0.16, ease: 'power4.in' }, '<')
+    // замах и удар — смещения от позы покоя, чтобы работать с любой моделью
+    tl.to(a, { x: a0.x - 2.45, z: a0.z - 0.37, duration: 0.32, ease: 'power2.out' })
+      .to(f, { x: f0.x - 0.4, duration: 0.32, ease: 'power2.out' }, 0)
+      .to(a, { x: a0.x + 0.5, z: a0.z + 0.28, duration: 0.16, ease: 'power4.in' })
+      .to(f, { x: f0.x + 0.45, duration: 0.16, ease: 'power4.in' }, '<')
       .to(glint, { v: 1, duration: 0.08, yoyo: true, repeat: 1 }, '<0.08')
       .add(() => { wind += 9; shake = 0.06; }, '<0.12')
       .to(a, { ...a0, duration: 0.9, ease: 'elastic.out(1, 0.6)' }, '+=0.12')
