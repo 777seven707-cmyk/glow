@@ -326,9 +326,17 @@ main, .footer { position: relative; z-index: 2; }
   display: flex; align-items: center; justify-content: space-between;
   padding: 22px var(--pad);
   color: var(--sumi);
-  transition: color .5s, translate .6s var(--ease);
+  transition: color .5s, translate .6s var(--ease), padding .5s var(--ease), background-color .5s;
+}
+.nav.is-scrolled {
+  padding-block: 12px;
+  background: color-mix(in srgb, var(--sky-top) 82%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+          backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 1px 0 var(--ink-12);
 }
 .nav.is-dark { color: var(--washi); }
+.nav.is-dark.is-scrolled { background: rgba(18, 16, 17, .72); box-shadow: 0 1px 0 var(--paper-12); }
 .nav.is-hidden { translate: 0 -110%; }
 .nav__logo { display: flex; align-items: center; gap: 12px; font: 700 20px/1 var(--f-jp); }
 .nav__logo em {
@@ -343,9 +351,9 @@ main, .footer { position: relative; z-index: 2; }
   padding: 6px 0;
 }
 .nav__links i {
-  font-style: normal; font-size: 10px;
+  font: 700 13px/1 var(--f-jp);
   color: var(--shu);
-  margin-right: 8px; vertical-align: 2px;
+  margin-right: 8px; vertical-align: 0;
 }
 .nav__links a::after {
   content: '';
@@ -452,10 +460,6 @@ main, .footer { position: relative; z-index: 2; }
   font: 800 clamp(3rem, 6.4vw, 6.4rem)/1 var(--f-jp);
 }
 .hero__jp span { display: block; }
-.hero__romaji {
-  font-size: 11px; letter-spacing: .5em; color: var(--ink-45);
-  padding-top: .6em;
-}
 .hero__foot {
   position: absolute; left: var(--pad); right: var(--pad); bottom: 28px;
   z-index: 2;
@@ -539,6 +543,7 @@ main, .footer { position: relative; z-index: 2; }
   color: var(--shu);
 }
 .hour--light { color: var(--paper-70); }
+.hour--light em { color: #e9b872; }   /* на тёмном и красном фоне киноварь теряется */
 .hour--center { justify-content: center; }
 /* огромный иероглиф часа — водяной знак раздела */
 .hour-mark {
@@ -608,6 +613,7 @@ main, .footer { position: relative; z-index: 2; }
   grid-column: 1 / -1;
   margin-top: 14px;
   text-align: right;
+  white-space: nowrap;
   font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
 }
 .dial__time b {
@@ -624,7 +630,7 @@ main, .footer { position: relative; z-index: 2; }
   font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
   color: var(--ink-70);
 }
-.era__time b { font: 600 15px/1 var(--f-body); color: var(--shu); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.era__time b { font: 600 15px/1 var(--f-body); color: var(--sumi); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
 .timeline__sun {
   position: absolute; left: 50%; top: 0;
   width: 26px; height: 26px;
@@ -635,10 +641,6 @@ main, .footer { position: relative; z-index: 2; }
   z-index: 1;
 }
 .section-head { max-width: 60rem; margin-bottom: clamp(48px, 8vh, 90px); }
-.section-head__num {
-  font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
-  color: var(--shu); margin-bottom: 18px;
-}
 .section-head__title {
   font: 500 clamp(2.6rem, 6vw, 6rem)/.98 var(--f-display);
   letter-spacing: -.015em;
@@ -890,16 +892,15 @@ main, .footer { position: relative; z-index: 2; }
 }
 .era__card { position: relative; max-width: 26rem; }
 .era__kanji {
-  position: absolute; right: -72px; top: 0;
-  font: 800 40px/1.05 var(--f-jp);
-  color: rgba(199, 58, 43, .35);
-  writing-mode: vertical-rl;
+  margin-right: 10px;
+  font: 700 15px/1 var(--f-jp);
+  letter-spacing: .08em;
+  color: var(--sumi);
 }
 .era h3 { font: 500 36px/1.1 var(--f-display); margin-bottom: 10px; }
 .era p { color: var(--ink-70); max-width: 22rem; }
 .era:nth-child(odd) .era__year { order: 2; text-align: left; }
 .era:nth-child(odd) .era__card { justify-self: end; text-align: right; }
-.era:nth-child(odd) .era__kanji { right: auto; left: -72px; }
 .era:nth-child(odd) p { margin-left: auto; }
 
 /* =========================================================
@@ -930,7 +931,7 @@ main, .footer { position: relative; z-index: 2; }
   filter: brightness(.55);
 }
 .quote__jp {
-  position: absolute; right: var(--pad); top: 50%;
+  position: absolute; left: var(--pad); top: 50%;
   translate: 0 -50%;
   writing-mode: vertical-rl;
   font: 700 18px/1 var(--f-jp);
@@ -966,14 +967,14 @@ main, .footer { position: relative; z-index: 2; }
 }
 .legend {
   position: relative;
-  max-width: 44rem;
+  max-width: 60rem;
   margin: 0 auto 10vh;
   text-align: center;
   display: flex; flex-direction: column; align-items: center; gap: 26px;
 }
 .legend .hour { margin-bottom: 0; }
 .legend__title {
-  font: 500 clamp(2.4rem, 5.6vw, 5.4rem)/1 var(--f-display);
+  font: 500 clamp(2.2rem, 4.8vw, 4.6rem)/1.05 var(--f-display);
   letter-spacing: -.015em;
   text-wrap: balance;
 }
@@ -981,8 +982,7 @@ main, .footer { position: relative; z-index: 2; }
 .legend__text { max-width: 34rem; color: var(--paper-70); }
 .footer__big {
   font: 800 min(44vw, 520px)/.9 var(--f-jp);
-  color: transparent;
-  -webkit-text-stroke: 1px var(--paper-12);
+  color: rgba(239, 232, 220, .04);
   text-align: center;
   margin-bottom: 4vh;
   user-select: none;
@@ -1015,6 +1015,12 @@ main, .footer { position: relative; z-index: 2; }
 /* =========================================================
    АДАПТИВ
    ========================================================= */
+@media (min-width: 961px) and (max-width: 1240px) {
+  .hero__text { max-width: 34vw; }
+  .hero__lead { font-size: 15px; }
+  .hero__vertical { display: none; }
+  .armor__side { width: 32vw; }
+}
 @media (max-width: 960px) {
   /* на телефоне часы — компактная плашка внизу */
   .dial {
@@ -1037,6 +1043,7 @@ main, .footer { position: relative; z-index: 2; }
   .hero__vertical { right: var(--pad); }
   .hour-mark { font-size: 50vw; }
   .footer__moon { right: 8vw; top: 6vh; }
+  .footer { padding-bottom: 84px; }   /* место под плашку часов */
   .nav__links {
     position: fixed; inset: 0;
     flex-direction: column; justify-content: center; align-items: center;
@@ -1059,7 +1066,6 @@ main, .footer { position: relative; z-index: 2; }
   .hero__cta { display: none; }
   .hero__vertical { top: 17svh; translate: none; }
   .hero__jp { font-size: 2.4rem; }
-  .hero__romaji { display: none; }
   .hero__foot { grid-template-columns: 1fr auto; }
   .hero__hint { display: none; }
 
@@ -1076,7 +1082,6 @@ main, .footer { position: relative; z-index: 2; }
     -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
   }
-  .armor__side .section-head__num { display: none; }
   .armor__title { font-size: 28px; margin-bottom: 16px; }
   .armor__steps { min-height: 190px; }
   .step { gap: 16px; }
@@ -1090,7 +1095,6 @@ main, .footer { position: relative; z-index: 2; }
   .era::before { left: 8px; top: 34px; }
   .era__year, .era:nth-child(odd) .era__year { order: 0; text-align: left; font-size: 3.4rem; }
   .era:nth-child(odd) .era__card { justify-self: start; text-align: left; }
-  .era__kanji, .era:nth-child(odd) .era__kanji { left: auto; right: 0; top: -54px; font-size: 30px; }
   .era:nth-child(odd) p { margin-left: 0; }
   .quote__jp { display: none; }
 }

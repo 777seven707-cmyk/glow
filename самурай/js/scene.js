@@ -235,11 +235,12 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     rot: 0,                    // поворот модели
     sun: 1, petals: 1, visible: 1,
     sunY: 1.6, warm: 1,        // высота солнца и насколько оно рассветно-оранжевое
+    dist: 1,                   // множитель расстояния камеры (на узких экранах — дальше)
     track: 1                   // насколько сильно фигура следит за курсором
   };
   const cur = {
     cam: rig.cam.clone(), look: rig.look.clone(),
-    shiftX: 0, shiftY: 0, rot: 0, sun: 1, petals: 1, visible: 1, track: 1, sunY: 1.6, warm: 1
+    shiftX: 0, shiftY: 0, rot: 0, sun: 1, petals: 1, visible: 1, track: 1, sunY: 1.6, warm: 1, dist: 1
   };
 
   // кадры для раздела «Доспех» — считаются по реальному положению деталей
@@ -347,7 +348,7 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     // плавно догоняем цели rig
     cur.cam.lerp(rig.cam, 1 - Math.exp(-2.6 * dt));
     cur.look.lerp(rig.look, 1 - Math.exp(-2.6 * dt));
-    ['shiftX', 'shiftY', 'rot', 'sun', 'petals', 'track'].forEach((k) => { cur[k] = damp(cur[k], rig[k], 3, dt); });
+    ['shiftX', 'shiftY', 'rot', 'sun', 'petals', 'track', 'dist'].forEach((k) => { cur[k] = damp(cur[k], rig[k], 3, dt); });
     cur.sunY = damp(cur.sunY, rig.sunY, 0.9, dt);   // солнце поднимается медленно
     cur.warm = damp(cur.warm, rig.warm, 0.9, dt);
     cur.visible = damp(cur.visible, rig.visible, 5, dt);
@@ -364,7 +365,7 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
 
     // камера с лёгким параллаксом от курсора и встряской после удара
     shake = Math.max(0, shake - dt * 0.25);
-    camera.position.copy(cur.cam);
+    camera.position.copy(cur.cam).sub(cur.look).multiplyScalar(cur.dist).add(cur.look);
     camera.position.x += pointerSmooth.x * 0.18 * cur.track + (Math.random() - 0.5) * shake;
     camera.position.y += pointerSmooth.y * 0.08 * cur.track + (Math.random() - 0.5) * shake;
     camera.lookAt(cur.look);

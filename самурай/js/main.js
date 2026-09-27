@@ -10,6 +10,7 @@ const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const isMobile = () => window.innerWidth <= 960;
+const isNarrow = () => window.innerWidth <= 1240;   // ноутбуки и планшеты в ландшафте
 const { gsap, ScrollTrigger, SplitText, Lenis } = window;
 const hasGsap = Boolean(gsap && ScrollTrigger && SplitText);
 
@@ -32,13 +33,13 @@ let state = 'hero';
 let armorStep = 'kabuto';
 const LAYOUT = {
   // 06:00 — солнце только встало, низкое и оранжевое
-  hero:     () => (isMobile() ? { shiftX: 0, shiftY: 0.2, sun: 1, petals: 1, visible: 1, track: 1, sunY: 1.45, warm: 1 }
-                              : { shiftX: 0.02, shiftY: 0, sun: 1, petals: 1, visible: 1, track: 1, sunY: 1.6, warm: 1 }),
+  hero:     () => (isMobile() ? { shiftX: 0, shiftY: 0.2, sun: 1, petals: 1, visible: 1, track: 1, sunY: 1.45, warm: 1, dist: 1 }
+                              : { shiftX: isNarrow() ? 0.12 : 0.02, shiftY: 0, sun: 1, petals: 1, visible: 1, track: 1, sunY: 1.6, warm: 1, dist: isNarrow() ? 1.1 : 1 }),
   // 08:00 — солнце выше и краснее, самурай уходит вправо
-  manifest: () => (isMobile() ? { shiftX: 0, shiftY: 0.2, sun: 0, petals: 0, visible: 0, track: 0.5, sunY: 2.4, warm: 0.2 }
-                              : { shiftX: 0.33, shiftY: 0, sun: 0.85, petals: 0.6, visible: 1, track: 0.6, sunY: 2.5, warm: 0.2 }),
-  armor:    () => (isMobile() ? { shiftX: 0, shiftY: -0.2, sun: 0, petals: 0, visible: 1, track: 0.3 }
-                              : { shiftX: 0.23, shiftY: 0, sun: 0, petals: 0, visible: 1, track: 0.35 }),
+  manifest: () => (isMobile() ? { shiftX: 0, shiftY: 0.2, sun: 0, petals: 0, visible: 0, track: 0.5, sunY: 2.4, warm: 0.2, dist: 1 }
+                              : { shiftX: isNarrow() ? 0.24 : 0.33, shiftY: 0, sun: 0.85, petals: 0.6, visible: 1, track: 0.6, sunY: 2.5, warm: 0.2, dist: isNarrow() ? 1.12 : 1 }),
+  armor:    () => (isMobile() ? { shiftX: 0, shiftY: -0.2, sun: 0, petals: 0, visible: 1, track: 0.3, dist: 1 }
+                              : { shiftX: isNarrow() ? 0.25 : 0.23, shiftY: 0, sun: 0, petals: 0, visible: 1, track: 0.35, dist: isNarrow() ? 1.3 : 1 }),
   hidden:   () => ({ sun: 0, petals: 0, visible: 0 })
 };
 function applyState() {
@@ -98,7 +99,7 @@ function initLenis() {
 function prepareHero() {
   const title = SplitText.create('#heroTitle .line', { type: 'lines,chars', mask: 'lines' });
   const jp = { chars: $$('.hero__jp span') };
-  const rest = ['.eyebrow', '#heroLead', '.hero__cta', '.hero__romaji', '.hero__foot', '.nav'];
+  const rest = ['.eyebrow', '#heroLead', '.hero__cta', '.hero__foot', '.nav'];
   if (!reduced) {
     gsap.set(title.chars, { yPercent: 118 });
     gsap.set(jp.chars, { autoAlpha: 0, filter: 'blur(10px)', y: -20 });
@@ -276,6 +277,7 @@ function initNav(lenis) {
     start: 0, end: 'max',
     onUpdate: (self) => {
       nav.classList.toggle('is-hidden', self.direction === 1 && self.scroll() > innerHeight * 0.7 && !nav.classList.contains('is-open'));
+      nav.classList.toggle('is-scrolled', self.scroll() > 40);
       if (!CSS.supports('animation-timeline: scroll()')) document.documentElement.style.setProperty('--p', self.progress.toFixed(4));
     }
   });
