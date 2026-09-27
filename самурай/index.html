@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Самурай — Путь воина</title>
-  <meta name="description" content="Интерактивная история самурая: 3D-доспех, который следит за курсором, семь добродетелей Бусидо, рождение катаны и тысяча лет эпох.">
+  <title>Один день самурая</title>
+  <meta name="description" content="Тысяча лет истории самураев как один день: рассвет эпохи Хэйан, полдень Сэнгоку, закат Мэйдзи. 3D-доспех, кодекс Бусидо, ковка катаны.">
   <meta name="theme-color" content="#121011">
-  <meta property="og:title" content="Самурай — Путь воина">
-  <meta property="og:description" content="3D-самурай, кодекс Бусидо, катана и эпохи Японии.">
+  <meta property="og:title" content="Один день самурая">
+  <meta property="og:description" content="Тысяча лет истории самураев — как один день: от рассвета до заката.">
   <meta property="og:image" content="assets/img/og-cover.png">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 
@@ -45,10 +45,10 @@
       </svg>
       <div class="intro__kanji" id="introKanji">侍</div>
       <div class="intro__hanko" id="introHanko"><span>武士</span></div>
-      <p class="intro__line" id="introLine">武士道 — путь воина</p>
+      <p class="intro__line" id="introLine">Ночь перед рассветом</p>
     </div>
     <div class="intro__meta">
-      <span>Загрузка доспеха</span>
+      <span>丑の刻 · 02:00 · до рассвета</span>
       <span class="intro__count"><b id="introCount">000</b>/100</span>
     </div>
   </div>
@@ -58,6 +58,9 @@
     <div class="cursor__ring"><span class="cursor__label" id="cursorLabel"></span></div>
     <div class="cursor__dot"></div>
   </div>
+
+  <!-- ============ НЕБО: цвет меняется вместе с часом ============ -->
+  <div class="sky" aria-hidden="true"><div class="sky__stars"></div></div>
 
   <!-- ============ ФОН ПЕРВОГО ЭКРАНА И 3D ============ -->
   <div class="backdrop" aria-hidden="true">
@@ -79,26 +82,43 @@
       <span>侍 <em>Самурай</em></span>
     </a>
     <nav class="nav__links" aria-label="Разделы">
-      <a href="#code"><i>01</i>Кодекс</a>
-      <a href="#armor"><i>02</i>Доспех</a>
-      <a href="#katana"><i>03</i>Катана</a>
-      <a href="#eras"><i>04</i>Эпохи</a>
+      <a href="#code"><i>巳</i>Кодекс</a>
+      <a href="#armor"><i>午</i>Доспех</a>
+      <a href="#katana"><i>未</i>Катана</a>
+      <a href="#eras"><i>申</i>Хроника</a>
     </nav>
     <button class="nav__burger" id="burger" aria-label="Меню" aria-expanded="false"><span></span><span></span></button>
   </header>
+
+  <!-- ============ СОЛНЕЧНЫЕ ЧАСЫ: где мы в этом дне ============ -->
+  <nav class="dial" id="dial" aria-label="Часы дня">
+    <div class="dial__rail"><i class="dial__sun" id="dialSun"></i></div>
+    <ol class="dial__stops">
+      <li><a href="#top" data-h="6" data-name="Кролика"><b>卯</b><span>06:00 · Рассвет</span></a></li>
+      <li><a href="#manifest" data-h="8" data-name="Дракона"><b>辰</b><span>08:00 · Служение</span></a></li>
+      <li><a href="#code" data-h="10" data-name="Змеи"><b>巳</b><span>10:00 · Кодекс</span></a></li>
+      <li><a href="#armor" data-h="12" data-name="Лошади"><b>午</b><span>12:00 · Доспех</span></a></li>
+      <li><a href="#katana" data-h="14" data-name="Овцы"><b>未</b><span>14:00 · Клинок</span></a></li>
+      <li><a href="#eras" data-h="16" data-name="Обезьяны"><b>申</b><span>16:00 · Хроника</span></a></li>
+      <li><a href="#sunset" data-h="18" data-name="Петуха"><b>酉</b><span>18:00 · Закат</span></a></li>
+      <li><a href="#quote" data-h="20" data-name="Собаки"><b>戌</b><span>20:00 · Сумерки</span></a></li>
+      <li><a href="#legend" data-h="24" data-name="Крысы"><b>子</b><span>00:00 · Легенда</span></a></li>
+    </ol>
+    <p class="dial__time"><b id="dialClock">06:00</b><span id="dialName">Час Кролика</span></p>
+  </nav>
 
   <main>
     <!-- ============ 1. ГЕРОЙ ============ -->
     <section class="hero" id="top" data-cursor="斬">
       <div class="hero__text">
-        <p class="eyebrow"><span class="eyebrow__dot"></span>武士道 · Бусидо · путь воина</p>
+        <p class="eyebrow"><span class="eyebrow__dot"></span>卯の刻 · 06:00 · рассвет</p>
         <h1 class="hero__title" id="heroTitle">
-          <span class="line">Путь</span>
+          <span class="line">Один день</span>
           <span class="line line--accent">самурая</span>
         </h1>
-        <p class="hero__lead" id="heroLead">Тысяча лет японской истории в одной фигуре: доспех, меч и&nbsp;кодекс чести, который пережил своё сословие.</p>
+        <p class="hero__lead" id="heroLead">Тысяча лет истории японских воинов, прожитые как один день: рассвет в&nbsp;эпоху Хэйан, полдень войн Сэнгоку, закат реформ Мэйдзи. Листайте — солнце пойдёт по небу вместе с&nbsp;вами.</p>
         <div class="hero__cta">
-          <a class="btn btn--ink" href="#manifest" data-magnetic><span>Начать путь</span><i>→</i></a>
+          <a class="btn btn--ink" href="#manifest" data-magnetic><span>Встретить рассвет</span><i>→</i></a>
           <a class="btn btn--line" href="#code" data-magnetic><span>Кодекс Бусидо</span></a>
         </div>
       </div>
@@ -110,7 +130,7 @@
 
       <div class="hero__foot">
         <span class="hero__hint"><b>Клик</b> — удар мечом · <b>курсор</b> — взгляд самурая</span>
-        <a class="scrollcue" href="#manifest" aria-label="Листать вниз"><span>Листайте</span><i></i></a>
+        <a class="scrollcue" href="#manifest" aria-label="Листать вниз"><span>Время идёт</span><i></i></a>
         <span class="hero__coord">35°00′N 135°46′E · Киото</span>
       </div>
       <div class="hero__fog" aria-hidden="true"></div>
@@ -118,17 +138,19 @@
 
     <!-- ============ 2. МАНИФЕСТ ============ -->
     <section class="manifest" id="manifest">
-      <div class="manifest__label"><span class="num">00</span><span>心 · Суть</span></div>
+      <p class="hour"><b>辰</b><span>Час Дракона · 08:00</span><em>Служение</em></p>
+      <span class="hour-mark" aria-hidden="true">辰</span>
       <p class="manifest__text" id="manifestText">Слово «самурай» происходит от глагола <em>сабурау</em> — «служить». Прежде чем стать легендой, самурай был служилым человеком: воином при господине, для которого верность, дисциплина и готовность к смерти были не словами, а&nbsp;повседневной практикой.</p>
       <img class="manifest__enso" src="assets/img/enso.svg" alt="" aria-hidden="true">
     </section>
 
     <!-- ============ 3. КОДЕКС ============ -->
     <section class="code section--dark" id="code">
+      <span class="hour-mark hour-mark--right" aria-hidden="true">巳</span>
       <div class="section-head">
-        <p class="section-head__num">01 / 07</p>
+        <p class="hour hour--light"><b>巳</b><span>Час Змеи · 10:00</span><em>Кодекс</em></p>
         <h2 class="section-head__title" data-split>Семь добродетелей Бусидо</h2>
-        <p class="section-head__sub">Неписаный кодекс воина систематизировал Нитобэ Инадзо в книге «Бусидо: душа Японии» (1900). Наведите курсор на иероглиф.</p>
+        <p class="section-head__sub">До полудня воин учился — мечу, письму и владению собой. Неписаный кодекс, по которому он жил, позже описал Нитобэ Инадзо в книге «Бусидо: душа Японии» (1900). Наведите курсор на иероглиф.</p>
       </div>
       <div class="virtues">
         <article class="virtue" data-cursor="見 Смотреть">
@@ -172,8 +194,9 @@
     <!-- ============ 4. ДОСПЕХ ============ -->
     <section class="armor" id="armor">
       <div class="armor__pin">
+        <span class="hour-mark" aria-hidden="true">午</span>
         <div class="armor__side">
-          <p class="section-head__num">02 / Доспех</p>
+          <p class="hour"><b>午</b><span>Час Лошади · 12:00</span><em>Доспех</em></p>
           <h2 class="armor__title">Анатомия <em>доспеха</em></h2>
           <div class="armor__steps">
             <article class="step is-active" data-shot="kabuto">
@@ -210,8 +233,9 @@
     <!-- ============ 5. КАТАНА ============ -->
     <section class="katana section--dark" id="katana">
       <div class="katana__pin">
+        <span class="hour-mark hour-mark--right" aria-hidden="true">未</span>
         <div class="katana__head">
-          <p class="section-head__num">03 / Рождение клинка</p>
+          <p class="hour hour--light"><b>未</b><span>Час Овцы · 14:00</span><em>Клинок</em></p>
           <h2 class="section-head__title" data-split>Как куётся катана</h2>
         </div>
         <div class="katana__blade" aria-hidden="true">
@@ -249,24 +273,27 @@
 
     <!-- ============ 6. ЭПОХИ ============ -->
     <section class="eras" id="eras">
+      <span class="hour-mark hour-mark--right" aria-hidden="true">申</span>
       <div class="section-head">
-        <p class="section-head__num">04 / Хронология</p>
-        <h2 class="section-head__title" data-split>Тысяча лет меча</h2>
+        <p class="hour"><b>申</b><span>Час Обезьяны · 16:00</span><em>Хроника</em></p>
+        <h2 class="section-head__title" data-split>Тысяча лет — один день</h2>
+        <p class="section-head__sub">Сожмём историю сословия до суток: 794 год — шесть утра, 1877-й — шесть вечера. Одна минута этого дня — полтора года.</p>
       </div>
       <div class="timeline">
-        <div class="timeline__line"><i id="timelineFill"></i></div>
-        <article class="era"><span class="era__year">794</span><div class="era__card"><span class="era__kanji">平安</span><h3>Хэйан</h3><p>Столица переезжает в Киото. В провинциях растёт сословие вооружённых слуг — будущих самураев.</p></div></article>
-        <article class="era"><span class="era__year">1185</span><div class="era__card"><span class="era__kanji">鎌倉</span><h3>Камакура</h3><p>Минамото побеждают в войне Гэмпэй. В 1192 году Ёритомо становится сёгуном — власть переходит к воинам.</p></div></article>
-        <article class="era"><span class="era__year">1281</span><div class="era__card"><span class="era__kanji">神風</span><h3>Божественный ветер</h3><p>Самураи дважды отражают флот Хубилая, а тайфун камикадзе довершает разгром.</p></div></article>
-        <article class="era"><span class="era__year">1467</span><div class="era__card"><span class="era__kanji">戦国</span><h3>Сэнгоку</h3><p>Смута Онин открывает век воюющих провинций: замки, аркебузы и великие полководцы.</p></div></article>
-        <article class="era"><span class="era__year">1603</span><div class="era__card"><span class="era__kanji">江戸</span><h3>Эдо</h3><p>Токугава Иэясу — сёгун. Два с половиной века мира: самураи становятся чиновниками, поэтами и учёными.</p></div></article>
-        <article class="era"><span class="era__year">1876</span><div class="era__card"><span class="era__kanji">明治</span><h3>Мэйдзи</h3><p>После реставрации императорской власти сословие упразднено, а ношение мечей запрещено указом.</p></div></article>
-        <article class="era"><span class="era__year">1877</span><div class="era__card"><span class="era__kanji">西南</span><h3>Сацума</h3><p>Последнее восстание самураев во главе с Сайго Такамори. Эпоха меча уходит — легенда остаётся.</p></div></article>
+        <div class="timeline__line"><i id="timelineFill"></i><b class="timeline__sun" id="timelineSun"></b></div>
+        <article class="era"><span class="era__year">794</span><div class="era__card"><span class="era__kanji">平安</span><p class="era__time"><b>06:00</b> · рассвет</p><h3>Хэйан</h3><p>Столица переезжает в Киото. В провинциях растёт сословие вооружённых слуг — будущих самураев.</p></div></article>
+        <article class="era"><span class="era__year">1185</span><div class="era__card"><span class="era__kanji">鎌倉</span><p class="era__time"><b>10:20</b> · утро</p><h3>Камакура</h3><p>Минамото побеждают в войне Гэмпэй. В 1192 году Ёритомо становится сёгуном — власть переходит к воинам.</p></div></article>
+        <article class="era"><span class="era__year">1281</span><div class="era__card"><span class="era__kanji">神風</span><p class="era__time"><b>11:24</b> · перед полуднем</p><h3>Божественный ветер</h3><p>Самураи дважды отражают флот Хубилая, а тайфун камикадзе довершает разгром.</p></div></article>
+        <article class="era"><span class="era__year">1467</span><div class="era__card"><span class="era__kanji">戦国</span><p class="era__time"><b>13:27</b> · после полудня</p><h3>Сэнгоку</h3><p>Смута Онин открывает век воюющих провинций: замки, аркебузы и великие полководцы.</p></div></article>
+        <article class="era"><span class="era__year">1603</span><div class="era__card"><span class="era__kanji">江戸</span><p class="era__time"><b>14:58</b> · долгий день</p><h3>Эдо</h3><p>Токугава Иэясу — сёгун. Два с половиной века мира: самураи становятся чиновниками, поэтами и учёными.</p></div></article>
+        <article class="era" id="sunset"><span class="era__year">1876</span><div class="era__card"><span class="era__kanji">明治</span><p class="era__time"><b>17:59</b> · закат</p><h3>Мэйдзи</h3><p>После реставрации императорской власти сословие упразднено, а ношение мечей запрещено указом.</p></div></article>
+        <article class="era"><span class="era__year">1877</span><div class="era__card"><span class="era__kanji">西南</span><p class="era__time"><b>18:00</b> · сумерки</p><h3>Сацума</h3><p>Последнее восстание самураев во главе с Сайго Такамори. Солнце сословия садится — остаётся легенда.</p></div></article>
       </div>
     </section>
 
     <!-- ============ 7. ЦИТАТА ============ -->
     <section class="quote section--dark" id="quote">
+      <p class="hour hour--light hour--center"><b>戌</b><span>Час Собаки · 20:00</span><em>Сумерки</em></p>
       <div class="quote__sun" aria-hidden="true"></div>
       <img class="quote__torii" src="assets/img/torii.svg" alt="" aria-hidden="true">
       <p class="quote__jp" aria-hidden="true">武士道と云ふは死ぬ事と見付けたり</p>
@@ -279,14 +306,20 @@
   </main>
 
   <!-- ============ ПОДВАЛ ============ -->
-  <footer class="footer section--dark">
+  <footer class="footer section--dark" id="legend">
+    <div class="footer__moon" aria-hidden="true"></div>
+    <div class="legend">
+      <p class="hour hour--light hour--center"><b>子</b><span>Час Крысы · 00:00</span><em>Легенда</em></p>
+      <h2 class="legend__title" data-split>Сословия больше нет.<br><em>Путь остался.</em></h2>
+      <p class="legend__text">В 1876 году самураи сняли мечи. Но верность, честь и спокойствие перед лицом конца пережили их — в книгах, в додзё и в людях, которые выбирают жить так же. Ночь закончится, и солнце взойдёт снова.</p>
+      <a class="btn btn--light" href="#top" data-magnetic><span>Встретить рассвет снова</span><i>↑</i></a>
+    </div>
     <div class="footer__big" aria-hidden="true">侍</div>
     <div class="footer__row">
-      <div class="footer__brand"><img src="assets/img/kamon.svg" alt="" width="44" height="44"><p>Самурай — интерактивная история<br><span>доспех, меч и кодекс чести</span></p></div>
+      <div class="footer__brand"><img src="assets/img/kamon.svg" alt="" width="44" height="44"><p>Один день самурая<br><span>тысяча лет истории от рассвета до заката</span></p></div>
       <nav class="footer__nav" aria-label="Разделы">
-        <a href="#code">Кодекс</a><a href="#armor">Доспех</a><a href="#katana">Катана</a><a href="#eras">Эпохи</a>
+        <a href="#code">Кодекс</a><a href="#armor">Доспех</a><a href="#katana">Катана</a><a href="#eras">Хроника</a>
       </nav>
-      <a class="btn btn--light" href="#top" data-magnetic><span>Наверх</span><i>↑</i></a>
     </div>
     <p class="footer__small">3D-модель, иллюстрации и код — ручная работа · <a href="PLAN.md">План проекта</a> · <a href="../">← Студия</a></p>
   </footer>

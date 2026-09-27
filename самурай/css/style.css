@@ -28,6 +28,10 @@
   --f-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --pad: clamp(20px, 6vw, 96px);
+  /* небо: main.js плавно меняет эти цвета вместе с часом дня */
+  --sky-top: #e3dde3;
+  --sky-bot: #f3d9c3;
+  --night: 0;
   --ease: cubic-bezier(.22, 1, .36, 1);
   color-scheme: light;
 }
@@ -40,7 +44,7 @@ html.lenis, html.lenis body { height: auto; }
 
 body {
   margin: 0;
-  background: var(--washi);
+  background: var(--sky-bot);
   color: var(--sumi);
   font: 400 16px/1.6 var(--f-body);
   -webkit-font-smoothing: antialiased;
@@ -57,15 +61,38 @@ em { font-style: italic; }
 :focus-visible { outline: 2px solid var(--shu); outline-offset: 4px; }
 
 /* ---------- слои ---------- */
+/* небо за всей страницей: светлые разделы прозрачные и показывают его */
+.sky {
+  position: fixed; inset: 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, var(--sky-top), var(--sky-bot));
+  pointer-events: none;
+}
+.sky__stars {
+  position: absolute; inset: 0;
+  opacity: var(--night);
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 27% 62%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 41% 33%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 58% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 66% 48%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 79% 26%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 88% 71%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 7% 84%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 51% 88%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 94% 6%, #fff 50%, transparent 51%);
+  background-size: 420px 420px;
+  animation: twinkle 5s ease-in-out infinite alternate;
+}
+@keyframes twinkle { to { filter: brightness(.55); } }
 .backdrop {
   position: absolute; inset: 0 0 auto 0;
   height: 100svh;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  background:
-    radial-gradient(120% 80% at 50% 0%, rgba(255, 252, 245, .7), transparent 60%),
-    var(--washi);
+  background: radial-gradient(120% 80% at 50% 0%, rgba(255, 252, 245, .45), transparent 60%);
 }
 .backdrop__kanji {
   position: absolute; left: -4vw; top: 50%;
@@ -77,6 +104,7 @@ em { font-style: italic; }
   position: absolute; left: 0; right: 0; bottom: 0;
   width: 100%; height: 34vh;
   opacity: .75;
+  mix-blend-mode: multiply;
 }
 
 .scene {
@@ -398,7 +426,7 @@ main, .footer { position: relative; z-index: 2; }
 }
 @keyframes pulse { 50% { box-shadow: 0 0 0 10px rgba(199, 58, 43, 0); } }
 .hero__title {
-  font: 500 clamp(3.6rem, 8.6vw, 9.4rem)/.88 var(--f-display);
+  font: 500 clamp(3.4rem, 7.2vw, 8rem)/.9 var(--f-display);
   letter-spacing: -.02em;
   margin-bottom: 30px;
 }
@@ -413,7 +441,7 @@ main, .footer { position: relative; z-index: 2; }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; }
 
 .hero__vertical {
-  position: absolute; right: var(--pad); top: 50%;
+  position: absolute; right: calc(var(--pad) + 44px); top: 50%;
   translate: 0 -50%;
   display: flex; gap: 18px; align-items: flex-start;
   writing-mode: vertical-rl;
@@ -454,7 +482,7 @@ main, .footer { position: relative; z-index: 2; }
 .hero__fog {
   position: absolute; left: 0; right: 0; bottom: 0;
   height: 20vh;
-  background: linear-gradient(to bottom, rgba(239, 232, 220, 0), var(--washi) 80%);
+  background: linear-gradient(to bottom, transparent, var(--sky-bot) 85%);
   pointer-events: none;
 }
 
@@ -469,12 +497,6 @@ main, .footer { position: relative; z-index: 2; }
   gap: 40px;
   align-content: center;
 }
-.manifest__label {
-  display: flex; align-items: baseline; gap: 18px;
-  font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
-  color: var(--ink-45);
-}
-.num { font: 500 44px/1 var(--f-display); color: var(--shu); letter-spacing: 0; }
 .manifest__text {
   max-width: 14em;
   font: 400 clamp(1.9rem, 3.4vw, 3.5rem)/1.14 var(--f-display);
@@ -493,6 +515,125 @@ main, .footer { position: relative; z-index: 2; }
    ОБЩЕЕ: заголовки секций, тёмные секции
    ========================================================= */
 .section--dark { background: var(--sumi); color: var(--washi); }
+
+/* ---------- метка часа: знак зодиака, время, название ---------- */
+.hour {
+  display: inline-flex; align-items: center; gap: 14px;
+  margin-bottom: 22px;
+  font-size: 12px; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--ink-70);
+}
+.hour b {
+  display: grid; place-items: center;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--shu);
+  color: var(--washi);
+  font: 700 20px/1 var(--f-jp);
+  letter-spacing: 0;
+  box-shadow: 0 0 0 5px rgba(199, 58, 43, .14);
+}
+.hour em {
+  font: italic 400 22px/1 var(--f-display);
+  letter-spacing: 0; text-transform: none;
+  color: var(--shu);
+}
+.hour--light { color: var(--paper-70); }
+.hour--center { justify-content: center; }
+/* огромный иероглиф часа — водяной знак раздела */
+.hour-mark {
+  position: absolute; left: -2vw; bottom: 4vh;
+  z-index: -1;   /* под текстом, но над фоном раздела (раздел изолирован) */
+  font: 800 min(52vh, 40vw)/1 var(--f-jp);
+  color: rgba(18, 16, 17, .045);
+  pointer-events: none;
+  user-select: none;
+}
+.hour-mark--right { left: auto; right: -2vw; }
+.section--dark .hour-mark { color: rgba(239, 232, 220, .035); }
+.manifest, .code, .armor__pin, .katana__pin, .eras { isolation: isolate; }
+
+/* ---------- солнечные часы ---------- */
+.dial {
+  position: fixed; right: 22px; top: 50%;
+  translate: 0 -50%;
+  z-index: 55;
+  display: grid; grid-template-columns: auto auto; gap: 0 12px;
+  align-items: stretch;
+  color: var(--sumi);
+  transition: color .5s, opacity .6s;
+}
+.dial.is-dark { color: var(--washi); }
+.dial__rail {
+  position: relative;
+  width: 1px;
+  margin: 12px 0;
+  background: color-mix(in srgb, currentColor 25%, transparent);
+  grid-column: 2; grid-row: 1;
+}
+.dial__sun {
+  position: absolute; left: 50%; top: 0;
+  width: 11px; height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border-radius: 50%;
+  background: var(--shu);
+  box-shadow: 0 0 0 4px rgba(199, 58, 43, .2), 0 0 18px rgba(199, 58, 43, .7);
+}
+.dial__stops {
+  grid-column: 1; grid-row: 1;
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.dial__stops a {
+  position: relative;
+  display: flex; align-items: center; justify-content: flex-end;
+  height: 24px;
+  font-size: 11px; letter-spacing: .12em;
+}
+.dial__stops b {
+  font: 700 15px/1 var(--f-jp);
+  opacity: .4;
+  transition: opacity .3s, color .3s, scale .4s var(--ease);
+}
+.dial__stops span {
+  position: absolute; right: calc(100% + 10px);
+  opacity: 0; translate: 8px 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity .3s, translate .4s var(--ease);
+}
+.dial__stops a:hover span, .dial__stops a:focus-visible span { opacity: .8; translate: 0 0; }
+.dial__stops a.is-active b { opacity: 1; color: var(--shu); scale: 1.3; }
+.dial__time {
+  grid-column: 1 / -1;
+  margin-top: 14px;
+  text-align: right;
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+}
+.dial__time b {
+  display: block;
+  font: 500 26px/1 var(--f-display);
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+.dial__time span { opacity: .6; }
+
+/* ---------- хроника: закат ---------- */
+.era__time {
+  margin-bottom: 6px;
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-70);
+}
+.era__time b { font: 600 15px/1 var(--f-body); color: var(--shu); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.timeline__sun {
+  position: absolute; left: 50%; top: 0;
+  width: 26px; height: 26px;
+  margin: -13px 0 0 -13px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #f6d08a, #e0913f 60%, #c9652e);
+  box-shadow: 0 0 30px 8px rgba(224, 145, 63, .45);
+  z-index: 1;
+}
 .section-head { max-width: 60rem; margin-bottom: clamp(48px, 8vh, 90px); }
 .section-head__num {
   font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
@@ -509,6 +650,7 @@ main, .footer { position: relative; z-index: 2; }
    3. КОДЕКС
    ========================================================= */
 .code {
+  position: relative;
   padding: 20vh var(--pad) 16vh;
   background:
     radial-gradient(60% 50% at 85% 0%, rgba(199, 58, 43, .16), transparent 70%),
@@ -765,6 +907,7 @@ main, .footer { position: relative; z-index: 2; }
    ========================================================= */
 .quote {
   position: relative;
+  background: transparent;
   min-height: 110svh;
   padding: 20vh var(--pad);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -813,7 +956,29 @@ main, .footer { position: relative; z-index: 2; }
 /* =========================================================
    ПОДВАЛ
    ========================================================= */
-.footer { padding: 10vh var(--pad) 40px; overflow: hidden; }
+.footer { position: relative; background: transparent; padding: 22vh var(--pad) 40px; overflow: hidden; }
+.footer__moon {
+  position: absolute; right: 14vw; top: 12vh;
+  width: min(16vw, 150px); aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 38%, #fbf6ea, #e8e0cc 60%, #cfc6b0);
+  box-shadow: 0 0 80px 16px rgba(240, 232, 210, .18);
+}
+.legend {
+  position: relative;
+  max-width: 44rem;
+  margin: 0 auto 10vh;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 26px;
+}
+.legend .hour { margin-bottom: 0; }
+.legend__title {
+  font: 500 clamp(2.4rem, 5.6vw, 5.4rem)/1 var(--f-display);
+  letter-spacing: -.015em;
+  text-wrap: balance;
+}
+.legend__title em { color: var(--shu-2); }
+.legend__text { max-width: 34rem; color: var(--paper-70); }
 .footer__big {
   font: 800 min(44vw, 520px)/.9 var(--f-jp);
   color: transparent;
@@ -851,6 +1016,27 @@ main, .footer { position: relative; z-index: 2; }
    АДАПТИВ
    ========================================================= */
 @media (max-width: 960px) {
+  /* на телефоне часы — компактная плашка внизу */
+  .dial {
+    top: auto; bottom: 14px; right: auto; left: 14px;
+    translate: none;
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px 8px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--sky-bot) 70%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+  }
+  .dial.is-dark { background: rgba(18, 16, 17, .6); }
+  .dial__rail, .dial__stops li:not(:has(.is-active)) { display: none; }
+  .dial__stops span { display: none; }
+  .dial__stops a { height: auto; }
+  .dial__stops a.is-active b { scale: 1; }
+  .dial__time { margin: 0; text-align: left; display: flex; align-items: baseline; gap: 8px; }
+  .dial__time b { display: inline; font-size: 18px; }
+  .hero__vertical { right: var(--pad); }
+  .hour-mark { font-size: 50vw; }
+  .footer__moon { right: 8vw; top: 6vh; }
   .nav__links {
     position: fixed; inset: 0;
     flex-direction: column; justify-content: center; align-items: center;

@@ -31,10 +31,12 @@ setTimeout(() => { loadProgress = 1; }, 7000);    // не держим всту�
 let state = 'hero';
 let armorStep = 'kabuto';
 const LAYOUT = {
-  hero:     () => (isMobile() ? { shiftX: 0, shiftY: 0.2, sun: 1, petals: 1, visible: 1, track: 1 }
-                              : { shiftX: 0.02, shiftY: 0, sun: 1, petals: 1, visible: 1, track: 1 }),
-  manifest: () => (isMobile() ? { shiftX: 0, shiftY: 0.2, sun: 0, petals: 0, visible: 0, track: 0.5 }
-                              : { shiftX: 0.33, shiftY: 0, sun: 0, petals: 0.6, visible: 1, track: 0.6 }),
+  // 06:00 — солнце только встало, низкое и оранжевое
+  hero:     () => (isMobile() ? { shiftX: 0, shiftY: 0.2, sun: 1, petals: 1, visible: 1, track: 1, sunY: 1.45, warm: 1 }
+                              : { shiftX: 0.02, shiftY: 0, sun: 1, petals: 1, visible: 1, track: 1, sunY: 1.6, warm: 1 }),
+  // 08:00 — солнце выше и краснее, самурай уходит вправо
+  manifest: () => (isMobile() ? { shiftX: 0, shiftY: 0.2, sun: 0, petals: 0, visible: 0, track: 0.5, sunY: 2.4, warm: 0.2 }
+                              : { shiftX: 0.33, shiftY: 0, sun: 0.85, petals: 0.6, visible: 1, track: 0.6, sunY: 2.5, warm: 0.2 }),
   armor:    () => (isMobile() ? { shiftX: 0, shiftY: -0.2, sun: 0, petals: 0, visible: 1, track: 0.3 }
                               : { shiftX: 0.23, shiftY: 0, sun: 0, petals: 0, visible: 1, track: 0.35 }),
   hidden:   () => ({ sun: 0, petals: 0, visible: 0 })
@@ -74,6 +76,7 @@ function init() {
   initSlash();
   initReveals();
   initVirtues();
+  initDay();
 }
 
 /* =========================================================
@@ -262,7 +265,11 @@ function initNav(lenis) {
   // цвет меню над тёмными секциями
   const dark = $$('.section--dark').map((sec) => ScrollTrigger.create({
     trigger: sec, start: 'top 40px', end: 'bottom 40px',
-    onToggle: () => nav.classList.toggle('is-dark', dark.some((t) => t.isActive))
+    onToggle: () => {
+      const on = dark.some((t) => t.isActive);
+      nav.classList.toggle('is-dark', on);
+      $('#dial').classList.toggle('is-dark', on);
+    }
   }));
   // прячем меню при прокрутке вниз
   ScrollTrigger.create({
@@ -353,7 +360,11 @@ function initScenes() {
   gsap.to('.hero__text', { y: -120, autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: '#top', start: '20% top', end: '80% top', scrub: true } });
   gsap.to('.hero__vertical', { y: -200, ease: 'none', scrollTrigger: { trigger: '#top', start: 'top top', end: 'bottom top', scrub: true } });
   gsap.fromTo('.manifest__enso', { rotate: -40 }, { rotate: 40, ease: 'none', scrollTrigger: { trigger: '#manifest', start: 'top bottom', end: 'bottom top', scrub: true } });
-  gsap.fromTo('.quote__sun', { scale: 0.55, yPercent: 25 }, { scale: 1, yPercent: 0, ease: 'none', scrollTrigger: { trigger: '#quote', start: 'top bottom', end: 'center center', scrub: true } });
+  // 20:00 — солнце садится за тории
+  gsap.fromTo('.quote__sun', { yPercent: -25 }, { yPercent: 38, scale: 1.08, ease: 'none', scrollTrigger: { trigger: '#quote', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.fromTo('.footer__moon', { yPercent: 60 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'center center', scrub: true } });
+  // огромные иероглифы часов плывут медленнее текста
+  $$('.hour-mark').forEach((m) => gsap.fromTo(m, { yPercent: 18 }, { yPercent: -18, ease: 'none', scrollTrigger: { trigger: m.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
   gsap.fromTo('.quote__torii', { yPercent: 40 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '#quote', start: 'top bottom', end: 'bottom bottom', scrub: true } });
   gsap.fromTo('.footer__big', { yPercent: 30 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
 }
@@ -379,10 +390,11 @@ function initReveals() {
   });
 
   // эпохи: линия заполняется, карточки выплывают по сторонам
-  gsap.to('#timelineFill', {
-    scaleY: 1, ease: 'none',
-    scrollTrigger: { trigger: '.timeline', start: 'top 60%', end: 'bottom 60%', scrub: true }
-  });
+  // солнце катится по линии от рассвета 794 года к закату 1877-го
+  const tlScroll = { trigger: '.timeline', start: 'top 60%', end: 'bottom 60%', scrub: true };
+  gsap.to('#timelineFill', { scaleY: 1, ease: 'none', scrollTrigger: tlScroll });
+  gsap.fromTo('#timelineSun', { top: '0%', filter: 'hue-rotate(0deg) saturate(1)' },
+    { top: '100%', filter: 'hue-rotate(-28deg) saturate(1.5)', ease: 'none', scrollTrigger: { ...tlScroll } });
   $$('.era').forEach((era, i) => {
     const side = isMobile() ? 0 : (i % 2 ? 1 : -1);
     gsap.from(era.children, {
@@ -430,4 +442,71 @@ function initVirtues() {
     });
     card.addEventListener('pointerleave', () => tilt(card, 0, 0));
   });
+}
+
+/* =========================================================
+   ДЕНЬ: солнечные часы и цвет неба
+   Каждый раздел — час дня. Позиция прокрутки переводится во время,
+   время — в цвет неба, звёзды и положение солнца на шкале.
+   ========================================================= */
+const SKY = [            // час, верх неба, низ неба
+  [6, '#e3dde3', '#f3d9c3'],   // рассвет: сиреневый верх, персиковый горизонт
+  [8, '#ece8e2', '#f1e6d6'],
+  [12, '#f3f0ea', '#efe8dc'],  // полдень: белая бумага
+  [16, '#efe1cc', '#ecd6b8'],
+  [18, '#e2a47e', '#cf6a4a'],  // закат
+  [19, '#b86a55', '#b2503a'],
+  [20, '#1a1320', '#4a1f1d'],  // сумерки
+  [24, '#0b0b12', '#141018']   // полночь
+];
+const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const SKY_RGB = SKY.map(([h, a, b]) => [h, rgb(a), rgb(b)]);
+const clamp01 = (v) => Math.max(0, Math.min(1, v));
+function skyAt(h) {
+  let k = 0;
+  while (k < SKY_RGB.length - 2 && h > SKY_RGB[k + 1][0]) k++;
+  const [h0, t0, b0] = SKY_RGB[k], [h1, t1, b1] = SKY_RGB[k + 1];
+  const f = clamp01((h - h0) / (h1 - h0));
+  const mix = (a, b) => `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * f)).join(',')})`;
+  return [mix(t0, t1), mix(b0, b1)];
+}
+
+function initDay() {
+  const links = $$('.dial__stops a');
+  const targets = links.map((a) => $(a.getAttribute('href')));
+  const hours = links.map((a) => +a.dataset.h);
+  const names = links.map((a) => a.dataset.name);
+  const sun = $('#dialSun'), clock = $('#dialClock'), name = $('#dialName');
+  const root = document.documentElement.style;
+  const pad = (n) => String(n).padStart(2, '0');
+  let tops = [], last = -1;
+
+  const measure = () => {
+    tops = targets.map((t) => t.getBoundingClientRect().top + scrollY);
+    tops[0] = innerHeight * 0.3;   // первые 30% экрана — ещё ровно 06:00
+  };
+  const update = () => {
+    const y = scrollY + innerHeight * 0.3;
+    let i = 0;
+    while (i < tops.length - 1 && y >= tops[i + 1]) i++;
+    const f = i < tops.length - 1 ? clamp01((y - tops[i]) / (tops[i + 1] - tops[i])) : 0;
+    const h = hours[i] + (i < hours.length - 1 ? (hours[i + 1] - hours[i]) * f : 0);
+
+    sun.style.top = ((i + f) / (links.length - 1)) * 100 + '%';
+    clock.textContent = `${pad(Math.floor(h) % 24)}:${pad(Math.floor((h % 1) * 60))}`;
+    if (i !== last) {
+      links.forEach((a, k) => a.classList.toggle('is-active', k === i));
+      name.textContent = 'Час ' + names[i];
+      last = i;
+    }
+    const [top, bot] = skyAt(h);
+    root.setProperty('--sky-top', top);
+    root.setProperty('--sky-bot', bot);
+    root.setProperty('--night', clamp01((h - 19) / 4).toFixed(3));
+  };
+
+  ScrollTrigger.addEventListener('refresh', () => { measure(); update(); });
+  measure();
+  update();
+  ScrollTrigger.create({ start: 0, end: 'max', onUpdate: update });
 }

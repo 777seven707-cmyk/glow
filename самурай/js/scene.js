@@ -59,6 +59,7 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
   /* ---------- красное солнце за спиной ---------- */
   const sunGroup = new THREE.Group();
   sunGroup.position.set(0, 1.6, -2.6);
+  const SUN_NOON = new THREE.Color(0xc73a2b), SUN_DAWN = new THREE.Color(0xe0612f);
   const sunMat = new THREE.MeshBasicMaterial({ color: 0xc73a2b, transparent: true, toneMapped: false, depthWrite: false });
   const sun = new THREE.Mesh(new THREE.CircleGeometry(1.25, 96), sunMat);
   const haloMat = new THREE.MeshBasicMaterial({ color: 0xc73a2b, transparent: true, opacity: 0.35, toneMapped: false, depthWrite: false });
@@ -233,11 +234,12 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     shiftX: 0, shiftY: 0,      // сдвиг картинки в долях экрана (для композиции)
     rot: 0,                    // поворот модели
     sun: 1, petals: 1, visible: 1,
+    sunY: 1.6, warm: 1,        // высота солнца и насколько оно рассветно-оранжевое
     track: 1                   // насколько сильно фигура следит за курсором
   };
   const cur = {
     cam: rig.cam.clone(), look: rig.look.clone(),
-    shiftX: 0, shiftY: 0, rot: 0, sun: 1, petals: 1, visible: 1, track: 1
+    shiftX: 0, shiftY: 0, rot: 0, sun: 1, petals: 1, visible: 1, track: 1, sunY: 1.6, warm: 1
   };
 
   // кадры для раздела «Доспех» — считаются по реальному положению деталей
@@ -346,6 +348,8 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     cur.cam.lerp(rig.cam, 1 - Math.exp(-2.6 * dt));
     cur.look.lerp(rig.look, 1 - Math.exp(-2.6 * dt));
     ['shiftX', 'shiftY', 'rot', 'sun', 'petals', 'track'].forEach((k) => { cur[k] = damp(cur[k], rig[k], 3, dt); });
+    cur.sunY = damp(cur.sunY, rig.sunY, 0.9, dt);   // солнце поднимается медленно
+    cur.warm = damp(cur.warm, rig.warm, 0.9, dt);
     cur.visible = damp(cur.visible, rig.visible, 5, dt);
     canvas.style.opacity = cur.visible.toFixed(3);
     if (cur.visible < 0.01 && rig.visible === 0) return;   // сцена скрыта — не рисуем
@@ -399,6 +403,9 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     sunMat.opacity = cur.sun;
     haloMat.opacity = cur.sun * 0.35;
     sunGroup.scale.setScalar(0.6 + cur.sun * 0.4);
+    sunGroup.position.y = cur.sunY;
+    sunMat.color.copy(SUN_NOON).lerp(SUN_DAWN, cur.warm);
+    haloMat.color.copy(sunMat.color);
     sunGroup.rotation.z = t * 0.02;
     sunGroup.visible = cur.sun > 0.01;
 
@@ -457,6 +464,8 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
       cur.look.set(0, 1.4, 0);
       cur.sun = 0;
       rig.sun = 1;
+      cur.sunY = 0.1;       // восход: солнце поднимается из-за гор
+      cur.warm = 1;
       if (gsap) gsap.fromTo(model.position, { y: -0.25 }, { y: 0, duration: 2.2, ease: 'expo.out' });
     }
   };
