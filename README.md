@@ -45,7 +45,8 @@ components/ui/             React-компоненты для shadcn (сайто�
 самурай/js/main.js              вступление, курсор, скролл-сцены (GSAP, Lenis)
 самурай/js/scene.js             3D-сцена на Three.js: свет, солнце, сакура, взгляд за курсором
 самурай/js/samurai-model.js     процедурная 3D-модель самурая
-самурай/tools/build-model.mjs   экспорт модели в GLB
+самурай/tools/meshy/            импорт модели самурая из 3MF (MakerLab) в GLB
+самурай/tools/build-model.mjs   экспорт запасной фигуры из примитивов в GLB
 самурай/tools/blender/          черновик сборки модели в Blender (на сайте не используется)
 самурай/assets/models/samurai.glb
 самурай/assets/img/             камон, энсо, катана, тории, горы, сэйгайха, постер, обложка

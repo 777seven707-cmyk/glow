@@ -126,7 +126,9 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     banner: find(model, 'banner'),
     kamon: find(model, 'kamon')
   };
-  parts.foreR = find(parts.armR, 'forearm');
+  parts.foreR = parts.armR ? find(parts.armR, 'forearm') : null;
+  // модель без суставов (например, из Meshy): голова — отдельный узел, остальное цельное
+  const rigged = Boolean(parts.torso && parts.armR);
 
   let eyesMat = null, steelMat = null;
   model.traverse((o) => {
@@ -184,12 +186,11 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     if (eyes) {
       eyes.geometry.computeBoundingBox();
       box.copy(eyes.geometry.boundingBox).applyMatrix4(eyes.matrix);
-    } else {
-      box.set(new THREE.Vector3(-0.05, 0.12, 0.08), new THREE.Vector3(0.05, 0.14, 0.1));
     }
     const c = box.getCenter(new THREE.Vector3());
     const half = (box.max.x - box.min.x) / 2;
-    [-1, 1].forEach((s) => {
+    // у модели без светящихся глаз ореол не рисуем
+    if (eyes) [-1, 1].forEach((s) => {
       const sp = new THREE.Sprite(glowMat);
       sp.scale.setScalar(0.05);
       sp.position.set(c.x + s * half * 0.7, c.y, box.max.z + 0.01);
@@ -251,11 +252,16 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
   model.updateMatrixWorld(true);
   const shots = {};
   const makeShots = () => {
-    const kab = focus(parts.kabuto, new THREE.Vector3(0, 1.95, 0));
-    const face = parts.head ? parts.head.localToWorld(new THREE.Vector3(0, 0.1, 0.08)) : new THREE.Vector3(0, 1.75, 0.1);
+    // у цельной модели точки считаем от узла головы (он стоит на шее)
+    const kab = parts.kabuto ? focus(parts.kabuto, null)
+      : parts.head ? parts.head.localToWorld(new THREE.Vector3(0, 0.15, 0)) : new THREE.Vector3(0, 1.95, 0);
+    const face = parts.head
+      ? parts.head.localToWorld(rigged ? new THREE.Vector3(0, 0.1, 0.08) : new THREE.Vector3(0, 0.06, 0.1))
+      : new THREE.Vector3(0, 1.75, 0.1);
     const chest = focus(parts.kamon, new THREE.Vector3(0, 1.3, 0.2));
     const sode = focus(parts.sodeL, new THREE.Vector3(0.45, 1.3, 0));
-    const blade = focus(parts.katana, new THREE.Vector3(-0.4, 0.8, 0.3));
+    // катана в руке у своей модели или в ножнах на левом бедре у модели из Meshy
+    const blade = focus(parts.katana, new THREE.Vector3(0.36, 0.86, 0.18));
     Object.assign(shots, {
       hero:     { cam: [0, 1.2, 6.4], look: [0, 1.12, 0], rot: 0 },
       manifest: { cam: [0.3, 1.45, 5.6], look: [0, 1.3, 0], rot: -0.55 },
@@ -263,7 +269,9 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
       menpo:    { cam: [face.x + 0.22, face.y - 0.04, face.z + 1.45], look: face.toArray(), rot: 0 },
       do:       { cam: [chest.x - 0.95, chest.y + 0.2, chest.z + 2.5], look: [chest.x, chest.y - 0.05, chest.z - 0.2], rot: 0 },
       sode:     { cam: [sode.x + 1.9, sode.y + 0.25, sode.z + 1.8], look: [sode.x, sode.y - 0.08, sode.z], rot: 0 },
-      katana:   { cam: [blade.x - 1.5, blade.y + 0.45, blade.z + 2.3], look: blade.toArray(), rot: 0 }
+      katana:   rigged
+        ? { cam: [blade.x - 1.5, blade.y + 0.45, blade.z + 2.3], look: blade.toArray(), rot: 0 }
+        : { cam: [blade.x + 1.1, blade.y + 0.4, blade.z + 2.4], look: [blade.x - 0.1, blade.y, blade.z], rot: 0 }
     });
   };
   makeShots();
@@ -293,8 +301,18 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
   /* ---------- удар мечом ---------- */
   let slashing = false;
   const slash = (gsap) => {
-    if (slashing || !parts.armR || !gsap) return;
+    if (slashing || !gsap) return;
     slashing = true;
+    if (!parts.armR) {
+      // нет отдельной руки — резкий разворот корпуса, как в начале удара
+      const r = model.rotation, p = model.position;
+      return gsap.timeline({ onComplete: () => { slashing = false; } })
+        .to(r, { z: 0.06, duration: 0.2, ease: 'power2.out' }, 0)
+        .to(p, { z: 0.12, duration: 0.2, ease: 'power2.out' }, 0)
+        .add(() => { wind += 9; shake = 0.06; }, 0.18)
+        .to(r, { z: 0, duration: 0.9, ease: 'elastic.out(1, 0.5)' }, 0.25)
+        .to(p, { z: 0, duration: 0.9, ease: 'elastic.out(1, 0.5)' }, 0.25);
+    }
     const a = parts.armR.rotation, f = parts.foreR ? parts.foreR.rotation : new THREE.Euler();
     const a0 = { x: a.x, y: a.y, z: a.z }, f0 = { x: f.x, y: f.y, z: f.z };
     const glint = { v: 0 };
@@ -377,6 +395,8 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     if (parts.torso) {
       parts.torso.scale.y = 1 + Math.sin(t * 1.6) * 0.006;
       parts.torso.position.y = Math.sin(t * 1.6) * 0.004;
+    } else {
+      model.scale.y = 1 + Math.sin(t * 1.6) * 0.004;
     }
 
     // голова и торс смотрят на курсор (считаем от экранного положения головы)
@@ -385,8 +405,10 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
       headNDC.copy(headWorld).project(camera);
       const dx = (pointerSmooth.x - headNDC.x) * camera.aspect;
       const dy = pointerSmooth.y - headNDC.y;
-      const yaw = THREE.MathUtils.clamp(Math.atan(dx * 0.9), -0.75, 0.75) * cur.track;
-      const pitch = THREE.MathUtils.clamp(-Math.atan(dy * 0.8), -0.35, 0.45) * cur.track;
+      // у цельной модели шея — просто разрез сетки, поэтому поворот скромнее
+      const yl = rigged ? 0.75 : 0.42, pl = rigged ? 0.45 : 0.22;
+      const yaw = THREE.MathUtils.clamp(Math.atan(dx * 0.9), -yl, yl) * cur.track;
+      const pitch = THREE.MathUtils.clamp(-Math.atan(dy * 0.8), -pl * 0.8, pl) * cur.track;
       parts.head.rotation.y = damp(parts.head.rotation.y, yaw - cur.rot * 0.3, 7, dt);
       parts.head.rotation.x = damp(parts.head.rotation.x, pitch, 7, dt);
       if (parts.torso) parts.torso.rotation.y = damp(parts.torso.rotation.y, yaw * 0.28, 3, dt);
