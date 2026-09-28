@@ -816,6 +816,8 @@ main, .footer { position: relative; z-index: 2; }
           mask: url(../assets/img/katana.svg) 0 0 / 100% 100% no-repeat;
   pointer-events: none;
 }
+/* с диска браузер не даёт SVG-маску — без неё блик лёг бы прямоугольником */
+.is-file .katana__blade::after { display: none; }
 .katana__track {
   display: flex; gap: 20px;
   padding: 0 var(--pad);

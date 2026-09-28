@@ -9,17 +9,32 @@
    - по клику — удар мечом.
    Камерой управляет main.js через объект rig: он задаёт цель,
    сцена плавно догоняет её каждый кадр.
+
+   Это обычный скрипт, а не ES-модуль: так сайт работает и при
+   открытии index.html с диска. Three.js подгружается через
+   import() по карте импортов из index.html.
    ========================================================= */
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+(function () {
+'use strict';
 
-// GLB — основной файл; .gltf.json — та же модель текстом для хостингов,
-// которые не отдают .glb (например, артефакты claude.ai)
-const MODEL_URLS = ['../assets/models/samurai.glb', '../assets/models/samurai.gltf.json']
-  .map((p) => new URL(p, import.meta.url).href);
+const SCRIPT_URL = document.currentScript ? document.currentScript.src : location.href;
+const url = (p) => new URL(p, SCRIPT_URL).href;
 
-export async function createScene(canvas, { onProgress = () => {} } = {}) {
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = () => reject(new Error('Не загрузился ' + src));
+    document.head.appendChild(s);
+  });
+}
+
+async function createScene(canvas, { onProgress = () => {} } = {}) {
+  const THREE = await import('three');
+  const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+  const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
+
   /* ---------- рендерер ---------- */
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setClearColor(0x000000, 0);
@@ -90,20 +105,31 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
 
   /* ---------- модель ---------- */
   let model;
-  for (const url of MODEL_URLS) {
+  const loader = new GLTFLoader();
+  const pick = (gltf) => gltf.scene.getObjectByName('Samurai') || gltf.scene;
+  // 1) обычный GLB — быстрее всего, но не с диска и не там, где .glb не отдают
+  if (location.protocol !== 'file:') {
     try {
-      const gltf = await new GLTFLoader().loadAsync(url, (e) => {
-        if (e.total) onProgress(e.loaded / e.total);
-      });
-      model = gltf.scene.getObjectByName('Samurai') || gltf.scene;
-      break;
+      model = pick(await loader.loadAsync(url('../assets/models/samurai.glb'), (e) => {
+        if (e.total) onProgress(e.loaded / e.total * 0.95);
+      }));
     } catch (err) {
-      console.warn('Модель не загрузилась:', url, err);
+      console.info('samurai.glb недоступен, беру копию в samurai.glb.js');
     }
   }
+  // 2) та же модель в base64 внутри обычного скрипта — грузится откуда угодно
   if (!model) {
-    // последний запасной вариант — упрощённая фигура из примитивов
-    const { buildSamurai } = await import('./samurai-model.js');
+    try {
+      if (!window.SAMURAI_GLB) await loadScript(url('../assets/models/samurai.glb.js'));
+      const bytes = Uint8Array.from(atob(window.SAMURAI_GLB), (c) => c.charCodeAt(0));
+      model = pick(await loader.parseAsync(bytes.buffer, ''));
+    } catch (err) {
+      console.warn('Копия модели не загрузилась', err);
+    }
+  }
+  // 3) последний вариант — упрощённая фигура из примитивов
+  if (!model) {
+    const { buildSamurai } = await import(url('samurai-model.js'));
     model = buildSamurai(THREE);
   }
   onProgress(1);
@@ -130,11 +156,71 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
   // модель без суставов (например, из Meshy): голова — отдельный узел, остальное цельное
   const rigged = Boolean(parts.torso && parts.armR);
 
+  /* ---------- фактура доспеха для модели из MakerLab ----------
+     В сетке нет текстур, поэтому ряды пластин, стыки, красную
+     шнуровку, зерно лака и разную шероховатость рисуем в шейдере
+     по координатам модели. Для головы — свои копии материалов
+     со сдвигом (узел головы стоит на шее). */
+  const ENHANCE_COMMON = `
+varying vec3 vObj;
+float eh3(vec3 p){ p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+float evn(vec3 x){ vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(mix(eh3(i), eh3(i + vec3(1,0,0)), f.x), mix(eh3(i + vec3(0,1,0)), eh3(i + vec3(1,1,0)), f.x), f.y),
+             mix(mix(eh3(i + vec3(0,0,1)), eh3(i + vec3(1,0,1)), f.x), mix(eh3(i + vec3(0,1,1)), eh3(i + vec3(1,1,1)), f.x), f.y), f.z); }
+float efbm(vec3 p){ return 0.5 * evn(p) + 0.25 * evn(p * 2.03) + 0.125 * evn(p * 4.01); }
+`;
+  const enhance = (mat, lamellar, offset) => {
+    mat.onBeforeCompile = (sh) => {
+      sh.uniforms.uOffset = { value: offset };
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vObj;\nuniform vec3 uOffset;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvObj = position + uOffset;');
+      sh.fragmentShader = sh.fragmentShader
+        .replace('#include <common>', '#include <common>\n' + ENHANCE_COMMON)
+        .replace('#include <color_fragment>', `#include <color_fragment>
+  // размер пикселя на поверхности: издалека детали плавно гаснут, чтобы не рябили
+  float ePx = length(fwidth(vObj));
+  float eNear = 1.0 - smoothstep(0.0025, 0.009, ePx);
+  float eGrain = efbm(vObj * 18.0);
+  float eBand = fract(vObj.y / 0.072);
+  float eBw = max(fwidth(vObj.y / 0.072), 1e-4);
+  float eLam = 0.0, eGroove = 0.0, eLace = 0.0;
+  ${lamellar ? `
+  // ряды пластин: кираса и юбка кусадзури, назатыльник шлема (без лица)
+  float eIn = step(0.62, vObj.y) * step(vObj.y, 1.47)
+            + step(1.64, vObj.y) * step(vObj.y, 1.86) * (1.0 - step(abs(vObj.x), 0.12) * step(0.0, vObj.z));
+  eLam = clamp(eIn, 0.0, 1.0) * (1.0 - smoothstep(0.06, 0.1, dot(diffuseColor.rgb, vec3(0.333)))) * eNear;
+  // стык пластин — тёмный желобок, под ним тонкая красная шнуровка
+  eGroove = eLam * (1.0 - smoothstep(0.0, 0.05 + eBw, eBand));
+  eLace = eLam * smoothstep(0.06 - eBw, 0.06 + eBw, eBand) * (1.0 - smoothstep(0.12 - eBw, 0.12 + eBw, eBand));
+  diffuseColor.rgb *= 1.0 - eGroove * 0.55;
+  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.16, 0.012, 0.012), eLace * 0.75);` : ''}
+`)
+        .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+  roughnessFactor = clamp(roughnessFactor + (eGrain - 0.5) * 0.12 * eNear + eLace * 0.25, 0.08, 1.0);`);
+    };
+    mat.customProgramCacheKey = () => 'samurai-enh3-' + (lamellar ? 1 : 0) + offset.toArray().join(',');
+    mat.needsUpdate = true;
+  };
+  const headOffset = parts.head ? parts.head.position.clone() : new THREE.Vector3();
+  const enhanced = new Map();
+  model.traverse((o) => {
+    if (!o.isMesh || !/^meshy-/.test(o.material.name)) return;
+    const inHead = parts.head && o.parent === parts.head;
+    const key = o.material.name + (inHead ? ':head' : '');
+    if (!enhanced.has(key)) {
+      const m = inHead ? o.material.clone() : o.material;
+      enhance(m, o.material.name === 'meshy-armor', inHead ? headOffset : new THREE.Vector3());
+      enhanced.set(key, m);
+    }
+    o.material = enhanced.get(key);
+  });
+
   let eyesMat = null, steelMat = null;
   model.traverse((o) => {
     if (!o.isMesh) return;
     const m = o.material;
-    m.envMapIntensity = m.name === 'gold' || m.name === 'blade-steel' ? 1.0 : 0.6;
+    m.envMapIntensity = /gold|blade-steel/.test(m.name) ? 1.0 : 0.6;
     if (m.name === 'eyes') eyesMat = m;
     if (m.name === 'blade-steel') steelMat = m;
   });
@@ -493,3 +579,6 @@ export async function createScene(canvas, { onProgress = () => {} } = {}) {
     }
   };
 }
+
+window.SamuraiScene = { create: createScene };
+})();

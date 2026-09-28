@@ -3,7 +3,13 @@
    GSAP + ScrollTrigger + SplitText, плавный скролл Lenis.
    3D-сцена (scene.js) грузится динамически: если WebGL или
    CDN недоступны, сайт показывает постер и остаётся рабочим.
+   Обычный скрипт (не модуль), чтобы страница работала и при
+   открытии index.html двойным кликом.
    ========================================================= */
+(function () {
+'use strict';
+
+const JS_BASE = document.currentScript ? document.currentScript.src : location.href;
 const $ = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
 
@@ -17,8 +23,17 @@ const hasGsap = Boolean(gsap && ScrollTrigger && SplitText);
 /* ---------- 3D-сцена ---------- */
 let api = null;
 let loadProgress = 0;
-const scenePromise = import('./scene.js')
-  .then((m) => m.createScene($('#scene'), { onProgress: (p) => { loadProgress = Math.max(loadProgress, p); } }))
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = () => reject(new Error('Не загрузился ' + src));
+    document.head.appendChild(s);
+  });
+}
+const scenePromise = loadScript(new URL('scene.js', JS_BASE).href)
+  .then(() => window.SamuraiScene.create($('#scene'), { onProgress: (p) => { loadProgress = Math.max(loadProgress, p); } }))
   .then((a) => { api = a; applyState(); return a; })
   .catch((err) => {
     console.warn('3D-сцена недоступна, показываю постер', err);
@@ -27,6 +42,19 @@ const scenePromise = import('./scene.js')
     return null;
   });
 setTimeout(() => { loadProgress = 1; }, 7000);    // не держим вступление дольше 7 секунд: сцена проявится сама
+if (location.protocol === 'file:') document.documentElement.classList.add('is-file');
+
+// страховка: если вступление так и не начало закрываться (ошибка скрипта,
+// не загрузилась библиотека), через 20 секунд страница всё равно откроется
+let introClosing = false;
+setTimeout(() => {
+  const intro = document.getElementById('intro');
+  if (!intro || introClosing) return;
+  intro.remove();
+  document.body.classList.remove('is-locked');
+  document.documentElement.classList.remove('lenis-stopped');
+  if (window.__lenis) window.__lenis.start();
+}, 20000);
 
 /* ---------- состояния сцены по разделам ---------- */
 let state = 'hero';
@@ -90,6 +118,7 @@ function initLenis() {
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
   lenis.stop();
+  window.__lenis = lenis;
   return lenis;
 }
 
@@ -162,6 +191,7 @@ function initIntro(lenis, heroIn) {
   gsap.ticker.add(tick);
 
   const outro = () => {
+    introClosing = true;
     gsap.timeline({ onComplete: () => intro.remove() })
       .to('.intro__stage', { scale: 1.14, opacity: 0, filter: 'blur(10px)', duration: 0.7, ease: 'power2.in' })
       .to('.intro__meta', { opacity: 0, duration: 0.4 }, '<')
@@ -264,14 +294,15 @@ function initNav(lenis) {
   });
 
   // цвет меню над тёмными секциями
-  const dark = $$('.section--dark').map((sec) => ScrollTrigger.create({
-    trigger: sec, start: 'top 40px', end: 'bottom 40px',
-    onToggle: () => {
-      const on = dark.some((t) => t.isActive);
-      nav.classList.toggle('is-dark', on);
-      $('#dial').classList.toggle('is-dark', on);
-    }
-  }));
+  // меню темнеет по верхнему краю экрана, солнечные часы — по середине, где они стоят
+  const darkWatch = (el, start, end) => {
+    const list = $$('.section--dark').map((sec) => ScrollTrigger.create({
+      trigger: sec, start, end,
+      onToggle: () => el.classList.toggle('is-dark', list.some((t) => t.isActive))
+    }));
+  };
+  darkWatch(nav, 'top 40px', 'bottom 40px');
+  darkWatch($('#dial'), 'top center', 'bottom center');
   // прячем меню при прокрутке вниз
   ScrollTrigger.create({
     start: 0, end: 'max',
@@ -512,3 +543,4 @@ function initDay() {
   update();
   ScrollTrigger.create({ start: 0, end: 'max', onUpdate: update });
 }
+})();
