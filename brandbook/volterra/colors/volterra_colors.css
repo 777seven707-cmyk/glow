@@ -1,0 +1,14 @@
+:root {
+  /* VOLTERRA — основные цвета */
+  --volterra-yellow: #FFD600;  /* RGB 255,214,0 */
+  --volterra-black: #000000;  /* RGB 0,0,0 */
+  --volterra-blue: #007BFF;  /* RGB 0,123,255 */
+  --volterra-white: #FFFFFF;  /* RGB 255,255,255 */
+  /* вспомогательные */
+  --volterra-graphite: #111214;
+  --volterra-carbon: #1C1D20;
+  --volterra-steel: #2C2E33;
+  --volterra-silver: #8B8F97;
+  --volterra-mono-dark: #4D4D4D;
+  --volterra-mono-light: #BFBFBF;
+}

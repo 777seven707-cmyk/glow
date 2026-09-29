@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="logo/svg/volterra_mark_yellow.svg">
+<style>@font-face{font-family:"Montserrat";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/Montserrat-600.ttf) format("truetype")}@font-face{font-family:"Montserrat";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/Montserrat-700.ttf) format("truetype")}@font-face{font-family:"Montserrat";font-style:normal;font-weight:800;font-display:swap;src:url(fonts/Montserrat-800.ttf) format("truetype")}@font-face{font-family:"Montserrat";font-style:italic;font-weight:800;font-display:swap;src:url(fonts/Montserrat-800italic.ttf) format("truetype")}@font-face{font-family:"Oswald";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/Oswald-600.ttf) format("truetype")}@font-face{font-family:"Oswald";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/Oswald-700.ttf) format("truetype")}@font-face{font-family:"Noto Sans";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/NotoSans-400.ttf) format("truetype")}@font-face{font-family:"Noto Sans";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/NotoSans-600.ttf) format("truetype")}@font-face{font-family:"Noto Sans";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/NotoSans-700.ttf) format("truetype")}</style>
+<title>VOLTERRA Brand Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;0,700;0,800;1,800&family=Noto+Sans:wght@400;600;700&family=Oswald:wght@600;700&display=swap">
+<style>
+/* Layout: a stack of landscape "spreads" (297×210 ratio) like the printed book — black paper, yellow signal, blue glow on the lightning cut. */
+:root{
+  --black:#000000; --graphite:#111214; --carbon:#1C1D20; --steel:#2C2E33; --silver:#8B8F97;
+  --yellow:#FFD600; --blue:#007BFF; --white:#FFFFFF; --paper:#F2F2F0; --ink:#0A0A0A;
+  --f-display:"Montserrat","Arial Black",sans-serif;   /* covers & slogans: 800 italic caps */
+  --f-head:"Oswald","Arial Narrow",sans-serif;          /* spread titles: condensed caps */
+  --f-body:"Segoe UI","Noto Sans","Helvetica Neue",Arial,sans-serif;
+  --page-w:1200px; --pad:56px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--black)}
+body{margin:0;background:var(--black);color:var(--white);font:15px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;padding-inline:16px;padding-block:24px}
+a{color:var(--yellow)}
+img{max-width:100%;display:block}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+p{margin:0}
+.book{max-width:var(--page-w);margin:0 auto;display:grid;gap:28px}
+
+/* --- spread --- */
+.page{position:relative;background:var(--graphite);min-height:calc(var(--page-w) / 1.414);padding:34px var(--pad) 30px;display:flex;flex-direction:column;gap:26px;overflow:hidden;border:1px solid #1a1b1e}
+.page.light{background:var(--paper);color:var(--ink);border-color:#ddd}
+.page.black{background:var(--black)}
+.run{display:flex;justify-content:space-between;align-items:center;gap:16px;font:600 11px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--silver);border-bottom:1px solid var(--steel);padding-bottom:12px}
+.light .run{border-color:#d4d4d4;color:#777}
+.run .l{display:flex;align-items:center;gap:12px}
+.run .l img{height:16px;width:auto}
+.run .l span{border-left:1px solid var(--steel);padding-left:12px}
+.run b{color:var(--yellow);font-weight:700}
+.foot{margin-top:auto;display:flex;justify-content:space-between;gap:16px;font:600 10px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:var(--silver);padding-top:14px;border-top:1px solid var(--steel)}
+.light .foot{border-color:#d4d4d4;color:#888}
+.foot b{color:var(--yellow)}
+.title{font:700 44px/1 var(--f-head);text-transform:uppercase;letter-spacing:.005em}
+.title+.rule,.rule{width:44px;height:4px;background:var(--yellow);margin-top:14px}
+.lead{max-width:62ch;color:#C9CCD2;margin-top:12px}
+.light .lead{color:#444}
+.label{font:700 11px/1.2 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--yellow)}
+.light .label{color:#111}
+.muted{color:var(--silver)}
+.light .muted{color:#666}
+.note{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--steel);padding:12px 14px;font-size:13px;color:#C9CCD2;max-width:520px}
+.note i{flex:none;width:22px;height:22px;border:2px solid var(--yellow);border-radius:50%;display:grid;place-items:center;font:800 13px/1 var(--f-body);color:var(--yellow);font-style:normal}
+.light .note{border-color:#ccc;color:#333}
+.grid{display:grid;gap:22px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.fname{font:12px/1.3 ui-monospace,Consolas,monospace;color:var(--silver);display:flex;gap:8px;align-items:center;word-break:break-all}
+.fname::before{content:"";flex:none;width:14px;height:10px;border:1.5px solid currentColor;border-radius:2px}
+.light .fname{color:#666}
+
+/* --- lightning-cut covers --- */
+.cover{background:var(--black);padding:0;min-height:calc(var(--page-w) / 1.414)}
+.cover .bolt{position:absolute;inset:0;background:var(--yellow);clip-path:polygon(76% 0,100% 0,100% 100%,9% 100%,68% 50%,38% 50%);filter:drop-shadow(0 0 0 transparent)}
+.cover .glow{position:absolute;inset:0;background:#3D9BFF;clip-path:polygon(75.55% 0,76% 0,38% 50%,68% 50%,9% 100%,8.55% 100%,67.1% 50.55%,37.1% 50.55%);filter:drop-shadow(0 0 6px #007BFF)}
+.cover .glow2{position:absolute;inset:0;background:var(--blue);clip-path:polygon(73% 0,76% 0,38% 50%,68% 50%,9% 100%,6% 100%,65% 52.2%,34.6% 52.2%);filter:blur(18px);opacity:.5}
+.cover .sheen{position:absolute;inset:0;background:repeating-linear-gradient(125deg,transparent 0 120px,rgba(255,255,255,.025) 120px 122px),linear-gradient(125deg,#0b0c0e 0%,#000 45%,#08090b 100%)}
+.cover .in{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;min-height:inherit;padding:56px 64px}
+.cover .logo{width:300px}
+.cover h1{margin-top:auto;align-self:flex-end;text-align:right;color:var(--black);font:800 italic 40px/1.08 var(--f-display);text-transform:uppercase;letter-spacing:-.01em}
+.cover .meta{align-self:flex-end;text-align:right;color:#1a1a1a;font-size:13px;margin-top:18px;font-weight:600}
+.cover.section h1{font-size:46px}
+.cover .num{position:absolute;right:64px;top:56px;font:800 italic 120px/1 var(--f-display);color:rgba(255,214,0,.0);-webkit-text-stroke:1.5px rgba(0,0,0,.55);z-index:2}
+
+/* --- contents --- */
+.toc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 36px;counter-reset:t}
+.toc a{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--steel);color:var(--white);text-decoration:none;font:600 15px/1.3 var(--f-body)}
+.toc a span{font:700 20px/1 var(--f-head);color:var(--yellow)}
+.toc a small{display:block;color:var(--silver);font-weight:400;font-size:12.5px;margin-top:3px}
+.toc a:hover,.toc a:focus-visible{color:var(--yellow);outline:none}
+
+/* --- brand page --- */
+.values{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--steel);border:1px solid var(--steel)}
+.values div{background:var(--graphite);padding:20px 18px;display:grid;gap:8px;align-content:start}
+.values svg{width:30px;height:30px}
+.values h4{font:700 18px/1 var(--f-head);text-transform:uppercase;letter-spacing:.02em}
+.values p{font-size:13px;color:#C9CCD2}
+.slogans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.slogans div{background:var(--black);border-left:4px solid var(--yellow);padding:18px 20px;font:800 italic 22px/1.15 var(--f-display);text-transform:uppercase}
+.slogans div small{display:block;font:400 12.5px/1.4 var(--f-body);text-transform:none;color:var(--silver);margin-top:8px;font-style:normal}
+.voice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.voice ul{margin:8px 0 0;padding-left:18px;display:grid;gap:5px;font-size:13.5px;color:#C9CCD2}
+.voice .yes .label{color:#3BD16F}.voice .no .label{color:#FF4D4D}
+
+/* --- logo pages --- */
+.stage{display:grid;place-items:center;padding:40px;min-height:300px;position:relative}
+.stage.k{background:var(--black)} .stage.w{background:var(--white)} .stage.y{background:var(--yellow)} .stage.g{background:var(--carbon)}
+.stage img{width:min(100%,420px)}
+.anatomy{display:grid;grid-template-columns:1.25fr 1fr;gap:34px;align-items:center}
+.anatomy ol{margin:0;padding:0;list-style:none;display:grid;gap:14px;counter-reset:a}
+.anatomy li{display:grid;grid-template-columns:30px 1fr;gap:12px;font-size:14px;color:#C9CCD2}
+.anatomy li::before{counter-increment:a;content:counter(a);width:26px;height:26px;border-radius:50%;border:2px solid var(--yellow);color:var(--yellow);display:grid;place-items:center;font:700 13px/1 var(--f-body)}
+.anatomy li b{color:var(--white);display:block}
+.pin{position:absolute;width:26px;height:26px;border-radius:50%;background:var(--yellow);color:var(--black);display:grid;place-items:center;font:800 13px/1 var(--f-body)}
+.var-card{display:grid;gap:10px}
+.var-card .stage{min-height:200px;padding:30px}
+.var-card .stage img{width:min(100%,300px)}
+.var-card h4{font:700 16px/1.1 var(--f-head);text-transform:uppercase}
+.var-card p{font-size:13px;color:var(--silver)}
+.light .var-card p{color:#555}
+
+/* hero logo on black */
+.onblack{display:grid;grid-template-columns:1.5fr 1fr;gap:30px;align-items:stretch}
+.onblack .stage{min-height:420px;border:1px solid #1d1e22}
+.onblack .stage img{width:min(100%,520px)}
+.filelist{display:grid;gap:10px;align-content:start}
+.filelist a{text-decoration:none}
+.filelist a small{display:block;color:#5f636b;font-size:11px;margin-top:1px}
+.filelist .fname{align-items:flex-start}
+.filelist .fname::before{margin-top:3px}
+
+/* clear space */
+.cs{position:relative;display:inline-block;padding:var(--x);outline:1px dashed var(--yellow);outline-offset:-1px}
+.cs img{width:360px;max-width:100%}
+.cs::before{content:"";position:absolute;inset:var(--x);border:1px dashed rgba(255,214,0,.55)}
+.cs .x{position:absolute;font:700 14px/1 var(--f-body);color:var(--yellow)}
+.minsz{display:grid;gap:16px}
+.minsz .row{display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap;padding:16px;background:var(--black);border:1px solid var(--steel)}
+.minsz .row div{display:grid;gap:6px;justify-items:start;font-size:12px;color:var(--silver)}
+.spec{width:100%;border-collapse:collapse;font-size:13.5px}
+.spec th,.spec td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--steel);vertical-align:top}
+.spec th{font:700 11px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--yellow)}
+.light .spec th,.light .spec td{border-color:#d6d6d6}
+.light .spec th{color:#111}
+.spec td:first-child{white-space:nowrap}
+.tbl{overflow-x:auto}
+.num{font-variant-numeric:tabular-nums}
+
+/* backgrounds */
+.bgs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.bgcol{display:grid;gap:10px;align-content:start}
+.bgcol h4{display:flex;align-items:center;gap:10px;font:700 18px/1 var(--f-head);text-transform:uppercase}
+.bgcol h4 i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:800 13px/1 var(--f-body);font-style:normal;border:2px solid}
+.ok i{color:#3BD16F}.mid i{color:var(--yellow)}.bad i{color:#FF4D4D}
+.bgcol .tile{height:132px;display:grid;place-items:center;padding:18px}
+.bgcol .tile img{width:min(100%,220px)}
+.bgcol p{font-size:12.5px;color:var(--silver)}
+.photo-light{background:linear-gradient(160deg,#e9ecef,#b9c0c7 55%,#dfe3e6)}
+.photo-busy{background:repeating-linear-gradient(35deg,#ffd600 0 14px,#fff 14px 28px,#7a8a99 28px 44px)}
+.navy{background:#0B1A2E}
+
+/* misuse */
+.misuse{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.mis{display:grid;gap:10px;align-content:start}
+.mis .tile{position:relative;height:150px;background:var(--black);display:grid;place-items:center;overflow:hidden;border:1px solid var(--steel)}
+.mis .tile::before,.mis .tile::after{content:"";position:absolute;left:8%;right:8%;top:50%;height:2px;background:#FF3030;transform:rotate(22deg);z-index:3}
+.mis .tile::after{transform:rotate(-22deg)}
+.mis .tile img{width:170px}
+.mis p{font-size:12.5px;color:#C9CCD2;text-align:center}
+
+/* colors */
+.swatches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.sw{display:grid;grid-template-rows:auto 1fr;border:1px solid var(--steel)}
+.sw .chip{padding:18px 20px 16px;min-height:150px;display:grid;align-content:space-between;gap:14px}
+.sw .chip h3{font:700 26px/1 var(--f-head);text-transform:uppercase}
+.sw .chip p{font-size:12.5px;max-width:40ch;opacity:.85}
+.sw .codes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:var(--black)}
+.sw .codes div{padding:10px 14px;border-top:1px solid var(--steel);border-right:1px solid var(--steel);display:grid;gap:2px}
+.sw .codes div:nth-child(3n){border-right:0}
+.sw .codes span{font:700 10px/1.2 var(--f-body);letter-spacing:.14em;color:var(--silver);text-transform:uppercase}
+.sw .codes button{all:unset;cursor:pointer;font:600 14px/1.3 ui-monospace,Consolas,monospace;color:var(--white);font-variant-numeric:tabular-nums;border-radius:3px}
+.sw .codes button:hover{color:var(--yellow)}
+.sw .codes button:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+.sw .codes button.copied::after{content:" ✓";color:#3BD16F}
+.c-y{background:var(--yellow);color:var(--black)} .c-k{background:#050505;color:var(--white);border-bottom:1px solid var(--steel)} .c-b{background:var(--blue);color:var(--white)} .c-w{background:var(--white);color:var(--black)}
+.prop{display:flex;height:46px;border:1px solid var(--steel)}
+.prop div{display:flex;align-items:flex-end;padding:6px 10px;font:700 12px/1 var(--f-body)}
+.support{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.support div{display:grid;gap:6px;font-size:12px;color:var(--silver)}
+.support i{height:54px;border:1px solid var(--steel);display:block}
+.support b{color:var(--white);font-weight:600}
+.contrast{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.contrast div{padding:14px;display:grid;gap:4px;font-size:12px}
+.contrast strong{font:700 22px/1 var(--f-head);letter-spacing:.02em}
+.contrast em{font-style:normal;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+/* type */
+.typecards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.tc{border:1px solid var(--steel);padding:20px;display:grid;gap:12px;align-content:start;background:var(--black)}
+.tc .big{font-size:64px;line-height:1}
+.tc .alpha{font-size:13px;color:#C9CCD2;word-break:break-word}
+.tc .use{font-size:12.5px;color:var(--silver);border-top:1px solid var(--steel);padding-top:10px}
+.scale{display:grid;gap:0}
+.scale div{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--steel)}
+.scale>div>span{font:600 11px/1.3 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--silver)}
+
+/* graphics */
+.gfx{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.gfx .tile{height:190px;position:relative;overflow:hidden;background:var(--black);border:1px solid var(--steel)}
+.gfx h4{font:700 16px/1.1 var(--f-head);text-transform:uppercase;margin-top:12px}
+.gfx p{font-size:12.5px;color:var(--silver);margin-top:5px}
+.t-cut .y{position:absolute;inset:0;background:var(--yellow);clip-path:polygon(70% 0,100% 0,100% 100%,20% 100%,62% 52%,44% 52%)}
+.t-cut .b{position:absolute;inset:0;background:var(--blue);clip-path:polygon(69% 0,70% 0,44% 52%,62% 52%,20% 100%,19% 100%,60.6% 53.4%,42.2% 53.4%);filter:blur(.6px)}
+.t-cut .bb{position:absolute;inset:0;background:var(--blue);clip-path:polygon(66% 0,70% 0,44% 52%,62% 52%,20% 100%,16% 100%,58% 55%,40% 55%);filter:blur(14px);opacity:.6}
+.t-neon{display:grid;place-items:center}
+.t-neon div{width:70%;height:62%;border:2px solid #4DA3FF;box-shadow:0 0 6px #007BFF,0 0 22px #007BFF,inset 0 0 14px rgba(0,123,255,.5);display:grid;place-items:center}
+.t-neon img{width:150px}
+.t-bar{display:grid;align-content:center;gap:10px;padding:26px}
+.t-bar b{font:700 30px/1 var(--f-head);text-transform:uppercase}
+.t-bar i{display:block;width:48px;height:5px;background:var(--yellow)}
+.t-bar em{display:block;height:5px;background:linear-gradient(90deg,var(--yellow) 0 62%,transparent 62%);margin-top:18px}
+
+/* ads */
+.ads{display:grid;grid-template-columns:1.05fr .62fr 1.55fr;gap:20px;align-items:start}
+.ad{position:relative;overflow:hidden;background:var(--black);color:var(--white);container-type:inline-size}
+.ad .y{position:absolute;inset:0;background:var(--yellow);clip-path:polygon(82% 0,100% 0,100% 100%,40% 100%,78% 56%,60% 56%)}
+.ad .gl{position:absolute;inset:0;background:var(--blue);clip-path:polygon(79% 0,82% 0,60% 56%,78% 56%,40% 100%,37% 100%,75% 58%,57% 58%);filter:blur(10px);opacity:.7}
+.ad .in{position:absolute;inset:7cqw;display:flex;flex-direction:column;gap:3cqw}
+.ad .lg{width:34cqw}
+.ad h5{font:800 italic 7.6cqw/1.02 var(--f-display);text-transform:uppercase;margin:auto 0 0}
+.ad h5 span{color:var(--yellow)}
+.ad .sub{font-size:3.4cqw;color:#C9CCD2;max-width:60%}
+.ad .cta{align-self:flex-start;background:var(--yellow);color:var(--black);font:800 3.3cqw/1 var(--f-body);text-transform:uppercase;padding:2.6cqw 3.6cqw;letter-spacing:.04em}
+.ad .ct{font:600 3cqw/1.2 var(--f-body);color:var(--white)}
+.ad.sq{aspect-ratio:1/1}
+.ad.st{aspect-ratio:9/16}
+.ad.st .y{clip-path:polygon(88% 0,100% 0,100% 100%,30% 100%,80% 64%,58% 64%)}
+.ad.st .gl{clip-path:polygon(85% 0,88% 0,58% 64%,80% 64%,30% 100%,27% 100%,77% 66%,55% 66%)}
+.ad.st .in{inset:14cqw 8cqw}
+.ad.st .lg{width:48cqw}
+.ad.st h5{font-size:10cqw}
+.ad.st .sub{font-size:4.6cqw;max-width:58%}
+.ad.st .cta{font-size:5cqw;padding:4cqw 5cqw}
+.ad.st .ct{font-size:4.6cqw}
+.ad.bn{aspect-ratio:1200/628}
+.ad.bn .y{clip-path:polygon(66% 0,100% 0,100% 100%,40% 100%,62% 54%,50% 54%)}
+.ad.bn .gl{clip-path:polygon(64.6% 0,66% 0,50% 54%,62% 54%,40% 100%,38.6% 100%,60.6% 55.4%,48.6% 55.4%)}
+.ad.bn .in{inset:5cqw 5cqw;max-width:52%}
+.ad.bn .lg{width:20cqw}
+.ad.bn h5{font-size:5.2cqw}
+.ad.bn .sub{font-size:1.9cqw;max-width:100%}
+.ad.bn .cta{font-size:1.9cqw;padding:1.5cqw 2.2cqw}
+.ad.bn .ct{font-size:1.8cqw}
+.ad .bmark{position:absolute;right:6%;bottom:9%;width:26%;z-index:1}
+.ad.bn .bmark{width:20%;right:8%;bottom:16%}
+.ad .safe{position:absolute;inset:6%;border:1px dashed rgba(255,255,255,.35);z-index:4;pointer-events:none}
+.ad.st .safe{inset:13% 6% 18%}
+.adcap{display:grid;gap:3px;margin-top:10px;font-size:12.5px;color:var(--silver)}
+.adcap b{color:var(--white);font:700 15px/1.1 var(--f-head);text-transform:uppercase}
+.rules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.rules div{border-top:2px solid var(--yellow);padding-top:10px;font-size:13px;color:#C9CCD2}
+.rules b{display:block;color:var(--white);margin-bottom:4px}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.gal figure{margin:0;display:grid;gap:7px}
+.gal img{width:100%;aspect-ratio:1600/1132;object-fit:cover;border:1px solid var(--steel)}
+.gal figcaption{font:700 12px/1.2 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--silver)}
+
+/* files */
+.tree{font:13px/1.75 ui-monospace,Consolas,monospace;color:#C9CCD2;background:var(--black);border:1px solid var(--steel);padding:18px 20px;white-space:pre;overflow-x:auto}
+.tree b{color:var(--yellow);font-weight:600}
+.check{display:grid;gap:9px;margin:0;padding:0;list-style:none}
+.check li{display:grid;grid-template-columns:20px 1fr;gap:10px;font-size:13.5px;color:#C9CCD2}
+.check li::before{content:"";width:14px;height:14px;border:2px solid var(--yellow);margin-top:3px}
+.contacts{display:flex;gap:28px;flex-wrap:wrap;font:600 14px/1.3 var(--f-body)}
+.contacts span{color:var(--silver);font-weight:400;display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+
+@media (max-width:900px){
+  :root{--pad:22px}
+  .page,.cover{min-height:0}
+  .g3,.g4,.toc,.values,.misuse,.bgs,.typecards,.gfx,.gal,.rules,.contrast{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .anatomy,.onblack,.ads,.voice,.slogans,.swatches{grid-template-columns:minmax(0,1fr)}
+  .support{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .title{font-size:34px}
+  .cover .in{padding:30px 26px;min-height:520px}
+  .cover .logo{width:200px}
+  .cover h1,.cover.section h1{font-size:28px}
+  .ads .ad.st{max-width:320px}
+}
+@media (max-width:520px){
+  .g2,.g3,.g4,.toc,.values,.misuse,.bgs,.typecards,.gfx,.gal,.rules,.contrast{grid-template-columns:minmax(0,1fr)}
+  .support{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .scale div{grid-template-columns:1fr}
+  .tc .big{font-size:48px}
+  .run .l span{display:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  .toc a{transition:color .15s}
+}
+@page{size:297mm 210mm;margin:0}
+@media print{
+  body{padding:0;background:var(--black)}
+  .book{gap:0;max-width:none}
+  .page{width:1200px;height:848px;min-height:0;break-after:page;border:0}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+
+</head>
+<body>
+<main class="book">
+
+<!-- ============ COVER ============ -->
+<section class="page cover" id="cover" aria-label="Обложка">
+  <div class="sheen"></div><div class="glow2"></div><div class="bolt"></div><div class="glow"></div>
+  <div class="in">
+    <img class="logo" src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt="VOLTERRA">
+    <h1>Руководство<br>по использованию<br>фирменного стиля</h1>
+    <p class="meta">Версия для рекламных агентств и подрядчиков · 2026</p>
+  </div>
+</section>
+
+<!-- ============ CONTENTS ============ -->
+<section class="page" id="contents">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div>Содержание</div></div>
+  <div>
+    <h2 class="title">Содержание</h2><div class="rule"></div>
+    <p class="lead">Этот документ — всё, что нужно агентству, чтобы делать рекламу VOLTERRA без согласований «на глаз»: логотипы и где какой ставить, точные коды цветов для экрана, печати и вывесок, шрифты, графика, готовые схемы рекламных макетов и технические требования. Все файлы лежат в папке пакета, названия указаны на каждой странице.</p>
+  </div>
+  <nav class="toc" aria-label="Разделы">
+    <a href="#brand"><span>01</span><div>Бренд и голос<small>Кто мы, ценности, слоганы</small></div></a>
+    <a href="#logo"><span>02</span><div>Основной логотип<small>Состав и конструкция</small></div></a>
+    <a href="#onblack"><span>03</span><div>Логотип на чёрном фоне<small>Главная версия и готовые файлы</small></div></a>
+    <a href="#versions"><span>04</span><div>Версии логотипа<small>Цвет, ч/б, монохром, знак</small></div></a>
+    <a href="#clearspace"><span>05</span><div>Охранное поле и размер<small>Отступы, минимумы</small></div></a>
+    <a href="#backgrounds"><span>06</span><div>Логотип на фонах<small>Отлично, допустимо, нельзя</small></div></a>
+    <a href="#misuse"><span>07</span><div>Недопустимое использование<small>Частые ошибки</small></div></a>
+    <a href="#colors"><span>08</span><div>Фирменные цвета<small>HEX, RGB, CMYK, Pantone, RAL</small></div></a>
+    <a href="#type"><span>09</span><div>Шрифты<small>Гарнитуры и шкала размеров</small></div></a>
+    <a href="#graphics"><span>10</span><div>Графические элементы<small>Молния, свечение, акценты</small></div></a>
+    <a href="#ads"><span>11</span><div>Рекламные макеты<small>Сетки, форматы, правила</small></div></a>
+    <a href="#tech"><span>12</span><div>Технические требования<small>Печать, наружка, digital</small></div></a>
+    <a href="#carriers"><span>13</span><div>Фирменные носители<small>Утверждённые примеры</small></div></a>
+    <a href="#files"><span>14</span><div>Пакет файлов<small>Структура и чек-лист сдачи</small></div></a>
+  </nav>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>00</span></div>
+</section>
+
+<!-- ============ 01 BRAND ============ -->
+<section class="page" id="brand">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>01</b> Бренд и голос</div></div>
+  <div class="grid g2" style="align-items:end">
+    <div>
+      <h2 class="title">Энергия, которая<br>двигает вперёд</h2><div class="rule"></div>
+      <p class="lead">VOLTERRA — аккумуляторный центр и сеть автомагазинов. Мы подбираем, проверяем и устанавливаем аккумуляторы для легковых и грузовых авто, спецтехники и мототехники. Бренд говорит о надёжности, технологиях и скорости: клиент уезжает от нас заряженным и уверенным.</p>
+    </div>
+    <div class="note"><i>!</i><span>Название пишется только заглавными: <b>VOLTERRA</b>. В сплошном тексте допустимо «Volterra». Нельзя: «Вольтерра», «VolTerra», «Volterra-центр».</span></div>
+  </div>
+  <div class="values">
+    <div><svg viewBox="0 0 32 32" fill="none" stroke="#FFD600" stroke-width="2"><path d="M16 3 5 7v8c0 7 5 12 11 14 6-2 11-7 11-14V7L16 3Z"/><path d="m11 16 4 4 7-8"/></svg><h4>Надёжность</h4><p>Проверенные бренды АКБ, официальная гарантия, честная диагностика.</p></div>
+    <div><svg viewBox="0 0 32 32" fill="none" stroke="#FFD600" stroke-width="2"><circle cx="11" cy="11" r="4"/><circle cx="22" cy="12" r="3"/><path d="M3 27c0-5 4-8 8-8s8 3 8 8M18 21c1-2 3-3 5-3 3 0 6 2 6 7"/></svg><h4>Профессионализм</h4><p>Подбор по параметрам авто, установка и сервис руками специалистов.</p></div>
+    <div><svg viewBox="0 0 32 32" fill="none" stroke="#FFD600" stroke-width="2"><circle cx="16" cy="16" r="5"/><path d="M16 3v4M16 25v4M3 16h4M25 16h4M6.8 6.8l2.8 2.8M22.4 22.4l2.8 2.8M6.8 25.2l2.8-2.8M22.4 9.6l2.8-2.8"/></svg><h4>Качество</h4><p>Современное оборудование для проверки АКБ и электропитания.</p></div>
+    <div><svg viewBox="0 0 32 32" fill="none" stroke="#FFD600" stroke-width="2"><circle cx="16" cy="16" r="13"/><path d="M18 6 11 17h6l-3 9 8-12h-6l2-8Z" fill="#FFD600" stroke="none"/></svg><h4>Развитие</h4><p>Растущая сеть точек, единый стандарт сервиса в каждой.</p></div>
+  </div>
+  <div class="grid g2">
+    <div class="slogans">
+      <div>Движение начинается здесь<small>Основной слоган. Вывески, флаги, спина униформы.</small></div>
+      <div>Время двигаться с <span style="color:var(--yellow)">VOLTERRA</span><small>Рекламный слоган. Сайт, баннеры, стелы.</small></div>
+      <div>Энергия движет большее<small>Имиджевый. Конверты, презентации.</small></div>
+      <div>Надёжность в каждом километре<small>Поддерживающий. Колонтитулы, digital.</small></div>
+    </div>
+    <div class="voice">
+      <div class="yes"><p class="label">Так говорим</p><ul><li>Коротко и уверенно: «Подберём за 5 минут».</li><li>Конкретно: ёмкость, пусковой ток, гарантия в цифрах.</li><li>На «вы», дружелюбно, без канцелярита.</li><li>Глаголы движения: заряжаем, запускаем, едем.</li></ul></div>
+      <div class="no"><p class="label">Так не говорим</p><ul><li>Кричащие «СУПЕР-АКЦИЯ!!!» и много восклицаний.</li><li>Размытое «лучшее качество» без фактов.</li><li>Страшилки про поломки и давление страхом.</li><li>Сленг и мемы, которые устаревают через месяц.</li></ul></div>
+    </div>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>01</span></div>
+</section>
+
+<!-- ============ 02 LOGO ============ -->
+<section class="page" id="logo">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>02</b> Логотип</div></div>
+  <div>
+    <h2 class="title">Основной логотип</h2><div class="rule"></div>
+    <p class="lead">Логотип VOLTERRA — композиция знака и надписи. Знак — буква V из двух молний: энергия аккумулятора и движение. Основная версия используется на чёрном фоне. Логотип никогда не набирается шрифтом и не перерисовывается: только из файлов пакета.</p>
+  </div>
+  <div class="anatomy">
+    <div class="stage k" style="min-height:400px">
+      <img src="logo/svg/volterra_logo_vertical_tagline_color-onblack.svg" alt="Логотип VOLTERRA с дескриптором" style="width:min(84%,440px)">
+      <span class="pin" style="left:18%;top:20%">1</span>
+      <span class="pin" style="left:3%;top:62%">2</span>
+      <span class="pin" style="left:3%;top:77%">3</span>
+    </div>
+    <ol>
+      <li><div><b>Знак «Молния-V»</b>Две молнии образуют букву V. Цвет — только Volterra Yellow. Может использоваться отдельно: аватары, иконка приложения, фавикон, патчи на форме.</div></li>
+      <li><div><b>Надпись VOLTERRA</b>Индивидуальный широкий гротеск. Белая на тёмном, чёрная на светлом.</div></li>
+      <li><div><b>Дескриптор</b>«Аккумуляторный центр • Сеть автомагазинов». Точка-разделитель жёлтая. Убирается, если высота логотипа меньше 25 мм / 120 px.</div></li>
+      <li><div><b>Горизонтальная версия</b>Знак слева от надписи. Для шапок, колонтитулов, узких полос, сайта и подписи в email.<img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="" style="width:220px;margin-top:10px"></div></li>
+    </ol>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>02</span></div>
+</section>
+
+<!-- ============ 03 ON BLACK ============ -->
+<section class="page black" id="onblack">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>03</b> Логотип на чёрном фоне</div></div>
+  <div>
+    <h2 class="title">Логотип на чёрном фоне</h2><div class="rule"></div>
+    <p class="lead">Главная версия бренда: жёлтый знак и белая надпись на чистом чёрном #000000. Именно её ставим по умолчанию: реклама, соцсети, вывески, упаковка, видео. Готовые картинки на чёрном фоне уже собраны в нужных пропорциях, их можно сразу загружать.</p>
+  </div>
+  <div class="onblack">
+    <div class="stage k"><img src="logo/svg/volterra_logo_vertical_tagline_color-onblack.svg" alt="Логотип VOLTERRA на чёрном фоне"></div>
+    <div class="filelist">
+      <p class="label">Готовые файлы с чёрным фоном</p>
+      <a class="fname" href="logo/png/volterra_vertical_on-black-bg_square_1x1.png"><span>volterra_vertical_on-black-bg_square_1x1.png<small>2000×2000</small></span></a>
+      <a class="fname" href="logo/png/volterra_vertical_tagline_on-black-bg_square_1x1.png"><span>volterra_vertical_tagline_on-black-bg_square_1x1.png<small>2000×2000</small></span></a>
+      <a class="fname" href="logo/png/volterra_vertical_on-black-bg_landscape_16x9.png"><span>volterra_vertical_on-black-bg_landscape_16x9.png<small>3840×2160</small></span></a>
+      <a class="fname" href="logo/png/volterra_vertical_tagline_on-black-bg_landscape_16x9.png"><span>volterra_vertical_tagline_on-black-bg_landscape_16x9.png<small>3840×2160</small></span></a>
+      <a class="fname" href="logo/png/volterra_vertical_on-black-bg_story_9x16.png"><span>volterra_vertical_on-black-bg_story_9x16.png<small>2160×3840</small></span></a>
+      <a class="fname" href="logo/png/volterra_avatar_mark_on-black-bg_1x1.png"><span>volterra_avatar_mark_on-black-bg_1x1.png<small>аватар</small></span></a>
+      <p class="label" style="margin-top:12px">Прозрачный фон (для наложения)</p>
+      <a class="fname" href="logo/svg/volterra_logo_vertical_color-onblack.svg">volterra_logo_vertical_color-onblack.svg / .png</a>
+      <a class="fname" href="logo/svg/volterra_logo_vertical_tagline_color-onblack.svg">volterra_logo_vertical_tagline_color-onblack.svg / .png</a>
+      <a class="fname" href="logo/svg/volterra_logo_horizontal_color-onblack.svg">volterra_logo_horizontal_color-onblack.svg / .png</a>
+      <div class="note" style="margin-top:8px"><i>i</i><span>SVG — для печати, вывесок, плоттерной резки и масштабирования без потерь. PNG 4000 px — для офиса, презентаций и соцсетей.</span></div>
+    </div>
+  </div>
+  <div class="grid g3">
+    <div class="stage k" style="min-height:170px;border:1px solid #1d1e22"><img src="logo/svg/volterra_mark_yellow.svg" alt="Знак VOLTERRA" style="width:120px"></div>
+    <div class="stage k" style="min-height:170px;border:1px solid #1d1e22"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="Горизонтальный логотип" style="width:300px"></div>
+    <div class="stage k" style="min-height:170px;border:1px solid #1d1e22"><img src="logo/svg/volterra_logo_vertical_white.svg" alt="Белый логотип" style="width:200px"></div>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>03</span></div>
+</section>
+
+<!-- ============ 04 VERSIONS ============ -->
+<section class="page light" id="versions">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onwhite.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>04</b> Версии логотипа</div></div>
+  <div>
+    <h2 class="title">Версии логотипа</h2><div class="rule"></div>
+    <p class="lead">Логотип на белом допустим в редких случаях: документы, накладные, светлые страницы сайта. Если цветная печать недоступна (факс, гравировка, тиснение, штамп, однокрасочная печать), используется чёрно-белый или монохромный вариант.</p>
+  </div>
+  <div class="grid g4">
+    <div class="var-card"><div class="stage w" style="border:1px solid #ddd"><img src="logo/svg/volterra_logo_vertical_tagline_color-onwhite.svg" alt=""></div><h4>Цветной на белом</h4><p>Жёлтый знак, чёрная надпись. Документы, светлый сайт.</p><span class="fname">…_color-onwhite.svg</span></div>
+    <div class="var-card"><div class="stage w" style="border:1px solid #ddd"><img src="logo/svg/volterra_logo_vertical_tagline_black.svg" alt=""></div><h4>Чёрный</h4><p>Однокрасочная печать, штампы, гравировка по светлому.</p><span class="fname">…_black.svg</span></div>
+    <div class="var-card"><div class="stage k"><img src="logo/svg/volterra_logo_vertical_tagline_white.svg" alt=""></div><h4>Белый</h4><p>Выворотка на тёмных фото, шелкография, тиснение.</p><span class="fname">…_white.svg</span></div>
+    <div class="var-card"><div class="stage y"><img src="logo/svg/volterra_logo_vertical_tagline_black.svg" alt=""></div><h4>Чёрный на жёлтом</h4><p>Единственный допустимый вариант на жёлтом фоне.</p><span class="fname">…_black.svg</span></div>
+    <div class="var-card"><div class="stage w" style="border:1px solid #ddd"><img src="logo/svg/volterra_logo_vertical_tagline_grey-onwhite.svg" alt=""></div><h4>Монохром на белом</h4><p>Серый #4D4D4D. Водяные знаки, служебные бланки.</p><span class="fname">…_grey-onwhite.svg</span></div>
+    <div class="var-card"><div class="stage k"><img src="logo/svg/volterra_logo_vertical_tagline_grey-onblack.svg" alt=""></div><h4>Монохром на чёрном</h4><p>Серый #BFBFBF. Приглушённые подписи, титры.</p><span class="fname">…_grey-onblack.svg</span></div>
+    <div class="var-card"><div class="stage k"><img src="logo/svg/volterra_mark_yellow.svg" alt="" style="width:110px"></div><h4>Знак отдельно</h4><p>Аватары, иконки, патчи. Жёлтый, белый, чёрный.</p><span class="fname">volterra_mark_*.svg</span></div>
+    <div class="var-card"><div class="stage w" style="border:1px solid #ddd"><img src="logo/svg/volterra_wordmark_black.svg" alt="" style="width:240px"></div><h4>Надпись отдельно</h4><p>Только когда знак уже есть рядом: торец коробки, рукав.</p><span class="fname">volterra_wordmark_*.svg</span></div>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>04</span></div>
+</section>
+
+<!-- ============ 05 CLEAR SPACE ============ -->
+<section class="page" id="clearspace">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>05</b> Охранное поле и размер</div></div>
+  <div class="grid g2" style="gap:44px">
+    <div style="display:grid;gap:22px;align-content:start">
+      <div><h2 class="title">Охранное поле</h2><div class="rule"></div>
+      <p class="lead">Вокруг логотипа всегда сохраняется свободное пространство, чтобы он легче считывался. Минимальная ширина охранного поля равна высоте букв надписи — <b style="color:var(--yellow)">X</b>. В это поле не заходят текст, фото, края носителя и другие логотипы.</p></div>
+      <div style="background:var(--black);padding:34px;display:grid;place-items:center;border:1px solid var(--steel)">
+        <div class="cs" style="--x:42px">
+          <img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt="Охранное поле логотипа">
+          <span class="x" style="left:14px;top:14px">X</span><span class="x" style="right:14px;top:14px">X</span><span class="x" style="left:14px;bottom:14px">X</span><span class="x" style="right:14px;bottom:14px">X</span>
+        </div>
+      </div>
+      <p class="muted" style="font-size:13px">Для горизонтальной версии X тоже равен высоте букв VOLTERRA. Для знака отдельно — ¼ его ширины.</p>
+    </div>
+    <div style="display:grid;gap:22px;align-content:start">
+      <div><h2 class="title">Минимальный размер</h2><div class="rule"></div>
+      <p class="lead">Для хорошего восприятия всех элементов логотип не делают меньше указанных размеров. На минимальном размере дескриптор убирается. Максимальный размер не ограничен.</p></div>
+      <div class="minsz">
+        <div class="row">
+          <div><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt="" style="height:46px;width:auto">Вертикальный<br><b style="color:#fff">печать ≥ 12 мм · экран ≥ 48 px</b></div>
+          <div><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="" style="height:22px;width:auto">Горизонтальный<br><b style="color:#fff">печать ≥ 5 мм · экран ≥ 20 px</b></div>
+          <div><img src="logo/svg/volterra_mark_yellow.svg" alt="" style="height:22px;width:auto">Знак<br><b style="color:#fff">печать ≥ 6 мм · экран ≥ 16 px</b></div>
+        </div>
+        <div class="row">
+          <div><img src="logo/svg/volterra_logo_vertical_tagline_color-onblack.svg" alt="" style="height:80px;width:auto">С дескриптором<br><b style="color:#fff">печать ≥ 25 мм · экран ≥ 120 px</b></div>
+        </div>
+      </div>
+      <div class="note"><i>!</i><span>Размеры указаны по высоте всего логотипа. Для вышивки на форме: вертикальный ≥ 30 мм, знак ≥ 15 мм.</span></div>
+    </div>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>05</span></div>
+</section>
+
+<!-- ============ 06 BACKGROUNDS ============ -->
+<section class="page" id="backgrounds">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>06</b> Логотип на фонах</div></div>
+  <div>
+    <h2 class="title">Размещение логотипа</h2><div class="rule"></div>
+    <p class="lead">Правильное размещение обеспечивает заметность, контраст и узнаваемость. Ставьте логотип на фоны с высоким контрастом и спокойной фактурой.</p>
+  </div>
+  <div class="bgs">
+    <div class="bgcol ok"><h4><i>✓</i>Отлично</h4>
+      <div class="tile" style="background:#000"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt=""></div>
+      <div class="tile" style="background:radial-gradient(circle at 30% 30%,#2a2a2a,#050505 70%)"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt=""></div>
+      <p>Чёрный или близкий к чёрному фон, тёмная фактура (карбон, металл, асфальт) — идеальное решение.</p></div>
+    <div class="bgcol mid"><h4><i>!</i>Допустимо</h4>
+      <div class="tile navy"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt=""></div>
+      <div class="tile" style="background:var(--yellow)"><img src="logo/svg/volterra_logo_vertical_black.svg" alt=""></div>
+      <p>Тёмные и нейтральные фоны (графит, тёмно-синий). На жёлтом — только чёрная версия.</p></div>
+    <div class="bgcol bad"><h4><i>✕</i>Нельзя</h4>
+      <div class="tile photo-light"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt=""></div>
+      <div class="tile photo-busy"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt=""></div>
+      <p>Светлые, пёстрые и сложные фоны: логотип теряется. Жёлтый знак на белом без чёрной надписи.</p></div>
+  </div>
+  <div class="note"><i>!</i><span>На фотографиях ставьте логотип на самый тёмный спокойный участок или подкладывайте чёрную плашку/градиент 0→70 % чёрного. Нельзя менять цвета логотипа, добавлять тени, контуры и другие эффекты.</span></div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>06</span></div>
+</section>
+
+<!-- ============ 07 MISUSE ============ -->
+<section class="page" id="misuse">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>07</b> Недопустимое использование</div></div>
+  <div>
+    <h2 class="title">Недопустимое использование</h2><div class="rule"></div>
+    <p class="lead">Чтобы логотип не терял узнаваемости, избегайте этих ошибок. Если нужна версия, которой нет в пакете, — запросите её у бренда, а не собирайте сами.</p>
+  </div>
+  <div class="misuse">
+    <div class="mis"><div class="tile"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt="" style="filter:hue-rotate(175deg) saturate(1.6)"></div><p>Менять фирменные цвета</p></div>
+    <div class="mis"><div class="tile"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt="" style="transform:scaleX(1.45)"></div><p>Искажать пропорции, растягивать и сжимать</p></div>
+    <div class="mis"><div class="tile"><div style="display:grid;justify-items:center;gap:4px"><img src="logo/svg/volterra_mark_yellow.svg" alt="" style="width:40px"><img src="logo/svg/volterra_wordmark_white.svg" alt="" style="width:170px"></div></div><p>Менять масштаб элементов относительно друг друга</p></div>
+    <div class="mis"><div class="tile"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt="" style="transform:skewX(-14deg)"></div><p>Наклонять и менять начертание</p></div>
+    <div class="mis"><div class="tile"><img src="img/misuse_outline.svg" alt=""></div><p>Использовать контурное начертание</p></div>
+    <div class="mis"><div class="tile"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt="" style="transform:rotate(-14deg)"></div><p>Поворачивать логотип</p></div>
+    <div class="mis"><div class="tile"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt="" style="filter:drop-shadow(5px 6px 0 #007BFF) drop-shadow(0 0 10px #fff)"></div><p>Добавлять тени, обводки, свечение</p></div>
+    <div class="mis"><div class="tile" style="background:var(--yellow)"><img src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt=""></div><p>Ставить цветную версию на жёлтый и светлые фоны</p></div>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>07</span></div>
+</section>
+
+<!-- ============ 08 COLORS ============ -->
+<section class="page" id="colors">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>08</b> Фирменные цвета</div></div>
+  <div class="grid g2" style="align-items:end">
+    <div><h2 class="title">Фирменные цвета</h2><div class="rule"></div>
+    <p class="lead">Палитра отражает характер VOLTERRA: энергия, надёжность и премиальный подход. Нажмите на код, чтобы скопировать.</p></div>
+    <div style="display:grid;gap:8px">
+      <p class="label">Пропорции в макете</p>
+      <div class="prop"><div style="flex:60;background:#000;color:#fff">60% чёрный</div><div style="flex:25;background:var(--yellow);color:#000">25% жёлтый</div><div style="flex:10;background:var(--blue);color:#fff">10%</div><div style="flex:5;background:#fff;color:#000">5</div></div>
+    </div>
+  </div>
+  <div class="swatches">
+    <div class="sw"><div class="chip c-y"><h3>Жёлтый · Volterra Yellow</h3><p>Основной цвет бренда. Знак, акценты, выделение, кнопки, ключевые элементы.</p></div>
+      <div class="codes"><div><span>HEX</span><button data-copy="#FFD600">#FFD600</button></div><div><span>RGB</span><button data-copy="255, 214, 0">255, 214, 0</button></div><div><span>CMYK</span><button data-copy="0, 16, 100, 0">0 · 16 · 100 · 0</button></div><div><span>Pantone ≈</span><button data-copy="Pantone 109 C">109 C</button></div><div><span>RAL ≈</span><button data-copy="RAL 1018">1018</button></div><div><span>Oracal ≈</span><button data-copy="Oracal 641-021">641-021</button></div></div></div>
+    <div class="sw"><div class="chip c-k"><h3>Чёрный · Volterra Black</h3><p>Основной цвет фона и носителей. Передаёт надёжность, силу и премиальность.</p></div>
+      <div class="codes"><div><span>HEX</span><button data-copy="#000000">#000000</button></div><div><span>RGB</span><button data-copy="0, 0, 0">0, 0, 0</button></div><div><span>CMYK</span><button data-copy="0, 0, 0, 100">0 · 0 · 0 · 100</button></div><div><span>Rich Black</span><button data-copy="60, 40, 40, 100">60 · 40 · 40 · 100</button></div><div><span>RAL</span><button data-copy="RAL 9005">9005</button></div><div><span>Oracal ≈</span><button data-copy="Oracal 641-070">641-070</button></div></div></div>
+    <div class="sw"><div class="chip c-b"><h3>Синий · Volterra Blue</h3><p>Дополнительный. Свечение, акценты, интерактивные элементы, цифровые носители, подсветка фасадов.</p></div>
+      <div class="codes"><div><span>HEX</span><button data-copy="#007BFF">#007BFF</button></div><div><span>RGB</span><button data-copy="0, 123, 255">0, 123, 255</button></div><div><span>CMYK</span><button data-copy="100, 52, 0, 0">100 · 52 · 0 · 0</button></div><div><span>Pantone ≈</span><button data-copy="Pantone 2727 C">2727 C</button></div><div><span>RAL ≈</span><button data-copy="RAL 5015">5015</button></div><div><span>Oracal ≈</span><button data-copy="Oracal 641-086">641-086</button></div></div></div>
+    <div class="sw"><div class="chip c-w"><h3>Белый · Volterra White</h3><p>Вспомогательный. Текст на тёмном, фоны документов, контраст.</p></div>
+      <div class="codes"><div><span>HEX</span><button data-copy="#FFFFFF">#FFFFFF</button></div><div><span>RGB</span><button data-copy="255, 255, 255">255, 255, 255</button></div><div><span>CMYK</span><button data-copy="0, 0, 0, 0">0 · 0 · 0 · 0</button></div><div><span>RAL</span><button data-copy="RAL 9003">9003</button></div><div><span>Oracal</span><button data-copy="Oracal 641-010">641-010</button></div><div><span>—</span><button data-copy="#FFFFFF" tabindex="-1" aria-hidden="true">&nbsp;</button></div></div></div>
+  </div>
+  <div class="grid g2" style="gap:28px">
+    <div style="display:grid;gap:10px"><p class="label">Вспомогательные оттенки (подложки, линии, второстепенный текст)</p>
+      <div class="support">
+        <div><i style="background:#111214"></i><b>Graphite</b>#111214</div>
+        <div><i style="background:#1C1D20"></i><b>Carbon</b>#1C1D20</div>
+        <div><i style="background:#2C2E33"></i><b>Steel</b>#2C2E33</div>
+        <div><i style="background:#8B8F97"></i><b>Silver</b>#8B8F97</div>
+        <div><i style="background:#4D4D4D"></i><b>Mono Dark</b>#4D4D4D</div>
+        <div><i style="background:#BFBFBF"></i><b>Mono Light</b>#BFBFBF</div>
+      </div></div>
+    <div style="display:grid;gap:10px"><p class="label">Контраст текста (WCAG)</p>
+      <div class="contrast">
+        <div style="background:#000;color:var(--yellow);border:1px solid var(--steel)"><strong>14.9:1</strong>Жёлтый на чёрном<em style="color:#3BD16F">Любой текст</em></div>
+        <div style="background:var(--yellow);color:#000"><strong>14.9:1</strong>Чёрный на жёлтом<em>Любой текст</em></div>
+        <div style="background:var(--blue);color:#fff"><strong>4.0:1</strong>Белый на синем<em>Только от 18 pt / bold</em></div>
+        <div style="background:#fff;color:#000"><strong><span style="color:var(--yellow);-webkit-text-stroke:.5px #999">1.4:1</span></strong>Жёлтый на белом<em style="color:#D22">Нельзя для текста</em></div>
+      </div></div>
+  </div>
+  <p class="muted" style="font-size:12px">Pantone, RAL и Oracal — ближайшие соответствия. Перед тиражом и изготовлением вывесок сверяйте цвет по физическому вееру и пробному оттиску. Файлы: <span class="num">colors/volterra_colors_RGB.ase · _CMYK.ase · .css · .json · .txt</span></p>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>08</span></div>
+</section>
+
+<!-- ============ 09 TYPE ============ -->
+<section class="page" id="type">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>09</b> Шрифты</div></div>
+  <div><h2 class="title">Фирменные шрифты</h2><div class="rule"></div>
+  <p class="lead">Для документов используется Segoe UI из стандартного набора Windows: это обеспечивает доступность и корректное отображение на всех устройствах. Для рекламы добавляются два акцентных шрифта. Все поддерживают кириллицу и казахский алфавит.</p></div>
+  <div class="typecards">
+    <div class="tc"><p class="label">Основной · документы и текст</p><div class="big" style="font-family:var(--f-body);font-weight:700">Аа</div><h3 style="font:700 22px/1.1 var(--f-body)">Segoe UI</h3><p class="alpha" style="font-family:var(--f-body)">Bold / Semibold / Regular<br>АӘБВГҒДЕЁЖЗИЙКҚЛМНҢОӨПРСТУҰҮФХҺЦЧШЩЪЫІЬЭЮЯ 0123456789</p><p class="use">Основной текст, документы, визитки, бланки, презентации. Замена на Mac и в вебе: <b style="color:#fff">Noto Sans</b> (бесплатный, Google Fonts).</p></div>
+    <div class="tc"><p class="label">Акцентный · заголовки</p><div class="big" style="font-family:var(--f-head);font-weight:700">АА</div><h3 style="font:700 22px/1.1 var(--f-head);text-transform:uppercase">Oswald</h3><p class="alpha" style="font-family:var(--f-head);font-weight:600;text-transform:uppercase">SemiBold / Bold · только заглавные<br>АӘБВГҒДЕЁЖЗИЙКҚЛМНҢОӨПРСТУҰҮФХҺЦЧШЩЪЫІЬЭЮЯ 0123456789</p><p class="use">Заголовки разворотов, таблички, навигация, цены, параметры АКБ (100 Ah · 900 A). Бесплатный, Google Fonts.</p></div>
+    <div class="tc"><p class="label">Дисплейный · обложки и слоганы</p><div class="big" style="font:800 italic 64px/1 var(--f-display)">АА</div><h3 style="font:800 italic 22px/1.1 var(--f-display);text-transform:uppercase">Montserrat</h3><p class="alpha" style="font:800 italic 13px/1.55 var(--f-display);text-transform:uppercase">ExtraBold Italic · заглавные<br>АӘБВГҒДЕЁЖЗИЙКҚЛМНҢОӨПРСТУҰҮФХҺЦЧШЩЪЫІЬЭЮЯ</p><p class="use">Слоганы, обложки, крупные рекламные заголовки: «Время двигаться с VOLTERRA». До 7 слов. Бесплатный, Google Fonts.</p></div>
+  </div>
+  <div class="scale">
+    <div><span>Рекламный заголовок<br>Montserrat 800 Italic</span><p style="font:800 italic 34px/1.05 var(--f-display);text-transform:uppercase">Время двигаться с <span style="color:var(--yellow)">VOLTERRA</span></p></div>
+    <div><span>Заголовок раздела<br>Oswald 700 · caps</span><p style="font:700 26px/1.1 var(--f-head);text-transform:uppercase">Подбор аккумулятора за 5 минут</p></div>
+    <div><span>Основной текст<br>Segoe UI 400 · 1.5</span><p style="max-width:65ch;color:#C9CCD2">Пример основного текста. VOLTERRA — аккумуляторный центр, где надёжность встречается с технологиями. Мы предлагаем лучшие решения для вашего автомобиля.</p></div>
+    <div><span>Қазақ тілі<br>Segoe UI 400</span><p style="max-width:65ch;color:#C9CCD2">Негізгі мәтіннің мысалы. Volterra — аккумуляторлық орталық, мұнда сенімділік пен технология ұштасады.</p></div>
+  </div>
+  <p class="muted" style="font-size:12px">Пропорция размеров: заголовок ≈ 2.5× основного текста, подзаголовок ≈ 1.6×. В макетах шрифты переводятся в кривые. Файлы шрифтов Oswald, Montserrat и Noto Sans лежат в папке <span class="num">fonts/</span> (лицензия SIL OFL, свободное коммерческое использование).</p>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>09</span></div>
+</section>
+
+<!-- ============ 10 GRAPHICS ============ -->
+<section class="page" id="graphics">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>10</b> Графические элементы</div></div>
+  <div><h2 class="title">Графические элементы</h2><div class="rule"></div>
+  <p class="lead">Три узнаваемых приёма собирают фирменный стиль. Их достаточно, чтобы любой макет выглядел как VOLTERRA даже без логотипа крупным планом.</p></div>
+  <div class="gfx">
+    <div><div class="tile t-cut"><div class="bb"></div><div class="y"></div><div class="b"></div></div>
+      <h4>Разрез-молния</h4><p>Чёрная и жёлтая плоскости разделены диагональю со ступенькой, как молния. Угол диагонали 55–60°, ступенька горизонтальная, по ширине ≈ ⅓ поля. Жёлтая часть — справа или снизу.</p></div>
+    <div><div class="tile t-neon"><div><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt=""></div></div>
+      <h4>Синее свечение</h4><p>Тонкая синяя линия #007BFF вдоль края разреза или контура с мягким свечением. Только как подсветка: на фасадах — LED-лента, в макетах — эффект неона. Не больше 10 % площади.</p></div>
+    <div><div class="tile t-bar"><i></i><b>Фирменные цвета</b><em></em></div>
+      <h4>Жёлтые акценты</h4><p>Короткая жёлтая черта 44×4 под заголовком. Жёлтая полоса вдоль нижнего края носителя (визитка, бланк). Жёлтая кнопка с чёрным текстом — единственный вид кнопки.</p></div>
+  </div>
+  <div class="grid g2" style="align-items:start">
+    <figure style="margin:0;display:grid;gap:8px"><img src="img/08-pictograms.jpg" alt="Фирменные пиктограммы и примеры использования" style="border:1px solid var(--steel)"><figcaption class="muted" style="font-size:12px">Фирменные пиктограммы из утверждённого брендбука: круглый жёлтый контур, синяя подложка, белые линейные иконки.</figcaption></figure>
+    <div style="display:grid;gap:12px">
+      <p class="label">Правила пиктограмм</p>
+      <ul class="check">
+        <li>Единый стиль: круглая форма, линейная иконка, толщина линии одинаковая.</li>
+        <li>Только фирменные цвета: жёлтый, синий, белый на чёрном.</li>
+        <li>Подпись под пиктограммой — заглавными, Oswald или Segoe UI Semibold.</li>
+        <li>Набор: бесплатный сервис, гарантия 2 года, бесплатная установка, проверка аккумулятора, быстрый подбор, надёжная мощность, проверка электропитания.</li>
+        <li>Фото: тёмные, контрастные, с тёплым жёлтым светом и холодными синими бликами. Аккумулятор, авто, мастер за работой. Без стоковых улыбок на белом фоне.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>10</span></div>
+</section>
+
+<!-- ============ 11 ADS ============ -->
+<section class="page" id="ads">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>11</b> Рекламные макеты</div></div>
+  <div><h2 class="title">Рекламные макеты</h2><div class="rule"></div>
+  <p class="lead">Базовая схема для любой рекламы: чёрный фон, разрез-молния, логотип сверху слева, заголовок Montserrat Italic, жёлтая кнопка, контакты внизу. Пунктир — безопасная зона: в ней весь текст и логотип.</p></div>
+  <div class="ads">
+    <div><div class="ad sq"><div class="gl"></div><div class="y"></div><img class="bmark" src="logo/svg/volterra_mark_black.svg" alt=""><div class="safe"></div>
+      <div class="in"><img class="lg" src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><h5>Время<br>двигаться<br>с <span>VOLTERRA</span></h5><p class="sub">Подбор, проверка и установка аккумулятора</p><span class="cta">Подобрать АКБ</span><span class="ct">+7 776 08 22 22 · volterra.kz</span></div></div>
+      <div class="adcap"><b>Пост 1:1 / 4:5</b>1080×1080 · 1080×1350 px. Отступы 6 % от края.</div></div>
+    <div><div class="ad st"><div class="gl"></div><div class="y"></div><div class="safe"></div>
+      <div class="in"><img class="lg" src="logo/svg/volterra_logo_vertical_color-onblack.svg" alt="VOLTERRA"><h5>Движение<br>начинается<br><span>здесь</span></h5><p class="sub">Бесплатная установка при покупке</p><span class="cta">Записаться</span><span class="ct">volterra.kz</span></div></div>
+      <div class="adcap"><b>Stories / Reels 9:16</b>1080×1920 px. Верх 250 px и низ 340 px — без текста.</div></div>
+    <div><div class="ad bn"><div class="gl"></div><div class="y"></div><img class="bmark" src="logo/svg/volterra_mark_black.svg" alt=""><div class="safe"></div>
+      <div class="in"><img class="lg" src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><h5>Время двигаться<br>с <span>VOLTERRA</span></h5><p class="sub">Аккумуляторы Varta, Mutlu, Energizer и других брендов. Гарантия 2 года.</p><span class="cta">Подобрать аккумулятор →</span><span class="ct">+7 776 08 22 22 · Актау, 6а мкр</span></div></div>
+      <div class="adcap"><b>Баннер 1.91:1 / билборд 2:1</b>1200×628 px · 6×3 м. Текст — в левой чёрной части, жёлтая часть свободна.</div></div>
+  </div>
+  <div class="rules">
+    <div><b>Логотип</b>Сверху слева или по центру. Один логотип на макет. Ширина ≈ ⅓ формата в постах, ¼ — в баннерах.</div>
+    <div><b>Текст</b>Заголовок до 7 слов. Только на чёрной части. Жёлтым выделяется одно слово.</div>
+    <div><b>Кнопка</b>Жёлтая плашка, чёрный текст заглавными, без скруглений и теней.</div>
+    <div><b>Фото</b>Кладётся на чёрную часть с градиентом в чёрный. Жёлтую плоскость не перекрывать.</div>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>11</span></div>
+</section>
+
+<!-- ============ 12 TECH ============ -->
+<section class="page" id="tech">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>12</b> Технические требования</div></div>
+  <div><h2 class="title">Технические требования</h2><div class="rule"></div>
+  <p class="lead">Сводка форматов и требований к файлам, чтобы макеты проходили печать и модерацию площадок с первого раза.</p></div>
+  <div class="grid g2" style="gap:30px;align-items:start">
+    <div class="tbl"><table class="spec">
+      <thead><tr><th>Носитель</th><th>Формат</th><th>Требования</th></tr></thead>
+      <tbody>
+        <tr><td>Визитка</td><td class="num">90×50 / 86×55 мм</td><td>4+4, картон 300 г/м², вылеты 2 мм</td></tr>
+        <tr><td>Бланк</td><td class="num">A4, 210×297 мм</td><td>4+0, поля 12/10/20/20 мм</td></tr>
+        <tr><td>Конверт</td><td class="num">E65, 220×110 мм</td><td>4+0, офсет</td></tr>
+        <tr><td>Папка</td><td class="num">A4 (220×310 мм)</td><td>4+0 / 1+0, картон 350 г/м², матовая ламинация</td></tr>
+        <tr><td>Roll Up</td><td class="num">85×200 см</td><td>4+0, винил 510 г/м², вылеты 5 мм, низ 15 см пустой</td></tr>
+        <tr><td>Флаг</td><td class="num">по конструкции</td><td>4+0, флагшток чёрный</td></tr>
+        <tr><td>Билборд</td><td class="num">6×3 м</td><td>4+0, 1:10 при 720 dpi или 1:1 при 72 dpi</td></tr>
+        <tr><td>Вывеска</td><td class="num">по проекту</td><td>Объёмные буквы с внутренней подсветкой, белая LED 6500K, знак — жёлтый акрил</td></tr>
+      </tbody></table></div>
+    <div class="tbl"><table class="spec">
+      <thead><tr><th>Digital</th><th>Размер, px</th><th>Заметки</th></tr></thead>
+      <tbody>
+        <tr><td>Instagram пост</td><td class="num">1080×1350</td><td>Также 1080×1080</td></tr>
+        <tr><td>Stories / Reels</td><td class="num">1080×1920</td><td>Безопасная зона 1080×1330 по центру</td></tr>
+        <tr><td>Аватар</td><td class="num">1080×1080</td><td>Знак на чёрном, круглая обрезка</td></tr>
+        <tr><td>Facebook / VK</td><td class="num">1200×628</td><td>Текст ≤ 20 % площади</td></tr>
+        <tr><td>YouTube обложка</td><td class="num">2560×1440</td><td>Важное в 1546×423 по центру</td></tr>
+        <tr><td>2GIS / Яндекс</td><td class="num">1080×1080</td><td>Логотип без дескриптора</td></tr>
+        <tr><td>Email-подпись</td><td class="num">≤ 300×60</td><td>Горизонтальный PNG</td></tr>
+      </tbody></table></div>
+  </div>
+  <div class="rules">
+    <div><b>Печать</b>CMYK, профиль ISO Coated v2 (FOGRA39), 300 dpi, сумма красок ≤ 300 %.</div>
+    <div><b>Чёрный</b>Плашки — Rich Black 60/40/40/100. Текст и тонкие линии — только 100 K.</div>
+    <div><b>Сдача в печать</b>PDF/X-1a или PDF/X-4, шрифты в кривых, вылеты и метки реза.</div>
+    <div><b>Экран</b>sRGB, PNG/JPG, логотип — SVG. Жёлтый только #FFD600.</div>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>12</span></div>
+</section>
+
+<!-- ============ 13 CARRIERS ============ -->
+<section class="page" id="carriers">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>13</b> Фирменные носители</div></div>
+  <div><h2 class="title">Фирменные носители</h2><div class="rule"></div>
+  <p class="lead">Утверждённые примеры из основного брендбука. Ориентируйтесь на них при разработке новых материалов: та же композиция, те же пропорции цвета, тот же характер света.</p></div>
+  <div class="gal">
+    <figure><img src="img/11-business-cards.jpg" alt="Визитки"><figcaption>Визитки</figcaption></figure>
+    <figure><img src="img/12-letterhead.jpg" alt="Фирменный бланк"><figcaption>Фирменный бланк</figcaption></figure>
+    <figure><img src="img/13-envelope.jpg" alt="Конверт E65"><figcaption>Конверт E65</figcaption></figure>
+    <figure><img src="img/15-folder.jpg" alt="Фирменная папка"><figcaption>Фирменная папка</figcaption></figure>
+    <figure><img src="img/17-rollup.jpg" alt="Roll Up"><figcaption>Roll Up</figcaption></figure>
+    <figure><img src="img/21-flags.jpg" alt="Флаги"><figcaption>Флаги</figcaption></figure>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>13</span></div>
+</section>
+
+<section class="page" id="carriers-2">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>13</b> Фирменные носители</div></div>
+  <div><h2 class="title">Фасады, интерьер, digital</h2><div class="rule"></div>
+  <p class="lead">Чёрные фасады с жёлтыми порталами и синей LED-подсветкой, объёмный логотип с внутренней подсветкой, интерьер в тех же пропорциях цвета.</p></div>
+  <div class="gal">
+    <figure><img src="img/23-website.jpg" alt="Сайт"><figcaption>Главная страница сайта</figcaption></figure>
+    <figure><img src="img/26-facade-canopy.jpg" alt="Фасад"><figcaption>Фасад · круглый козырёк</figcaption></figure>
+    <figure><img src="img/28-facade-street.jpg" alt="Фасад"><figcaption>Фасад · длинная витрина</figcaption></figure>
+    <figure><img src="img/30-facade-bazaar.jpg" alt="Точка на базаре"><figcaption>Точка на базаре</figcaption></figure>
+    <figure><img src="img/31-interior.jpg" alt="Интерьер"><figcaption>Интерьер</figcaption></figure>
+    <figure><img src="img/35-uniform.jpg" alt="Униформа"><figcaption>Униформа сотрудников</figcaption></figure>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Аккумуляторный центр</span><span>13</span></div>
+</section>
+
+<!-- ============ 14 FILES ============ -->
+<section class="page" id="files">
+  <div class="run"><div class="l"><img src="logo/svg/volterra_logo_horizontal_color-onblack.svg" alt="VOLTERRA"><span>Brand book</span></div><div><b>14</b> Пакет файлов</div></div>
+  <div><h2 class="title">Пакет файлов</h2><div class="rule"></div>
+  <p class="lead">Всё, что нужно для работы, в одной папке. Названия файлов говорят сами за себя: версия — цвет — фон.</p></div>
+  <div class="grid g2" style="gap:30px;align-items:start">
+<div class="tree"><b>VOLTERRA_brandbook/</b>
+├─ VOLTERRA_Brandbook.pdf      <span class="muted">этот документ</span>
+├─ <b>logo/</b>
+│  ├─ svg/   <span class="muted">вектор: печать, вывески, резка</span>
+│  │  ├─ volterra_logo_vertical_*.svg
+│  │  ├─ volterra_logo_vertical_tagline_*.svg
+│  │  ├─ volterra_logo_horizontal_*.svg
+│  │  ├─ volterra_mark_*.svg / volterra_wordmark_*.svg
+│  │  └─ volterra_*_on-black-bg_*.svg
+│  └─ png/   <span class="muted">4000 px, прозрачный фон</span>
+├─ <b>colors/</b>
+│  ├─ volterra_colors_RGB.ase   <span class="muted">Adobe: экран</span>
+│  ├─ volterra_colors_CMYK.ase  <span class="muted">Adobe: печать</span>
+│  └─ volterra_colors.css / .json / .txt
+├─ <b>fonts/</b>   <span class="muted">Oswald, Montserrat, Noto Sans (OFL)</span>
+└─ <b>img/</b>     <span class="muted">утверждённые носители</span>
+
+<span class="muted">Суффиксы:</span>
+  color-onblack  <span class="muted">жёлтый + белый · на тёмном</span>
+  color-onwhite  <span class="muted">жёлтый + чёрный · на светлом</span>
+  white / black  <span class="muted">одноцветные</span>
+  grey-on*       <span class="muted">монохром</span></div>
+    <div style="display:grid;gap:14px">
+      <p class="label">Чек-лист перед отправкой на согласование</p>
+      <ul class="check">
+        <li>Логотип взят из пакета, не перерисован, пропорции не изменены.</li>
+        <li>Соблюдено охранное поле X и минимальный размер.</li>
+        <li>Фон тёмный и спокойный; на жёлтом — чёрная версия.</li>
+        <li>Цвета точно по кодам: #FFD600, #000000, #007BFF, #FFFFFF.</li>
+        <li>Пропорции цвета: чёрного больше всего, синий — только акцент.</li>
+        <li>Шрифты фирменные, заголовок до 7 слов, одно жёлтое слово.</li>
+        <li>Контакты актуальные: +7 776 08 22 22 · volterra.kz · Актау, 6а мкр.</li>
+        <li>Для печати: CMYK, 300 dpi, вылеты, шрифты в кривых.</li>
+      </ul>
+      <div class="contacts" style="margin-top:10px">
+        <div><span>Телефон</span>+7 776 08 22 22</div>
+        <div><span>Сайт</span>volterra.kz</div>
+        <div><span>Email</span>info@volterra.kz</div>
+        <div><span>Адрес</span>г. Актау, 6а мкр</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span><b>VOLTERRA</b> · Движение начинается здесь</span><span>14</span></div>
+</section>
+
+<!-- ============ BACK COVER ============ -->
+<section class="page cover section" id="end" aria-label="Задняя обложка">
+  <div class="sheen"></div><div class="glow2"></div><div class="bolt"></div><div class="glow"></div>
+  <div class="in">
+    <img class="logo" src="logo/svg/volterra_logo_vertical_tagline_color-onblack.svg" alt="VOLTERRA">
+    <h1>Движение<br>начинается здесь</h1>
+    <p class="meta">volterra.kz · +7 776 08 22 22</p>
+  </div>
+</section>
+
+</main>
+<script>
+document.querySelectorAll('[data-copy]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var v=b.getAttribute('data-copy');
+    function done(){b.classList.add('copied');setTimeout(function(){b.classList.remove('copied')},1400)}
+    function fallback(){var r=document.createRange();r.selectNodeContents(b);var s=getSelection();s.removeAllRanges();s.addRange(r)}
+    try{navigator.clipboard.writeText(v).then(done,fallback)}catch(e){fallback()}
+  });
+});
+</script>
+</body>
+</html>
